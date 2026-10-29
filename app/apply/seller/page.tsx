@@ -49,9 +49,9 @@ export default function ApplySellerPage() {
           <div className="w-20 h-20 bg-blue-600/10 border border-blue-600/20 rounded-sm flex items-center justify-center mb-8 rotate-45">
             <Store className="w-10 h-10 text-blue-600 -rotate-45" />
           </div>
-          <h2 className="text-4xl font-black text-white uppercase tracking-tighter mb-4">Storefront Request Logged</h2>
-          <p className="text-zinc-500 max-w-md font-medium uppercase text-xs tracking-widest leading-loose">
-            Your vendor application is under review. Please allow 3-5 business days for our procurement team to validate your inventory sources.
+          <h2 className="text-4xl font-semibold text-white mb-4">Application sent</h2>
+          <p className="text-zinc-500 max-w-md font-medium text-xs leading-loose">
+            Your vendor application is under review. We usually reply within 3–5 business days.
           </p>
           <Button variant="outline" className="mt-12" onClick={() => window.location.href='/dashboard'}>Return to Dashboard</Button>
         </div>
@@ -78,7 +78,7 @@ export default function ApplySellerPage() {
           <div className="p-8 space-y-8">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
-                <label className="text-[10px] font-black uppercase text-zinc-500 tracking-widest px-1">Company / Brand Name</label>
+                <label className="text-xs font-semibold text-zinc-500 px-1">Company / Brand Name</label>
                 <Input 
                   placeholder="XTS Hardware Co." 
                   className="bg-black/50 border-zinc-800 text-white" 
@@ -87,7 +87,7 @@ export default function ApplySellerPage() {
                 />
               </div>
               <div className="space-y-2">
-                <label className="text-[10px] font-black uppercase text-zinc-500 tracking-widest px-1">Website / Portfolio</label>
+                <label className="text-xs font-semibold text-zinc-500 px-1">Website / Portfolio</label>
                 <Input 
                   placeholder="https://..." 
                   className="bg-black/50 border-zinc-800 text-white" 
@@ -98,7 +98,7 @@ export default function ApplySellerPage() {
             </div>
             
             <div className="space-y-2">
-              <label className="text-[10px] font-black uppercase text-zinc-500 tracking-widest px-1">Inventory Category</label>
+              <label className="text-xs font-semibold text-zinc-500 px-1">Inventory Category</label>
               <Input 
                   placeholder="Motors, Sensors, Controllers..." 
                   className="bg-black/50 border-zinc-800 text-white" 
@@ -108,7 +108,7 @@ export default function ApplySellerPage() {
             </div>
 
             <div className="space-y-2">
-              <label className="text-[10px] font-black uppercase text-zinc-500 tracking-widest px-1">Logistics Capabilities</label>
+              <label className="text-xs font-semibold text-zinc-500 px-1">Logistics Capabilities</label>
               <Textarea 
                 placeholder="Describe your shipping capacity, warehouse location, and return policies..." 
                 className="bg-black/50 border-zinc-800 text-white min-h-[100px]" 
@@ -142,7 +142,7 @@ const Feature = ({ icon: Icon, title, description }: any) => (
     <div className="w-12 h-12 bg-blue-600/10 rounded-sm flex items-center justify-center mb-4">
       <Icon className="w-6 h-6 text-blue-600" />
     </div>
-    <h4 className="text-white font-black uppercase text-xs tracking-widest mb-2">{title}</h4>
-    <p className="text-zinc-500 text-[10px] leading-relaxed uppercase">{description}</p>
+    <h4 className="text-white font-semibold text-xs mb-2">{title}</h4>
+    <p className="text-zinc-500 text-xs leading-relaxed">{description}</p>
   </div>
 );

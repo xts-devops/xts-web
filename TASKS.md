@@ -5,6 +5,7 @@ Rule: set `owner` + `status: in-progress` **before** editing. Keep tasks small a
 Lanes: **claude** = UI + docs · **codex** = backend + data · **shared** = coordinate first (see AGENTS.md).
 
 ## In flight
+- [ ] **UI/UX consistency pass on top of PR #5** (`claude/ui-polish`: SectionHeading, Navbar, login, cart, product detail, dashboard, apply pages, skeletons; one-line locale fix in `lib/currency.ts`, flagged). Carry PR #5's plain style into the inner pages: plain copy, readable product names, one price format, no fake login options. ... owner: claude · status: review
 - [ ] **Compact public storefront cleanup, PR #5** (layout/brand/product-image components, homepage/shop/metadata, storefront CSS, SVG and docs; user-authorized UI lane). Compact XTS identity with separate Mechatronics department label, plain copy and direct catalog/service functionality. Earlier decorative iterations superseded. TypeScript/lint and 320px/375px/1280px preview checks passed. ... owner: codex · status: review
 - [ ] **Header brand presence follow-up to PR #5** (`components/layout/Brand.tsx`, `Navbar.tsx`, `app/brand.css`, layout CSS import, brand SVG and evaluation notes; user-authorized UI lane). Larger aligned lockup, desktop signature, mobile navigation space; TypeScript/lint and 320px/375px/1280px preview checked. ... owner: codex · status: review
 - [ ] **Marketing finesse follow-up to PR #5** (`codex/xts-mechatronics-ui`; user-authorized UI lane: homepage, storefront CSS, category deep links, metadata and evaluation notes). Stronger visual hierarchy, engineering details, category discovery and project CTA; preserve accessibility and sample labeling. TypeScript/lint and 375px/1280px preview checks passed. ... owner: codex · status: review
@@ -22,6 +23,12 @@ Lanes: **claude** = UI + docs · **codex** = backend + data · **shared** = coor
 - [ ] **NextAuth adapter swap** (`lib/auth.ts`, shared) ... owner: codex · status: todo
 - [ ] **Storage → Supabase Storage + URL rewrite** (`app/api/upload`, data) ... owner: codex · status: todo
 - [ ] **Update UI for any changed API shapes** ... owner: claude · status: todo
+
+## Backlog — UI consistency (after `claude/ui-polish`)
+- [ ] **Plain style for staff pages** (admin, seller) ... owner: claude · status: todo
+- [ ] **Plain style for chat, consultation, community, fabrication pages + their components** ... owner: claude · status: todo
+- [ ] **Badge component: stop forcing uppercase** (`components/ui/Badge.tsx`) ... owner: claude · status: todo
+- [ ] **Confirm product-page promises (1-year warranty, fast shipping, 30-day returns)** ... owner: user · status: todo
 
 ## Backlog — bugs and hardening
 - [ ] **Unread markers break on dotted emails** (`lib/chat.ts`, `lib/consultations.ts`) ... owner: codex · status: todo

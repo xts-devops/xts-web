@@ -9,6 +9,7 @@ import { Box, ArrowLeft, ShieldCheck, Truck, RotateCcw, Activity, Check, Shoppin
 import Link from 'next/link';
 import { useCart } from '@/lib/cart-context';
 import { useSession } from 'next-auth/react';
+import { formatMoney } from '@/lib/currency';
 import { ADMIN_INBOX_EMAIL } from '@/lib/admin-email';
 import { productImage } from '@/lib/sample-assets';
 import { ProductImage } from '@/components/ui/ProductImage';
@@ -131,8 +132,9 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
     return (
       <PageShell>
         <div className="container mx-auto px-4 sm:px-6 py-32 text-center">
-          <h2 className="text-3xl font-black text-[var(--text-primary)] uppercase mb-4">Product Not Found</h2>
-          <Button onClick={() => router.push('/shop')}>Back to Shop</Button>
+          <h1 className="text-3xl font-bold tracking-tight text-[var(--text-primary)] mb-2">Product not found</h1>
+          <p className="text-sm text-[var(--text-secondary)] mb-6">It may have been removed or the link is wrong.</p>
+          <Button onClick={() => router.push('/shop')}>Back to shop</Button>
         </div>
       </PageShell>
     );
@@ -147,7 +149,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
       <div className="container mx-auto px-4 sm:px-6 py-16 sm:py-20 pb-24 sm:pb-20">
         <Link href="/shop" className="flex items-center gap-2 text-[var(--text-muted)] hover:text-[var(--text-primary)] mb-8 sm:mb-10 transition-colors group">
           <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-          <span className="text-[10px] font-black uppercase tracking-widest">Back to Shop</span>
+          <span className="text-sm font-medium">Back to shop</span>
         </Link>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
@@ -159,9 +161,9 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
               ) : (
                 <Box className="w-32 h-32 sm:w-40 sm:h-40 text-[var(--text-muted)] opacity-30" />
               )}
-              <div className="absolute top-4 left-4">
+              {product.tag && <div className="absolute top-4 left-4">
                 <Badge variant="new" className="bg-safety-orange text-white border-none">{product.tag}</Badge>
-              </div>
+              </div>}
             </div>
             {primaryImage.startsWith('/images/products/') && <p className="text-xs text-[var(--text-muted)]">Illustrative sample image. Refer to specifications for product details.</p>}
             {images.length > 1 && (
@@ -193,14 +195,14 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
           {/* Details Section */}
           <div className="flex flex-col">
             <div className="mb-4 sm:mb-6">
-              <span className="text-[10px] font-black text-safety-orange uppercase tracking-widest block mb-2">{product.category} <span aria-hidden="true">/</span> {product.sku}</span>
-              <h1 className="text-3xl sm:text-4xl font-black text-[var(--text-primary)] uppercase tracking-tighter leading-none mb-3 sm:mb-4">
+              <span className="text-xs font-semibold text-safety-orange block mb-2">{product.category} <span aria-hidden="true">/</span> {product.sku}</span>
+              <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-[var(--text-primary)] leading-tight mb-3 sm:mb-4">
                 {product.name}
               </h1>
               <div className="flex flex-wrap items-center gap-3">
-                <span className="text-2xl sm:text-3xl font-black text-[var(--text-primary)]">PHP {Number(product.price).toFixed(2)}</span>
-                <Badge variant={product.stock > 0 ? 'completed' : 'warning'} className="text-[10px]">
-                  {product.stock > 0 ? `${product.stock} IN STOCK` : 'OUT OF STOCK'}
+                <span className="text-2xl sm:text-3xl font-bold text-[var(--text-primary)]">{formatMoney(Number(product.price))}</span>
+                <Badge variant={product.stock > 0 ? 'completed' : 'warning'} className="text-xs">
+                  {product.stock > 0 ? `${product.stock} in stock` : 'Out of stock'}
                 </Badge>
               </div>
               {/* Rating & Sold */}
@@ -224,11 +226,11 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
             {/* Specs */}
             {specs.length > 0 && (
               <div className="mb-6 sm:mb-8">
-                <h3 className="text-xs font-black text-[var(--text-primary)] uppercase tracking-widest mb-3">Specifications</h3>
+                <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-3">Specifications</h3>
                 <div className="border border-[var(--border-primary)] rounded-sm overflow-hidden">
                   {specs.map((spec: { key: string; value: string }, i: number) => (
                     <div key={i} className={`flex text-sm ${i % 2 === 0 ? 'bg-[var(--bg-surface)]' : 'bg-[var(--bg-secondary)]'}`}>
-                      <span className="w-1/3 sm:w-2/5 px-3 py-2 font-bold text-[var(--text-secondary)] text-xs uppercase border-r border-[var(--border-secondary)]">{spec.key}</span>
+                      <span className="w-1/3 sm:w-2/5 px-3 py-2 font-medium text-[var(--text-secondary)] text-xs border-r border-[var(--border-secondary)]">{spec.key}</span>
                       <span className="flex-grow px-3 py-2 text-[var(--text-primary)] text-xs">{spec.value}</span>
                     </div>
                   ))}
@@ -240,15 +242,15 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
             <div className="grid grid-cols-3 gap-2 sm:gap-3 mb-6 sm:mb-8">
               <div className="p-3 bg-[var(--bg-surface)] border border-[var(--border-primary)] rounded-sm text-center">
                 <ShieldCheck className="w-4 h-4 text-safety-orange mx-auto mb-1.5" />
-                <h4 className="text-[9px] font-black text-[var(--text-primary)] uppercase">1Y Warranty</h4>
+                <h4 className="text-xs font-medium text-[var(--text-primary)]">1-year warranty</h4>
               </div>
               <div className="p-3 bg-[var(--bg-surface)] border border-[var(--border-primary)] rounded-sm text-center">
                 <Truck className="w-4 h-4 text-safety-orange mx-auto mb-1.5" />
-                <h4 className="text-[9px] font-black text-[var(--text-primary)] uppercase">Fast Ship</h4>
+                <h4 className="text-xs font-medium text-[var(--text-primary)]">Fast shipping</h4>
               </div>
               <div className="p-3 bg-[var(--bg-surface)] border border-[var(--border-primary)] rounded-sm text-center">
                 <RotateCcw className="w-4 h-4 text-safety-orange mx-auto mb-1.5" />
-                <h4 className="text-[9px] font-black text-[var(--text-primary)] uppercase">30D Returns</h4>
+                <h4 className="text-xs font-medium text-[var(--text-primary)]">30-day returns</h4>
               </div>
             </div>
 
@@ -256,22 +258,22 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
             <div className="mt-auto space-y-3 hidden sm:block">
               <div className="grid grid-cols-2 gap-3">
                 <Button
-                  className={`h-12 sm:h-14 text-sm uppercase font-black tracking-wider transition-all w-full ${
+                  className={`h-12 sm:h-14 text-sm font-semibold transition-all w-full ${
                     added
-                      ? 'bg-green-600 hover:bg-green-600 shadow-[0_4px_0_0_#166534]'
-                      : 'bg-safety-orange hover:bg-safety-orange/80 shadow-[0_4px_0_0_#c2410c]'
-                  } active:translate-y-[2px] active:shadow-none`}
+                      ? 'bg-green-600 hover:bg-green-600'
+                      : 'bg-safety-orange hover:bg-safety-orange/80'
+                  }`}
                   onClick={handleAddToCart}
                   disabled={product.stock <= 0}
                 >
                   {added ? (
                     <><Check className="w-4 h-4 mr-2" /> Added</>
                   ) : (
-                    <><ShoppingCart className="w-4 h-4 mr-2" /> Add to Cart</>
+                    <><ShoppingCart className="w-4 h-4 mr-2" /> Add to cart</>
                   )}
                 </Button>
                 <Button
-                  className="h-12 sm:h-14 text-sm uppercase font-black tracking-wider bg-[var(--text-primary)] text-[var(--bg-primary)] hover:opacity-90 shadow-[0_4px_0_0_rgba(0,0,0,0.3)] active:translate-y-[2px] active:shadow-none w-full"
+                  className="h-12 sm:h-14 text-sm font-semibold bg-[var(--text-primary)] text-[var(--bg-primary)] hover:opacity-90 w-full"
                   onClick={handleBuyNow}
                   disabled={product.stock <= 0}
                 >
@@ -280,14 +282,14 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
               </div>
               <Button
                 variant="outline"
-                className="w-full h-10 sm:h-12 text-xs uppercase font-black tracking-wider flex items-center justify-center gap-2"
+                className="w-full h-10 sm:h-12 text-xs font-semibold flex items-center justify-center gap-2"
                 onClick={handleChatSeller}
                 disabled={chatLoading}
               >
                 {chatLoading ? (
-                  <><Activity className="w-4 h-4 animate-spin" /> Opening Chat...</>
+                  <><Activity className="w-4 h-4 animate-spin" /> Opening chat…</>
                 ) : (
-                  <><MessageCircle className="w-4 h-4" /> Chat Seller about this Product</>
+                  <><MessageCircle className="w-4 h-4" /> Message the seller</>
                 )}
               </Button>
             </div>
@@ -304,7 +306,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
       {product && (
         <div className="fixed bottom-0 left-0 right-0 z-40 bg-[var(--bg-primary)] border-t border-[var(--border-primary)] p-3 flex gap-2 sm:hidden">
           <Button
-            className={`flex-1 h-11 text-xs uppercase font-black tracking-wider ${
+            className={`flex-1 h-11 text-xs font-semibold ${
               added
                 ? 'bg-green-600 hover:bg-green-600'
                 : 'bg-safety-orange hover:bg-safety-orange/80'
@@ -315,7 +317,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
             {added ? <><Check className="w-3.5 h-3.5 mr-1" /> Added</> : <><ShoppingCart className="w-3.5 h-3.5 mr-1" /> Add</>}
           </Button>
           <Button
-            className="flex-1 h-11 text-xs uppercase font-black tracking-wider bg-[var(--text-primary)] text-[var(--bg-primary)] hover:opacity-90"
+            className="flex-1 h-11 text-xs font-semibold bg-[var(--text-primary)] text-[var(--bg-primary)] hover:opacity-90"
             onClick={handleBuyNow}
             disabled={product.stock <= 0}
           >
@@ -324,6 +326,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
           <Button
             variant="outline"
             className="h-11 px-3"
+            aria-label="Message the seller"
             onClick={handleChatSeller}
             disabled={chatLoading}
           >

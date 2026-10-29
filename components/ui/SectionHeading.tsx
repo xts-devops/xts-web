@@ -8,26 +8,20 @@ interface SectionHeadingProps {
   dark?: boolean;
 }
 
+// Page heading for inner pages. Matches the storefront style: sentence case,
+// plain weight, short muted label above (no decorative rule or handwriting).
 export const SectionHeading = ({ title, annotation, className, dark = false }: SectionHeadingProps) => {
   return (
-    <div className={cn("mb-12 relative", className)}>
+    <div className={cn("mb-10", className)}>
+      {annotation && (
+        <p className="text-xs font-semibold text-safety-orange mb-2">{annotation}</p>
+      )}
       <h2 className={cn(
-        "text-4xl md:text-5xl font-black uppercase tracking-tighter leading-none mb-2",
-        dark ? "text-white" : "text-esd-dark"
+        "text-3xl md:text-4xl font-bold tracking-tight leading-tight",
+        dark ? "text-[var(--text-primary)]" : "text-esd-dark"
       )}>
         {title}
       </h2>
-      <div className="flex items-center gap-4">
-        <div className={cn(
-          "h-1 grow rounded-full",
-          dark ? "bg-white/20" : "bg-black/10"
-        )} />
-        {annotation && (
-          <span className="font-handwriting text-safety-orange text-lg rotate-[-2deg]">
-            {annotation}
-          </span>
-        )}
-      </div>
     </div>
   );
 };

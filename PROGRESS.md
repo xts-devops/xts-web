@@ -12,6 +12,34 @@ Append-only. Newest at top. Never edit past entries. Format:
 
 ---
 
+## 2026-10-29 · claude · claude/ui-polish (built on codex/xts-mechatronics-ui)
+**Did:** UI/UX review of PR #5, then carried its plain style into the inner pages.
+- `SectionHeading` (used by ~14 pages): sentence case, plain weight, small label
+  instead of the all-caps title + handwriting note.
+- Navbar: "Terminal/Portal" → "Admin/Expert", dropped the "Authenticated" label,
+  placeholder while the session loads (no "Sign in" flash), readable mobile menu, aria-labels.
+- Login: only real options (Google + dev sample users); removed the disabled email
+  form, the sign-up toggle that did nothing, and the made-up security quote.
+  Signed-in users are sent to `/dashboard`.
+- Cart, product page, dashboard, apply pages: plain wording (no "acquisition queue",
+  "procurement", "transmitted", "Status: Operational"), readable product names, one
+  price format `₱1,234.00` via `formatMoney`, aria-labels on quantity/remove buttons,
+  confirm before clearing the cart, no empty tag badge, "XTS-PAY" claim replaced by
+  the PayMongo fact.
+- Product card skeleton now matches the real dark card (was a light paper card).
+- **Shared-lane flag:** `lib/currency.ts` `formatMoney` locale `undefined` → `'en-PH'`
+  so server and browser format prices the same. It had no other callers.
+**Why:** PR #5 made home/shop plain, but the pages after them still used the old
+all-caps jargon style, so the site felt like two products. Consistency with D8.
+**Verify:** `npx tsc --noEmit` passes. ESLint per changed file vs. Codex's version:
+no new problems (AuthForms 2 errors → 0). Local preview at 1280px and 375px: product page,
+empty + filled cart, dashboard, login signed out and signed in (redirects), sample admin login.
+**Next:** Review this PR, then merge it after #5. Still old style, not touched here:
+admin, seller, chat, consultation, community and fabrication pages and their
+components (e.g. "SYSTEM STATE: QUEUED" on fab job cards). The product page's
+"1-year warranty / Fast shipping / 30-day returns" badges show on every product; the
+owner should confirm those promises are true. Badge component still uppercases text.
+
 ## 2026-10-29 · codex · codex/xts-mechatronics-ui · compact public UI
 **Did:** Replaced the expanded lockup with a compact XTS mark and separate Mechatronics
 department label. Smallest headers show the department in the menu/home context

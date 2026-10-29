@@ -12,7 +12,7 @@ import { ADMIN_INBOX_EMAIL } from '@/lib/admin-email';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { Minus, Plus, X, ShoppingCart, Package, ArrowRight, Trash2, CheckCircle2, Activity, Truck, MapPin, CreditCard, Banknote, MessageCircle } from 'lucide-react';
-import { BASE_CURRENCY, PAYMONGO_MIN_AMOUNT_PHP } from '@/lib/currency';
+import { BASE_CURRENCY, PAYMONGO_MIN_AMOUNT_PHP, formatMoney } from '@/lib/currency';
 
 interface PickupPoint {
   id: string;
@@ -189,19 +189,19 @@ export default function CartPage() {
           <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }}>
             <CheckCircle2 className="w-20 h-20 text-green-500 mb-8" />
           </motion.div>
-          <h2 className="text-4xl font-black text-white uppercase tracking-tighter mb-4">Order Confirmed</h2>
-          <p className="text-zinc-500 max-w-md font-medium uppercase text-xs tracking-widest leading-loose mb-4">
-            Your procurement request has been transmitted. An engineering team member will process your order within 24 hours.
+          <h1 className="text-3xl font-bold tracking-tight text-[var(--text-primary)] mb-3">Order placed</h1>
+          <p className="text-[var(--text-secondary)] max-w-md text-sm leading-relaxed mb-4">
+            Thanks for your order. Our team will process it within 24 hours, and you can track it from your dashboard.
           </p>
           <p className="text-safety-orange font-mono text-sm mb-10">
-            Order Reference: {orderPlaced.slice(0, 8).toUpperCase()}
+            Order reference: {orderPlaced.slice(0, 8).toUpperCase()}
           </p>
           <div className="flex gap-4">
             <Link href="/dashboard">
-              <Button variant="outline">View Dashboard</Button>
+              <Button variant="outline">View dashboard</Button>
             </Link>
             <Link href="/shop">
-              <Button>Continue Shopping</Button>
+              <Button>Continue shopping</Button>
             </Link>
           </div>
         </div>
@@ -213,16 +213,16 @@ export default function CartPage() {
     return (
       <PageShell>
         <div className="container mx-auto px-6 py-20 min-h-[60vh] flex flex-col items-center justify-center text-center">
-          <div className="w-20 h-20 bg-zinc-900 border border-white/10 rounded-sm flex items-center justify-center mb-8 rotate-45">
-            <ShoppingCart className="w-10 h-10 text-zinc-700 -rotate-45" />
+          <div className="w-16 h-16 bg-[var(--bg-secondary)] border border-[var(--border-primary)] rounded-full flex items-center justify-center mb-6">
+            <ShoppingCart className="w-7 h-7 text-[var(--text-muted)]" />
           </div>
-          <h2 className="text-4xl font-black text-white uppercase tracking-tighter mb-4">Acquisition Queue Empty</h2>
-          <p className="text-zinc-500 max-w-md font-medium uppercase text-xs tracking-widest leading-loose mb-10">
-            No hardware components have been added to your procurement queue yet.
+          <h1 className="text-3xl font-bold tracking-tight text-[var(--text-primary)] mb-3">Your cart is empty</h1>
+          <p className="text-[var(--text-secondary)] max-w-md text-sm leading-relaxed mb-8">
+            Browse the shop to find boards, sensors, motors and other parts.
           </p>
           <Link href="/shop">
-            <Button className="px-10 h-14 text-sm uppercase font-black tracking-widest">
-              Browse Inventory <ArrowRight className="ml-2 w-4 h-4" />
+            <Button className="px-8 h-12 text-sm font-semibold">
+              Browse the shop <ArrowRight className="ml-2 w-4 h-4" />
             </Button>
           </Link>
         </div>
@@ -235,8 +235,8 @@ export default function CartPage() {
       <div className="container mx-auto px-4 sm:px-6 py-16 sm:py-20">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 sm:gap-8 mb-10 sm:mb-16">
           <SectionHeading
-            title="Acquisition Queue"
-            annotation={`${cartCount} Item${cartCount !== 1 ? 's' : ''} Staged`}
+            title="Your cart"
+            annotation={`${cartCount} item${cartCount !== 1 ? 's' : ''}`}
             dark={true}
             className="mb-0"
           />
@@ -244,9 +244,9 @@ export default function CartPage() {
             variant="outline"
             size="sm"
             className="text-red-500 border-red-500/30 hover:bg-red-500/10 flex items-center gap-2"
-            onClick={clearCart}
+            onClick={() => { if (window.confirm('Remove all items from your cart?')) clearCart(); }}
           >
-            <Trash2 className="w-4 h-4" /> Clear Queue
+            <Trash2 className="w-4 h-4" /> Clear cart
           </Button>
         </div>
 
@@ -269,26 +269,26 @@ export default function CartPage() {
                       </Link>
                       <div className="flex-grow flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                         <div>
-                          <span className="text-[10px] font-black text-[var(--text-on-card-muted)] uppercase tracking-widest block mb-1">
-                            {item.category || 'Hardware'} {item.sku ? `// ${item.sku}` : ''}
+                          <span className="text-xs font-medium text-[var(--text-on-card-muted)] block mb-1">
+                            {item.category || 'Hardware'} {item.sku ? `· ${item.sku}` : ''}
                           </span>
                           <Link href={`/shop/${item.id}`}>
-                            <h4 className="text-lg font-black text-esd-dark uppercase tracking-tight mb-1 hover:text-safety-orange transition-colors">{item.name}</h4>
+                            <h4 className="text-lg font-semibold text-esd-dark mb-1 hover:text-safety-orange transition-colors">{item.name}</h4>
                           </Link>
-                          <span className="text-sm font-black text-safety-orange">PHP {item.price.toFixed(2)}</span>
+                          <span className="text-sm font-semibold text-safety-orange">{formatMoney(item.price)}</span>
                         </div>
                         <div className="flex flex-wrap items-center gap-3 sm:gap-6">
                           <div className="flex items-center gap-0 border border-black/10 rounded-sm overflow-hidden">
-                            <button onClick={() => updateQuantity(item.id, item.quantity - 1)} className="w-10 h-10 flex items-center justify-center bg-zinc-100 hover:bg-zinc-200 text-esd-dark transition-colors">
+                            <button aria-label={`Decrease quantity of ${item.name}`} onClick={() => updateQuantity(item.id, item.quantity - 1)} className="w-10 h-10 flex items-center justify-center bg-zinc-100 hover:bg-zinc-200 text-esd-dark transition-colors">
                               <Minus className="w-3 h-3" />
                             </button>
-                            <span className="w-12 h-10 flex items-center justify-center text-sm font-black text-esd-dark bg-white">{item.quantity}</span>
-                            <button onClick={() => updateQuantity(item.id, item.quantity + 1)} className="w-10 h-10 flex items-center justify-center bg-zinc-100 hover:bg-zinc-200 text-esd-dark transition-colors">
+                            <span className="w-12 h-10 flex items-center justify-center text-sm font-semibold text-esd-dark bg-white">{item.quantity}</span>
+                            <button aria-label={`Increase quantity of ${item.name}`} onClick={() => updateQuantity(item.id, item.quantity + 1)} className="w-10 h-10 flex items-center justify-center bg-zinc-100 hover:bg-zinc-200 text-esd-dark transition-colors">
                               <Plus className="w-3 h-3" />
                             </button>
                           </div>
-                          <span className="text-base sm:text-lg font-black text-esd-dark sm:w-28 text-right">PHP {(item.price * item.quantity).toFixed(2)}</span>
-                          <button onClick={() => removeFromCart(item.id)} className="text-[var(--text-on-card-muted)] hover:text-red-500 transition-colors p-2 ml-auto sm:ml-0">
+                          <span className="text-base sm:text-lg font-semibold text-esd-dark sm:w-28 text-right">{formatMoney(item.price * item.quantity)}</span>
+                          <button aria-label={`Remove ${item.name} from cart`} onClick={() => removeFromCart(item.id)} className="text-[var(--text-on-card-muted)] hover:text-red-500 transition-colors p-2 ml-auto sm:ml-0">
                             <X className="w-4 h-4" />
                           </button>
                         </div>
@@ -302,7 +302,7 @@ export default function CartPage() {
             {/* ─── Delivery Method Selector ─── */}
             <div className="mt-10">
               <h3
-                className={`text-lg font-black text-white uppercase tracking-tighter flex items-center gap-3 ${
+                className={`text-lg font-semibold text-white flex items-center gap-3 ${
                   STANDARD_DELIVERY_ENABLED ? 'mb-6' : 'mb-2'
                 }`}
               >
@@ -310,7 +310,7 @@ export default function CartPage() {
                 Select Delivery Method
               </h3>
               {!STANDARD_DELIVERY_ENABLED && (
-                <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest mb-6">
+                <p className="text-xs text-zinc-500 font-bold mb-6">
                   Courier delivery paused — pickup only for now
                 </p>
               )}
@@ -346,14 +346,14 @@ export default function CartPage() {
                     </div>
                     <div className="min-w-0">
                       <h4
-                        className={`text-sm font-black text-white uppercase tracking-tight mb-1 ${
+                        className={`text-sm font-semibold text-white mb-1 ${
                           !STANDARD_DELIVERY_ENABLED ? 'line-through decoration-zinc-500 decoration-2' : ''
                         }`}
                       >
                         Standard Delivery
                       </h4>
                       <p
-                        className={`text-[10px] font-bold uppercase tracking-widest leading-relaxed ${
+                        className={`text-xs font-bold leading-relaxed ${
                           !STANDARD_DELIVERY_ENABLED
                             ? 'text-zinc-600 line-through decoration-zinc-600'
                             : 'text-zinc-500'
@@ -362,11 +362,11 @@ export default function CartPage() {
                         Delivered via courier partner (J&T Express)
                       </p>
                       <div className="mt-3 flex flex-wrap items-center gap-2">
-                        <span className="text-[9px] font-black text-zinc-500 uppercase tracking-widest bg-zinc-800/80 px-2 py-1 rounded-sm border border-white/10">
+                        <span className="text-[11px] font-semibold text-zinc-500 bg-zinc-800/80 px-2 py-1 rounded-sm border border-white/10">
                           Pickup only for now
                         </span>
                         {STANDARD_DELIVERY_ENABLED && (
-                          <span className="text-[9px] font-black text-yellow-500 uppercase tracking-widest bg-yellow-500/10 px-2 py-1 rounded-sm border border-yellow-500/20">
+                          <span className="text-[11px] font-semibold text-yellow-500 bg-yellow-500/10 px-2 py-1 rounded-sm border border-yellow-500/20">
                             Integration Pending
                           </span>
                         )}
@@ -397,12 +397,12 @@ export default function CartPage() {
                       <MapPin className="w-6 h-6" />
                     </div>
                     <div>
-                      <h4 className="text-sm font-black text-white uppercase tracking-tight mb-1">Local Pickup</h4>
-                      <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest leading-relaxed">
+                      <h4 className="text-sm font-semibold text-white mb-1">Local Pickup</h4>
+                      <p className="text-xs text-zinc-500 font-bold leading-relaxed">
                         Pick up from a designated meetup point
                       </p>
                       <div className="mt-3 flex items-center gap-2">
-                        <span className="text-[9px] font-black text-green-500 uppercase tracking-widest bg-green-500/10 px-2 py-1 rounded-sm border border-green-500/20">
+                        <span className="text-[11px] font-semibold text-green-500 bg-green-500/10 px-2 py-1 rounded-sm border border-green-500/20">
                           Available Now
                         </span>
                       </div>
@@ -427,7 +427,7 @@ export default function CartPage() {
                     className="overflow-hidden"
                   >
                     <div className="mt-4 p-6 bg-zinc-900 border border-blue-500/20 rounded-sm">
-                      <h4 className="text-xs font-black text-zinc-400 uppercase tracking-widest mb-4 flex items-center gap-2">
+                      <h4 className="text-xs font-semibold text-zinc-400 mb-4 flex items-center gap-2">
                         <MapPin className="w-3 h-3 text-blue-500" />
                         Choose Pickup Location
                       </h4>
@@ -456,7 +456,7 @@ export default function CartPage() {
                                 </div>
                                 <div>
                                   <span className="text-sm font-bold text-white block">{point.name}</span>
-                                  <span className="text-[10px] text-zinc-500 font-medium">{point.address}</span>
+                                  <span className="text-xs text-zinc-500 font-medium">{point.address}</span>
                                 </div>
                                 {selectedPickup?.id === point.id && (
                                   <CheckCircle2 className="w-4 h-4 text-blue-500 ml-auto shrink-0" />
@@ -468,8 +468,8 @@ export default function CartPage() {
                       ) : (
                         <div className="py-8 text-center">
                           <MapPin className="w-8 h-8 text-zinc-700 mx-auto mb-3" />
-                          <p className="text-xs text-zinc-500 font-bold uppercase tracking-widest">No pickup points available</p>
-                          <p className="text-[10px] text-zinc-600 mt-1">Contact the admin to add pickup locations.</p>
+                          <p className="text-xs text-zinc-500 font-bold">No pickup points available</p>
+                          <p className="text-xs text-zinc-600 mt-1">Contact the admin to add pickup locations.</p>
                         </div>
                       )}
 
@@ -486,17 +486,17 @@ export default function CartPage() {
                             className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-blue-500/10 border border-blue-500/30 rounded-sm text-blue-400 hover:bg-blue-500/20 transition-colors disabled:opacity-50"
                           >
                             {pickupChatLoading ? (
-                              <><Activity className="w-4 h-4 animate-spin" /><span className="text-xs font-black uppercase tracking-widest">Opening Chat...</span></>
+                              <><Activity className="w-4 h-4 animate-spin" /><span className="text-xs font-semibold">Opening Chat...</span></>
                             ) : (
-                              <><MessageCircle className="w-4 h-4" /><span className="text-xs font-black uppercase tracking-widest">Chat about Pickup</span></>
+                              <><MessageCircle className="w-4 h-4" /><span className="text-xs font-semibold">Chat about Pickup</span></>
                             )}
                           </button>
                           {pickupChatError && (
                             <div className="mt-2 p-2 bg-red-500/10 border border-red-500/30 rounded-sm">
-                              <p className="text-[10px] text-red-400 font-bold">{pickupChatError}</p>
+                              <p className="text-xs text-red-400 font-bold">{pickupChatError}</p>
                             </div>
                           )}
-                          <p className="text-[9px] text-zinc-600 text-center mt-2">Coordinate pickup time and details with the seller</p>
+                          <p className="text-[11px] text-zinc-600 text-center mt-2">Coordinate pickup time and details with the seller</p>
                         </motion.div>
                       )}
                     </div>
@@ -507,7 +507,7 @@ export default function CartPage() {
 
             {/* ─── Payment Method Selector ─── */}
             <div className="mt-10">
-              <h3 className="text-lg font-black text-white uppercase tracking-tighter mb-6 flex items-center gap-3">
+              <h3 className="text-lg font-semibold text-white mb-6 flex items-center gap-3">
                 <CreditCard className="w-5 h-5 text-safety-orange" />
                 Payment Method
               </h3>
@@ -530,12 +530,12 @@ export default function CartPage() {
                       <Banknote className="w-6 h-6" />
                     </div>
                     <div>
-                      <h4 className="text-sm font-black text-white uppercase tracking-tight mb-1">Cash on Delivery</h4>
-                      <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest leading-relaxed">
+                      <h4 className="text-sm font-semibold text-white mb-1">Cash on Delivery</h4>
+                      <p className="text-xs text-zinc-500 font-bold leading-relaxed">
                         Pay when you receive your order
                       </p>
                       <div className="mt-3 flex items-center gap-2">
-                        <span className="text-[9px] font-black text-green-500 uppercase tracking-widest bg-green-500/10 px-2 py-1 rounded-sm border border-green-500/20">
+                        <span className="text-[11px] font-semibold text-green-500 bg-green-500/10 px-2 py-1 rounded-sm border border-green-500/20">
                           Available
                         </span>
                       </div>
@@ -565,12 +565,12 @@ export default function CartPage() {
                       <CreditCard className="w-6 h-6" />
                     </div>
                     <div>
-                      <h4 className="text-sm font-black text-white uppercase tracking-tight mb-1">GCash</h4>
-                      <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest leading-relaxed">
+                      <h4 className="text-sm font-semibold text-white mb-1">GCash</h4>
+                      <p className="text-xs text-zinc-500 font-bold leading-relaxed">
                         Pay via Paymongo GCash
                       </p>
                       <div className="mt-3 flex items-center gap-2">
-                        <span className="text-[9px] font-black text-blue-400/90 uppercase tracking-widest bg-blue-500/10 px-2 py-1 rounded-sm border border-blue-500/25">
+                        <span className="text-[11px] font-semibold text-blue-400/90 bg-blue-500/10 px-2 py-1 rounded-sm border border-blue-500/25">
                           Available
                         </span>
                       </div>
@@ -590,20 +590,20 @@ export default function CartPage() {
           <div className="space-y-6">
             <div className="lg:sticky lg:top-32">
               <div className="p-8 bg-zinc-900 border border-white/5 rounded-sm shadow-2xl">
-                <h4 className="text-lg font-black text-white uppercase mb-8 tracking-tighter">Order Summary</h4>
+                <h4 className="text-lg font-semibold text-white mb-8">Order Summary</h4>
                 <div className="space-y-4 mb-4">
                   <div className="flex justify-between text-sm">
-                    <span className="text-zinc-500 font-bold uppercase">Subtotal ({cartCount} items)</span>
-                    <span className="text-white font-black">PHP {cartTotal.toFixed(2)}</span>
+                    <span className="text-zinc-500 font-bold">Subtotal ({cartCount} items)</span>
+                    <span className="text-white font-semibold">{formatMoney(cartTotal)}</span>
                   </div>
                   <div className="flex justify-between text-sm">
-                    <span className="text-zinc-500 font-bold uppercase">Shipping</span>
+                    <span className="text-zinc-500 font-bold">Shipping</span>
                     <span className="text-zinc-400 font-medium italic">
                       {deliveryMethod === 'pickup' ? 'Free (Pickup)' : STANDARD_DELIVERY_ENABLED && deliveryMethod === 'standard' ? 'TBD' : '—'}
                     </span>
                   </div>
                   <div className="flex justify-between text-sm">
-                    <span className="text-zinc-500 font-bold uppercase">Tax</span>
+                    <span className="text-zinc-500 font-bold">Tax</span>
                     <span className="text-zinc-400 font-medium italic">Included</span>
                   </div>
                 </div>
@@ -611,7 +611,7 @@ export default function CartPage() {
                 {/* Delivery method summary */}
                 {deliveryMethod && (
                   <div className="mb-4 p-3 rounded-sm border border-white/5 bg-zinc-800/50">
-                    <span className="text-[10px] font-black text-zinc-500 uppercase tracking-widest block mb-1">Delivery</span>
+                    <span className="text-xs font-semibold text-zinc-500 block mb-1">Delivery</span>
                     {STANDARD_DELIVERY_ENABLED && deliveryMethod === 'standard' ? (
                       <div className="flex items-center gap-2">
                         <Truck className="w-3.5 h-3.5 text-safety-orange" />
@@ -631,7 +631,7 @@ export default function CartPage() {
                 {/* Payment method summary */}
                 {paymentMethod && (
                   <div className="mb-6 p-3 rounded-sm border border-white/5 bg-zinc-800/50">
-                    <span className="text-[10px] font-black text-zinc-500 uppercase tracking-widest block mb-1">Payment</span>
+                    <span className="text-xs font-semibold text-zinc-500 block mb-1">Payment</span>
                     <div className="flex items-center gap-2">
                       {paymentMethod === 'cod' ? (
                         <>
@@ -650,8 +650,8 @@ export default function CartPage() {
 
                 <div className="pt-6 border-t border-white/10 mb-8">
                   <div className="flex justify-between items-end">
-                    <span className="text-xs font-black text-zinc-500 uppercase tracking-widest">Total</span>
-                    <span className="text-3xl font-black text-safety-orange">PHP {cartTotal.toFixed(2)}</span>
+                    <span className="text-xs font-semibold text-zinc-500">Total</span>
+                    <span className="text-3xl font-semibold text-safety-orange">{formatMoney(cartTotal)}</span>
                   </div>
                 </div>
 
@@ -676,7 +676,7 @@ export default function CartPage() {
                 {session && paymentMethod === 'gcash' && belowMinForGcash && (
                   <div className="mb-4 p-3 bg-red-950/30 border border-red-500/20 rounded-sm">
                     <p className="text-xs text-red-400 font-bold">
-                      Minimum GCash (PayMongo) payment is PHP {PAYMONGO_MIN_AMOUNT_PHP.toFixed(2)}. Add items or choose COD.
+                      Minimum GCash (PayMongo) payment is {formatMoney(PAYMONGO_MIN_AMOUNT_PHP)}. Add items or choose COD.
                     </p>
                   </div>
                 )}
@@ -689,7 +689,7 @@ export default function CartPage() {
 
                 <Button
                   id="place-order-btn"
-                  className="w-full h-14 text-sm uppercase font-black tracking-widest bg-safety-orange hover:bg-safety-orange/80 shadow-[0_6px_0_0_#995400] active:translate-y-[2px] active:shadow-[0_4px_0_0_#995400] transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+                  className="w-full h-14 text-sm font-semibold bg-safety-orange hover:bg-safety-orange/80 transition-all disabled:opacity-40 disabled:cursor-not-allowed"
                   onClick={handleCheckout}
                   disabled={checkingOut || !canCheckout}
                 >
@@ -698,15 +698,15 @@ export default function CartPage() {
                   ) : 'Place Order'}
                 </Button>
 
-                <p className="text-[10px] text-center text-zinc-600 font-bold uppercase tracking-widest mt-4">
-                  Secure processing via XTS-PAY
+                <p className="text-xs text-center text-zinc-500 mt-4">
+                  GCash payments are processed securely by PayMongo.
                 </p>
               </div>
 
               <div className="mt-6 p-1 bg-yellow-500/20 rounded-sm">
                 <div className="p-4 bg-zinc-900 border border-yellow-500/30 rounded-sm">
                   <p className="font-handwriting text-yellow-500 italic text-sm text-center">
-                    &quot;All acquisitions include standard warranty and technical documentation.&quot;
+                    &quot;All orders include the standard warranty and product documentation.&quot;
                   </p>
                 </div>
               </div>
