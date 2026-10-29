@@ -118,3 +118,22 @@ The Motion discovery link opens two Motors products; selecting All restores eigh
 products and removes the category query parameter. Physical-device testing,
 performance benchmarking, and a formal accessibility audit remain outside these
 smoke checks.
+
+## Header brand presence
+
+The header now aligns with the page's 1240px content container. The logo mark is
+64px at desktop widths, 48px on typical phones and 40px at 320px; XTS type is
+36px, 29px and 26px respectively. A gold period and short baseline accent add
+definition. The desktop lockup includes “Parts · Precision · Possibility”; phones
+omit that signature to leave room for the cart, theme and menu controls. The footer
+retains its existing separate brand signature without duplicating it in the lockup.
+
+`app/brand.css`, imported after the general stylesheet, owns this refinement.
+Navigation uses the expanded desktop layout from 1280px; narrower widths expose the
+menu to avoid squeezing the enlarged brand against navigation links. The standalone
+SVG wordmark matches the expanded lockup.
+
+TypeScript passes. ESLint for Brand, Navbar and root layout reports zero errors and
+two existing profile-image warnings. Browser checks cover 320px, 375px and 1280px
+iframe layouts plus the 585px main preview, and narrow-phone light/dark contrast.
+Physical-device QA remains a reviewer check.

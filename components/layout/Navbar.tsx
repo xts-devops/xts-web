@@ -83,11 +83,11 @@ export const Navbar = () => {
       "fixed top-0 left-0 w-full z-50 transition-all duration-300",
       navClasses
     )}>
-      <div className="container mx-auto px-4 sm:px-6 flex items-center justify-between">
-        <Link href="/" aria-label="XTS Mechatronics home"><Brand /></Link>
+      <div className="store-container navbar-inner flex items-center justify-between">
+        <Link href="/" aria-label="XTS Mechatronics home" className="navbar-brand"><Brand /></Link>
 
         {/* Desktop Nav */}
-        <div className="hidden lg:flex items-center gap-6">
+        <div className="hidden xl:flex items-center gap-6">
           {navLinks.map((link) => (
             <Link
               key={link.name}
@@ -180,7 +180,7 @@ export const Navbar = () => {
           </div>
 
           <button
-            className="lg:hidden text-[var(--text-primary)]"
+            className="xl:hidden text-[var(--text-primary)]"
             aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
             aria-expanded={mobileMenuOpen}
             aria-controls="mobile-navigation"
@@ -199,7 +199,7 @@ export const Navbar = () => {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="lg:hidden bg-[var(--bg-secondary)] border-b border-[var(--border-primary)] overflow-hidden"
+            className="xl:hidden bg-[var(--bg-secondary)] border-b border-[var(--border-primary)] overflow-hidden"
           >
             <div className="container mx-auto px-4 py-6 flex flex-col gap-5">
               {session && (

@@ -12,6 +12,20 @@ Append-only. Newest at top. Never edit past entries. Format:
 
 ---
 
+## 2026-10-29 · codex · codex/xts-mechatronics-ui · header branding
+**Did:** Enlarged the shared mark and wordmark, refined spacing, added a gold period
+and baseline accent, and added a desktop brand signature. Aligned the header with
+the content container, used the menu below 1280px to preserve navigation space, and
+updated the standalone SVG. Added a dedicated `app/brand.css` after the general CSS;
+the preview was initially retaining old general stylesheet rules, so applied sizing
+was verified in the final browser rendering. Kept the footer signature separate.
+**Why:** User requested a stronger, better-positioned brand specifically in the header.
+**Verify:** TypeScript passed; changed-file ESLint has zero errors and two existing
+profile-image warnings. Browser review: 320px, 375px and 1280px iframe layouts and
+585px main preview; no brand/action overlap and narrow light/dark contrast checked.
+No backend, authentication, order, payment or production-data changes.
+**Next:** Review the header branding update in PR #5; user merges after review.
+
 ## 2026-10-29 · codex · codex/xts-mechatronics-ui · marketing refinement
 **Did:** Refined the homepage with editorial type, warm lighting, technical grid/orbit
 details, a component annotation and richer service cards. Added category discovery

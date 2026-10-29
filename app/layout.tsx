@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Architects_Daughter } from "next/font/google";
 import "./globals.css";
+import "./brand.css";
 
 const inter = Inter({
   variable: "--font-inter",

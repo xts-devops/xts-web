@@ -5,6 +5,7 @@ Rule: set `owner` + `status: in-progress` **before** editing. Keep tasks small a
 Lanes: **claude** = UI + docs · **codex** = backend + data · **shared** = coordinate first (see AGENTS.md).
 
 ## In flight
+- [ ] **Header brand presence follow-up to PR #5** (`components/layout/Brand.tsx`, `Navbar.tsx`, `app/brand.css`, layout CSS import, brand SVG and evaluation notes; user-authorized UI lane). Larger aligned lockup, desktop signature, mobile navigation space; TypeScript/lint and 320px/375px/1280px preview checked. ... owner: codex · status: review
 - [ ] **Marketing finesse follow-up to PR #5** (`codex/xts-mechatronics-ui`; user-authorized UI lane: homepage, storefront CSS, category deep links, metadata and evaluation notes). Stronger visual hierarchy, engineering details, category discovery and project CTA; preserve accessibility and sample labeling. TypeScript/lint and 375px/1280px preview checks passed. ... owner: codex · status: review
 - [ ] **XTS Mechatronics branding, sample product imagery, responsive storefront polish** (`codex/xts-mechatronics-ui`; user-authorized UI lane: `app/**`, `components/**`, `public/**`, plus sample asset index and local seed; no API shape changes). Includes coordination/local-preview commits as development dependencies; no production data edits. Asset index and evaluation: `docs/xts-mechatronics-ui.md`. ... owner: codex · status: review
 - [ ] **Fix `.env.example` var names** (PR #2, `fix/env-example-var-names`) ... owner: claude · status: review
