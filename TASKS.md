@@ -27,7 +27,7 @@ Lanes: **claude** = UI + docs · **codex** = backend + data · **shared** = coor
 ## Backlog — UI consistency (after `claude/ui-polish`)
 - [ ] **Plain style for admin, seller, chat, consultation, community, fabrication pages + their components (Badge, Tabs, modals)** (`claude/ui-polish`, PR #6) ... owner: claude · status: review
 - [ ] **Confirm product-page promises (1-year warranty, fast shipping, 30-day returns) and consultation "Guarantees"** ... owner: user · status: todo
-- [ ] **Community "Hackathon #4" box: update or remove (old March event, dead button)** ... owner: user · status: todo
+- [x] **Community "Hackathon #4" box: update or remove (old March event, dead button)** ... owner: user · status: done (2026-10-29: user said keep it as is for now; don't change it unless asked)
 - [ ] **Seller page product cards: use sample photos via `productImage`** ... owner: claude · status: todo
 
 ## Backlog — bugs and hardening
