@@ -9,6 +9,15 @@ import { XTSLogo } from '@/components/icons';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 
 import { signIn } from "next-auth/react";
+import { isLocalPreviewClient } from '@/lib/local-preview';
+
+// Must match user ids in lib/firebase/local-seed.ts
+const LOCAL_PREVIEW_ACCOUNTS = [
+  { id: 'preview-admin', label: 'Admin' },
+  { id: 'preview-seller', label: 'Seller' },
+  { id: 'preview-expert', label: 'Expert' },
+  { id: 'preview-member', label: 'Customer' },
+];
 
 export const LoginForm = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -49,6 +58,26 @@ export const LoginForm = () => {
             </svg>
             Continue with Google
           </Button>
+
+          {isLocalPreviewClient() && (
+            <div className="border border-dashed border-safety-orange/60 p-4 space-y-2">
+              <p className="text-[10px] font-black uppercase tracking-widest text-safety-orange">
+                Local preview login (dev only)
+              </p>
+              <div className="grid grid-cols-2 gap-2">
+                {LOCAL_PREVIEW_ACCOUNTS.map((acct) => (
+                  <Button
+                    key={acct.id}
+                    variant="outline"
+                    className="text-[10px] uppercase font-black border-zinc-200 text-esd-dark hover:bg-zinc-100"
+                    onClick={() => signIn('local-preview', { userId: acct.id, callbackUrl: '/dashboard' })}
+                  >
+                    {acct.label}
+                  </Button>
+                ))}
+              </div>
+            </div>
+          )}
 
           <div className="relative my-8">
             <div className="absolute inset-0 flex items-center"><span className="w-full border-t border-zinc-200"></span></div>

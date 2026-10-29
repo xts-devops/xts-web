@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { adminStorage } from '@/lib/firebase/admin';
+import { isLocalPreview } from '@/lib/local-preview';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 
@@ -51,7 +52,9 @@ export async function POST(req: NextRequest) {
 
     await fileRef.makePublic();
 
-    const publicUrl = `https://storage.googleapis.com/${bucket.name}/${fileName}`;
+    const publicUrl = isLocalPreview()
+      ? `/local-uploads/${fileName}`
+      : `https://storage.googleapis.com/${bucket.name}/${fileName}`;
 
     return NextResponse.json({ url: publicUrl });
   } catch (error) {
