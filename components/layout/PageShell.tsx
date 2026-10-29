@@ -14,7 +14,7 @@ export const PageShell = ({ children }: PageShellProps) => {
     <div className="flex flex-col min-h-screen">
       <a href="#main-content" className="skip-link">Skip to content</a>
       <Navbar />
-      <main id="main-content" className="flex-grow pt-24">
+      <main id="main-content" className="flex-grow pt-16">
         {children}
       </main>
       <Footer />

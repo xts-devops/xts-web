@@ -87,8 +87,10 @@ the user doc on every refresh so role changes apply at once.
 
 ## 9. Branding and storefront branch
 `codex/xts-mechatronics-ui` includes the pending local preview and coordination work
-as dependencies. User-authorized UI changes display XTS Mechatronics and a scalable
-version of the first white logo reference. Shared UI: `components/layout/Brand.tsx`,
+as dependencies. The latest user direction uses a compact XTS mark with a separate
+Mechatronics department label, plain copy, and direct shop/service navigation.
+The earlier enlarged lockup and decorative marketing layout were superseded.
+Shared UI: `components/layout/Brand.tsx`,
 `components/ui/ProductCard.tsx`, `components/ui/ProductImage.tsx`. The asset index is
 `lib/sample-assets.ts`; image provenance, evaluation, and verification scope are in
 `docs/xts-mechatronics-ui.md`. Bundled samples are labeled and never overwrite seller

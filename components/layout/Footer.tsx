@@ -42,9 +42,9 @@ export const Footer = () => {
               <Brand footer />
             </Link>
             <p className="text-zinc-500 max-w-sm mb-6 sm:mb-8 text-sm">
-              The ultimate workbench for engineers. High-quality parts, specialized fabrication, and an expert community to bring your projects to life.
+              Electronics, custom fabrication, and technical support for engineering projects.
             </p>
-            <p className="footer-note">Parts. Precision. Possibility.</p>
+
           </div>
 
           {footerLinks.map((section) => (
@@ -65,7 +65,7 @@ export const Footer = () => {
         
         <div className="pt-8 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-6">
           <p className="text-zinc-600 text-xs sm:text-sm text-center sm:text-left">
-            &copy; {new Date().getFullYear()} XTS Mechatronics. Designed for the Engineering Desk.
+            &copy; {new Date().getFullYear()} XTS Mechatronics.
           </p>
           <div className="flex gap-4 sm:gap-8 text-xs sm:text-sm text-zinc-600">
             <Link href="/privacy" className="hover:text-zinc-400 transition-colors">Privacy Policy</Link>

@@ -12,6 +12,24 @@ Append-only. Newest at top. Never edit past entries. Format:
 
 ---
 
+## 2026-10-29 · codex · codex/xts-mechatronics-ui · compact public UI
+**Did:** Replaced the expanded lockup with a compact XTS mark and separate Mechatronics
+department label. Smallest headers show the department in the menu/home context
+instead. Kept the header at 64px with no scroll listener or resizing. Simplified the
+homepage to direct introduction, category links, featured products and services;
+removed slogans, serif accents, orbit/glow/grid graphics, tilt, entrance/hover motion,
+redundant hero product display and promotional panels. Consolidated storefront CSS,
+simplified shop/footer/metadata text and matched the standalone SVG. Wrapped price/add
+controls on 320px cards; product images and category filtering remain.
+**Why:** User explicitly requested compact department branding and minimal, efficient
+public UI, superseding earlier decorative iterations (recorded as D8).
+**Verify:** TypeScript passed. ESLint on changed TSX files passed with zero errors
+and two existing profile-image warnings. Browser checks: 320px/375px/1280px iframe
+layouts and 585px main preview, phone light/dark themes, 320px card controls, Motors
+shortcut returns two matching products, department menu label and Escape dismissal.
+No auth, API contracts, payments, orders or production-data changes. No new dependencies.
+**Next:** Review the simplified final design in PR #5; user merges after review.
+
 ## 2026-10-29 · codex · codex/xts-mechatronics-ui · header branding
 **Did:** Enlarged the shared mark and wordmark, refined spacing, added a gold period
 and baseline accent, and added a desktop brand signature. Aligned the header with

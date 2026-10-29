@@ -24,7 +24,6 @@ export const Navbar = () => {
   const pathname = usePathname();
   const { data: session } = useSession();
   const role = (session?.user as { role?: string } | undefined)?.role;
-  const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [loggingOut, setLoggingOut] = useState(false);
   const { cartCount } = useCart();
@@ -39,14 +38,7 @@ export const Navbar = () => {
     return () => window.removeEventListener('keydown', closeOnEscape);
   }, [mobileMenuOpen]);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-    };
-    handleScroll();
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+
 
   // Poll for unread chats. Also listens for an in-page "chats:refresh-unread"
   // event so the badge clears immediately after a user reads or sends a
@@ -74,15 +66,8 @@ export const Navbar = () => {
     await signOut({ callbackUrl: '/' });
   };
 
-  const navClasses = isScrolled
-    ? "bg-[var(--nav-bg)] backdrop-blur-md py-3 border-b border-[var(--border-primary)] shadow-xl"
-    : "bg-[var(--nav-bg)] backdrop-blur-md py-4 border-b border-[var(--border-primary)]";
-
   return (
-    <nav className={cn(
-      "fixed top-0 left-0 w-full z-50 transition-all duration-300",
-      navClasses
-    )}>
+    <nav className="fixed top-0 left-0 w-full z-50 bg-[var(--nav-bg)] border-b border-[var(--border-primary)] py-3">
       <div className="store-container navbar-inner flex items-center justify-between">
         <Link href="/" aria-label="XTS Mechatronics home" className="navbar-brand"><Brand /></Link>
 
@@ -96,7 +81,7 @@ export const Navbar = () => {
               className="group flex items-center gap-2 text-[var(--text-secondary)] hover:text-safety-orange transition-colors"
             >
               <link.icon className="w-4 h-4 group-hover:scale-110 transition-transform" />
-              <span className="text-sm font-bold uppercase tracking-tight">{link.name}</span>
+              <span className="text-sm font-medium">{link.name}</span>
             </Link>
           ))}
         </div>
@@ -202,6 +187,7 @@ export const Navbar = () => {
             className="xl:hidden bg-[var(--bg-secondary)] border-b border-[var(--border-primary)] overflow-hidden"
           >
             <div className="container mx-auto px-4 py-6 flex flex-col gap-5">
+              <p className="text-xs font-medium text-[var(--text-secondary)]">Mechatronics</p>
               {session && (
                 <div className="flex items-center gap-4 mb-2 p-4 bg-[var(--bg-surface)] rounded-sm">
                    {session.user?.image ? (

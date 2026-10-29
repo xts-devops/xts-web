@@ -61,79 +61,35 @@ Subjects:
 - LM2596 DC buck converter module, blue PCB with blue adjustment potentiometer, large copper inductor and two electrolytic capacitors.
 - Raspberry Pi 5 single board computer, green PCB with silver USB and ethernet ports, black chips, two micro HDMI ports and 40-pin GPIO header.
 
-## UI evaluation and changes
+## Current public UI
 
-- Replaced the oversized text-only hero with a responsive product workbench and
-  clear shop/fabrication links. Preserved service, expert and community destinations.
-- Unified homepage/shop cards, readable mobile typography, prices, stock state,
-  accessible add buttons, sample labels and consistent image framing.
-- Search now includes category names and ignores surrounding spaces. Filters expose
-  their selected state; empty searches can reset and fetch errors can retry.
-- Added image sizes, lazy loading, priority loading for the hero/detail image, and a
-  broken-image state. Product photos preserve aspect ratio rather than cropping.
-- Matched navbar/footer/metadata/icons and updated the displayed company name.
-- Added keyboard focus outlines, skip link, menu labels, Escape handling, and reduced
-  motion styling. Mobile menu scrolls within the viewport.
-- Removed nonfunctional social tiles, fake community posts and the newsletter form
-  that showed success without persisting a subscription. Community remains linked.
-- Removed the external paper texture request and corrected accent contrast on pale cards.
-- Kept checkout, payment, authentication and API contracts unchanged by the UI commit.
+The latest user direction replaces the earlier marketing and enlarged-header
+iterations. The header uses a compact XTS mark and a separate Mechatronics department
+label. Below 400px, the department moves out of the header row; it remains in the
+homepage context, mobile menu and footer. The header is a stable 64px high and shares
+the page content alignment.
 
-## Verification scope
+The homepage contains a direct introduction, category shortcuts, featured products,
+and services/support links. Removed the signature slogans, serif headline, glows,
+orbits, background dot grid, tilt, decorative diagram, numbered panels, redundant
+hero product display, repeated calls to action, and entrance/hover movement.
+Product photos remain labeled, with working catalog search, categories, cart feedback
+and stock states. Focus outlines, skip link, mobile menu/Escape, reduced-motion
+support and light/dark themes remain. The footer, shop heading and metadata use plain
+language. No new dependency or third-party request was added.
 
-Use `LOCAL_PREVIEW=true` and `NEXT_PUBLIC_LOCAL_PREVIEW=true` in `.env.local`, then
-`npm run dev`. The current checkout already has these flags enabled.
+The storefront CSS was consolidated instead of layering further overrides onto the
+marketing treatment. The header no longer attaches a scroll listener or changes size
+while scrolling. Narrow 320px product cards wrap the price and add button to avoid
+collisions; long category labels truncate while product names remain readable.
 
-Verified at the available 585px in-app browser width: homepage, all eight product
-images, ESP32 search (one result), Motors filter (two results), add-to-cart count and
-cart image, out-of-stock disabled add control, light and dark themes. Product detail
-and mobile menu are also included in the manual smoke check. No real orders,
-payments or production-data operations were performed. Wider desktop and physical
-phone QA remain a review item; no production build was attempted because it requires
-the real Firebase build environment.
+## Verification
 
-TypeScript and changed-file ESLint are required before committing. Remaining lint
-warnings concern the pre-existing thumbnail/profile `<img>` elements.
-
-## Marketing refinement
-
-The follow-up adds an editorial headline with a serif accent, a warm hero glow,
-technical grid/orbit details, a component annotation, and small entrance/hover
-transitions. Category discovery cards link directly to filtered catalog pages.
-Service cards have clearer visual hierarchy, and a contrasting fabrication call to
-action uses a lightweight native SVG drawing. Metadata now describes the actual
-offerings. No new dependencies, third-party requests, or image files were added.
-
-The marketing copy adds no invented testimonials, customer counts, turnaround
-guarantees, or discount urgency. Sample-image labels, one main heading, semantic
-links, keyboard focus, and reduced-motion behavior remain. Decorative details are
-hidden from assistive technology. Reduced-motion preferences disable entrance
-animations and the new hover transitions.
-
-Follow-up verification: TypeScript and ESLint for `app/page.tsx`, `app/shop/page.tsx`,
-and `app/layout.tsx` pass with zero errors or warnings. Browser review includes the
-585px primary preview and 375px/1280px iframe viewports in an ignored, local-only
-review harness, including the desktop lower-page banner and 375px light/dark hero.
-The Motion discovery link opens two Motors products; selecting All restores eight
-products and removes the category query parameter. Physical-device testing,
-performance benchmarking, and a formal accessibility audit remain outside these
-smoke checks.
-
-## Header brand presence
-
-The header now aligns with the page's 1240px content container. The logo mark is
-64px at desktop widths, 48px on typical phones and 40px at 320px; XTS type is
-36px, 29px and 26px respectively. A gold period and short baseline accent add
-definition. The desktop lockup includes “Parts · Precision · Possibility”; phones
-omit that signature to leave room for the cart, theme and menu controls. The footer
-retains its existing separate brand signature without duplicating it in the lockup.
-
-`app/brand.css`, imported after the general stylesheet, owns this refinement.
-Navigation uses the expanded desktop layout from 1280px; narrower widths expose the
-menu to avoid squeezing the enlarged brand against navigation links. The standalone
-SVG wordmark matches the expanded lockup.
-
-TypeScript passes. ESLint for Brand, Navbar and root layout reports zero errors and
-two existing profile-image warnings. Browser checks cover 320px, 375px and 1280px
-iframe layouts plus the 585px main preview, and narrow-phone light/dark contrast.
-Physical-device QA remains a reviewer check.
+TypeScript passes. Changed-file ESLint reports zero errors and two pre-existing
+profile-image warnings in Navbar. Browser review uses the main 585px view plus
+320px, 375px and 1280px iframe viewports in an ignored local review harness, including
+light/dark phone views and catalog/navigation smoke checks. Existing local sample
+data and seller uploads are preserved. No production data, real orders, payments or
+real login were used. Physical-device testing and formal accessibility/performance
+audits remain outside these checks. A production build requires the real Firebase
+environment and was not attempted.

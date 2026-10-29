@@ -37,3 +37,10 @@ on `codex/xts-mechatronics-ui`. Use the first supplied white geometric mark with
 the display name XTS Mechatronics, charcoal surfaces and warm brass accents.
 This is a task-scoped lane exception. Generated product imagery is illustrative,
 labeled and restricted to sample data; seller-uploaded photos retain priority.
+
+### D8 · Compact department branding and public UI · 2026-10-29 · codex
+The user's latest direction supersedes the expanded lockup and decorative marketing
+treatment: use a compact XTS mark with Mechatronics as a separate department label,
+plain copy, and direct catalog/service navigation. Omit the department label from the
+smallest header row; retain it in the mobile menu, homepage heading context and footer.
+Remove signature slogans, decorative diagrams, ambient graphics and redundant sections.
