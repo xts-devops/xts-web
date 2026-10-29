@@ -15,7 +15,7 @@ const architectsDaughter = Architects_Daughter({
 
 export const metadata: Metadata = {
   title: "XTS Mechatronics | Engineering Solutions & Fabrication",
-  description: "E-Commerce, Fabrication Services, and Technical Community for Engineers.",
+  description: "Bring your next idea to life with XTS Mechatronics. Explore electronics and robotics components, custom fabrication, and engineering expertise on one workbench.",
   icons: {
     icon: "/icon.svg",
   },

@@ -12,6 +12,22 @@ Append-only. Newest at top. Never edit past entries. Format:
 
 ---
 
+## 2026-10-29 · codex · codex/xts-mechatronics-ui · marketing refinement
+**Did:** Refined the homepage with editorial type, warm lighting, technical grid/orbit
+details, a component annotation and richer service cards. Added category discovery
+links and URL-backed filters, a contrasting fabrication CTA with native SVG artwork,
+subtle motion and clearer marketing metadata. Updated existing PR #5 on the same branch.
+**Why:** User found the first version too plain and requested marketing finesse while
+maintaining standards. Kept semantic structure, focus states, sample labels, and
+reduced-motion support; added no dependencies, images or external requests.
+**Verify:** `npx tsc --noEmit` passed. ESLint for the three changed TSX files passed
+with zero warnings/errors. Local-preview browser checks: 585px main view plus 375px
+and 1280px iframe layouts, phone light/dark contrast, desktop services/banner, Motion
+discovery opens two motor products; All restores eight and clears the URL category.
+No payments, orders, auth changes or production data accessed. No formal accessibility
+audit or performance benchmark claimed; physical-device QA remains a review item.
+**Next:** User reviews the updated PR #5 and marketing treatment before merging.
+
 ## 2026-10-29 · codex · codex/xts-mechatronics-ui
 **Did:** Created the user-requested UI branch from main, including existing coordination
 and local-preview commits as dependencies. Chose the first white reference mark,

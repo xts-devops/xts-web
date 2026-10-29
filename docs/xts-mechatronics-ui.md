@@ -94,3 +94,27 @@ the real Firebase build environment.
 
 TypeScript and changed-file ESLint are required before committing. Remaining lint
 warnings concern the pre-existing thumbnail/profile `<img>` elements.
+
+## Marketing refinement
+
+The follow-up adds an editorial headline with a serif accent, a warm hero glow,
+technical grid/orbit details, a component annotation, and small entrance/hover
+transitions. Category discovery cards link directly to filtered catalog pages.
+Service cards have clearer visual hierarchy, and a contrasting fabrication call to
+action uses a lightweight native SVG drawing. Metadata now describes the actual
+offerings. No new dependencies, third-party requests, or image files were added.
+
+The marketing copy adds no invented testimonials, customer counts, turnaround
+guarantees, or discount urgency. Sample-image labels, one main heading, semantic
+links, keyboard focus, and reduced-motion behavior remain. Decorative details are
+hidden from assistive technology. Reduced-motion preferences disable entrance
+animations and the new hover transitions.
+
+Follow-up verification: TypeScript and ESLint for `app/page.tsx`, `app/shop/page.tsx`,
+and `app/layout.tsx` pass with zero errors or warnings. Browser review includes the
+585px primary preview and 375px/1280px iframe viewports in an ignored, local-only
+review harness, including the desktop lower-page banner and 375px light/dark hero.
+The Motion discovery link opens two Motors products; selecting All restores eight
+products and removes the category query parameter. Physical-device testing,
+performance benchmarking, and a formal accessibility audit remain outside these
+smoke checks.
