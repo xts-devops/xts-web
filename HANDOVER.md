@@ -84,3 +84,12 @@ the user doc on every refresh so role changes apply at once.
 3. **New Vercel project**: env vars, Google OAuth redirect URIs, `NEXTAUTH_URL`,
    PayMongo webhook URL, disconnect the old project from `main`, DNS.
 4. Hardening from §7.
+
+## 9. Branding and storefront branch
+`codex/xts-mechatronics-ui` includes the pending local preview and coordination work
+as dependencies. User-authorized UI changes display XTS Mechatronics and a scalable
+version of the first white logo reference. Shared UI: `components/layout/Brand.tsx`,
+`components/ui/ProductCard.tsx`, `components/ui/ProductImage.tsx`. The asset index is
+`lib/sample-assets.ts`; image provenance, evaluation, and verification scope are in
+`docs/xts-mechatronics-ui.md`. Bundled samples are labeled and never overwrite seller
+photos. No production product data was seeded. Review this branch before merging.

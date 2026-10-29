@@ -3,7 +3,9 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
-import { XTSLogo, ShopIcon, FabricationIcon, ConsultationIcon, CommunityIcon } from '@/components/icons';
+import { ShopIcon, FabricationIcon, ConsultationIcon, CommunityIcon } from '@/components/icons';
+import { Brand } from './Brand';
+import { usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/Button';
 import { cn } from '@/lib/utils';
 import { Menu, X, ShoppingCart, LogOut, User as UserIcon, LayoutDashboard, Loader2, MessageCircle, Wrench } from 'lucide-react';
@@ -19,20 +21,30 @@ const navLinks = [
 ];
 
 export const Navbar = () => {
+  const pathname = usePathname();
   const { data: session } = useSession();
+  const role = (session?.user as { role?: string } | undefined)?.role;
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [mounted, setMounted] = useState(false);
   const [loggingOut, setLoggingOut] = useState(false);
   const { cartCount } = useCart();
   const [unreadChats, setUnreadChats] = useState(0);
 
   useEffect(() => {
-    setMounted(true);
+    if (!mobileMenuOpen) return;
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setMobileMenuOpen(false);
+    };
+    window.addEventListener('keydown', closeOnEscape);
+    return () => window.removeEventListener('keydown', closeOnEscape);
+  }, [mobileMenuOpen]);
+
+  useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
     };
-    window.addEventListener('scroll', handleScroll);
+    handleScroll();
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -62,9 +74,9 @@ export const Navbar = () => {
     await signOut({ callbackUrl: '/' });
   };
 
-  const navClasses = mounted && isScrolled
+  const navClasses = isScrolled
     ? "bg-[var(--nav-bg)] backdrop-blur-md py-3 border-b border-[var(--border-primary)] shadow-xl"
-    : "bg-[var(--nav-bg-transparent)] py-5";
+    : "bg-[var(--nav-bg)] backdrop-blur-md py-4 border-b border-[var(--border-primary)]";
 
   return (
     <nav className={cn(
@@ -72,10 +84,7 @@ export const Navbar = () => {
       navClasses
     )}>
       <div className="container mx-auto px-4 sm:px-6 flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-2 sm:gap-3 group">
-          <XTSLogo className="w-10 h-10 sm:w-12 sm:h-12 group-hover:rotate-12 transition-transform" />
-          <span className="text-xl sm:text-2xl md:text-3xl font-black tracking-tighter text-[var(--text-primary)]">XTS WEB</span>
-        </Link>
+        <Link href="/" aria-label="XTS Mechatronics home"><Brand /></Link>
 
         {/* Desktop Nav */}
         <div className="hidden lg:flex items-center gap-6">
@@ -83,6 +92,7 @@ export const Navbar = () => {
             <Link
               key={link.name}
               href={link.href}
+              aria-current={pathname === link.href || pathname.startsWith(`${link.href}/`) ? 'page' : undefined}
               className="group flex items-center gap-2 text-[var(--text-secondary)] hover:text-safety-orange transition-colors"
             >
               <link.icon className="w-4 h-4 group-hover:scale-110 transition-transform" />
@@ -102,7 +112,7 @@ export const Navbar = () => {
             )}
           </Link>
 
-          <Link href="/cart" className="relative p-2 text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">
+          <Link href="/cart" aria-label={`Cart, ${cartCount} items`} className="relative p-2 text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">
             <ShoppingCart className="w-5 h-5 sm:w-6 sm:h-6" />
             {cartCount > 0 && (
               <motion.span
@@ -119,17 +129,17 @@ export const Navbar = () => {
           <div className="hidden md:flex items-center gap-3">
             {session ? (
               <div className="flex items-center gap-3">
-                {((session.user as any)?.role?.includes('admin') || (session.user as any)?.role?.includes('expert')) && (
+                {(role?.includes('admin') || role?.includes('expert')) && (
                   <Link href="/admin" className="mr-1">
                     <Button variant="outline" size="sm" className={cn(
                       "border-[var(--border-primary)] text-[var(--text-secondary)] hover:bg-[var(--bg-surface)]",
-                      (session.user as any)?.role?.includes('admin') && "border-red-500/50 text-red-500 hover:bg-red-500/10"
+                      role?.includes('admin') && "border-red-500/50 text-red-500 hover:bg-red-500/10"
                     )}>
-                      {(session.user as any)?.role?.includes('admin') ? 'Terminal' : 'Portal'}
+                      {role?.includes('admin') ? 'Terminal' : 'Portal'}
                     </Button>
                   </Link>
                 )}
-                {((session.user as any)?.role?.includes('admin') || (session.user as any)?.role?.includes('seller')) && (
+                {(role?.includes('admin') || role?.includes('seller')) && (
                   <Link href="/seller">
                     <Button variant="outline" size="sm" className="border-blue-500/50 text-blue-500 hover:bg-blue-500/10">
                       Seller
@@ -171,6 +181,9 @@ export const Navbar = () => {
 
           <button
             className="lg:hidden text-[var(--text-primary)]"
+            aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
+            aria-expanded={mobileMenuOpen}
+            aria-controls="mobile-navigation"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           >
             {mobileMenuOpen ? <X /> : <Menu />}
@@ -182,6 +195,7 @@ export const Navbar = () => {
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
+            id="mobile-navigation"
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
@@ -236,21 +250,21 @@ export const Navbar = () => {
                 )}
               </Link>
 
-              {session && ((session.user as any)?.role?.includes('admin') || (session.user as any)?.role?.includes('expert')) && (
+              {session && (role?.includes('admin') || role?.includes('expert')) && (
                 <Link
                   href="/admin"
                   onClick={() => setMobileMenuOpen(false)}
                   className={cn(
                     "flex items-center gap-4 text-lg font-black uppercase tracking-tighter transition-colors",
-                    (session.user as any)?.role?.includes('admin') ? "text-red-500 hover:text-red-400" : "text-safety-orange hover:text-safety-orange/80"
+                    role?.includes('admin') ? "text-red-500 hover:text-red-400" : "text-safety-orange hover:text-safety-orange/80"
                   )}
                 >
                   <LayoutDashboard className="w-5 h-5" />
-                  {(session.user as any)?.role?.includes('admin') ? 'Terminal' : 'Expert Portal'}
+                  {role?.includes('admin') ? 'Terminal' : 'Expert Portal'}
                 </Link>
               )}
 
-              {session && ((session.user as any)?.role?.includes('admin') || (session.user as any)?.role?.includes('seller')) && (
+              {session && (role?.includes('admin') || role?.includes('seller')) && (
                 <Link
                   href="/seller"
                   onClick={() => setMobileMenuOpen(false)}

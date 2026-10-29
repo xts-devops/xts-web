@@ -5,6 +5,7 @@ Rule: set `owner` + `status: in-progress` **before** editing. Keep tasks small a
 Lanes: **claude** = UI + docs · **codex** = backend + data · **shared** = coordinate first (see AGENTS.md).
 
 ## In flight
+- [ ] **XTS Mechatronics branding, sample product imagery, responsive storefront polish** (`codex/xts-mechatronics-ui`; user-authorized UI lane: `app/**`, `components/**`, `public/**`, plus sample asset index and local seed; no API shape changes). Includes coordination/local-preview commits as development dependencies; no production data edits. Asset index and evaluation: `docs/xts-mechatronics-ui.md`. ... owner: codex · status: review
 - [ ] **Fix `.env.example` var names** (PR #2, `fix/env-example-var-names`) ... owner: claude · status: review
 - [ ] **Local preview mode** (PR #3, `dev/local-preview`) ... owner: claude · status: review
 - [ ] **Codex/Claude coordination files** (`claude/cowork-setup`) ... owner: claude · status: review

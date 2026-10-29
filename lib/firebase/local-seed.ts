@@ -4,6 +4,8 @@
  * Delete .local-preview/db.json to reset to this seed.
  */
 
+import { sampleAssets } from '../sample-assets';
+
 const ADMIN_INBOX = process.env.NEXT_PUBLIC_ADMIN_EMAIL || 'admin@xts.com';
 
 const daysAgo = (d: number, h = 0) => new Date(Date.now() - d * 86400000 - h * 3600000);
@@ -77,10 +79,12 @@ export function buildSeed(): Record<string, Record<string, any>> {
   }
 
   products.forEach(([id, p], i) => {
-    const { hue, seller, ...rest } = p;
+    const { seller, ...rest } = p;
+    delete rest.hue;
+    const asset = sampleAssets.find(asset => asset.id === id);
     col('products')[id] = {
       ...rest,
-      imageUrls: [placeholder(p.sku, hue), placeholder(`${p.sku} · B`, hue + 20)],
+      imageUrls: asset ? [`/images/products/${asset.file}.webp`] : [],
       ...(seller ? { sellerId: users['preview-seller'].email } : {}),
       createdAt: daysAgo(40 - i * 3),
     };
@@ -130,7 +134,7 @@ export function buildSeed(): Record<string, Record<string, any>> {
     [casey, 'Hi! Does the ESP32 come with headers soldered?', 3],
     [users['preview-seller'], 'Yes, pre-soldered male headers on both rows.', 2.9],
     [casey, 'Great, ordering two now.', 2.8],
-  ], { productRef: { id: 'p-esp32', name: p1.name, price: p1.price, imageUrl: placeholder(p1.sku, 25) } });
+  ], { productRef: { id: 'p-esp32', name: p1.name, price: p1.price, imageUrl: '/images/products/esp32.webp' } });
   chat('chat-pickup', casey, inbox, 'pickup', [
     [casey, 'What time can I pick up order ord-1003 in Makati?', 0.15],
   ], { pickupRef: { pointId: 'pp-makati', pointName: 'XTS Hub — Makati', pointAddress: '123 Ayala Ave, Makati City' } });

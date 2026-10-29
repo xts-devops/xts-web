@@ -3,21 +3,22 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { PageShell } from '@/components/layout/PageShell';
-import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
-import { ShopIcon } from '@/components/icons';
 import { Box, ArrowLeft, ShieldCheck, Truck, RotateCcw, Activity, Check, ShoppingCart, MessageCircle, Star, Zap } from 'lucide-react';
 import Link from 'next/link';
 import { useCart } from '@/lib/cart-context';
 import { useSession } from 'next-auth/react';
 import { ADMIN_INBOX_EMAIL } from '@/lib/admin-email';
+import { productImage } from '@/lib/sample-assets';
+import { ProductImage } from '@/components/ui/ProductImage';
+import type { ProductDTO } from '@/lib/types';
 
 export default function ProductDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const [id, setId] = useState<string | null>(null);
   const router = useRouter();
   const { data: session } = useSession();
-  const [product, setProduct] = useState<any>(null);
+  const [product, setProduct] = useState<ProductDTO | null>(null);
   const [loading, setLoading] = useState(true);
   const [added, setAdded] = useState(false);
   const [selectedImage, setSelectedImage] = useState(0);
@@ -52,11 +53,11 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
     addToCart({
       id: product.id,
       name: product.name,
-      price: parseFloat(product.price),
+      price: Number(product.price),
       category: product.category,
       sku: product.sku,
       tag: product.tag,
-      imageUrl: product.imageUrls?.[0] || '',
+      imageUrl: productImage(product),
       sellerId: product.sellerId || undefined,
     });
     setAdded(true);
@@ -69,6 +70,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
   };
 
   const handleChatSeller = async () => {
+    if (!product) return;
     if (!session?.user?.email) {
       router.push('/login');
       return;
@@ -76,7 +78,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
     setChatLoading(true);
     setChatError(null);
     try {
-      const productPrice = parseFloat(product.price).toLocaleString('en-PH', { minimumFractionDigits: 2 });
+      const productPrice = Number(product.price).toLocaleString('en-PH', { minimumFractionDigits: 2 });
       const initialMessage = `Hi! I'm interested in this product:\n\n📦 ${product.name}\n🏷️ SKU: ${product.sku}\n💰 Price: ₱${productPrice}\n📂 Category: ${product.category}\n\nCould you help me with more details?`;
 
       // Route to the product's seller if available, otherwise fall back to admin inbox
@@ -91,7 +93,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
           productRef: {
             id: product.id,
             name: product.name,
-            price: parseFloat(product.price),
+            price: Number(product.price),
             imageUrl: product.imageUrls?.[0] || '',
           },
           initialMessage,
@@ -136,7 +138,8 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
     );
   }
 
-  const images = product.imageUrls && product.imageUrls.length > 0 ? product.imageUrls : [];
+  const primaryImage = productImage(product);
+  const images: string[] = primaryImage.startsWith('/images/products/') ? [primaryImage] : product.imageUrls || [];
   const specs = product.specifications || [];
 
   return (
@@ -152,7 +155,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
           <div className="space-y-4">
             <div className="aspect-square bg-[var(--bg-surface)] border border-[var(--border-primary)] rounded-sm flex items-center justify-center relative overflow-hidden">
               {images.length > 0 ? (
-                <img src={images[selectedImage]} alt={product.name} className="w-full h-full object-cover" />
+                <ProductImage src={images[selectedImage]} name={product.name} priority sizes="(max-width: 1024px) 90vw, 45vw" />
               ) : (
                 <Box className="w-32 h-32 sm:w-40 sm:h-40 text-[var(--text-muted)] opacity-30" />
               )}
@@ -160,6 +163,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
                 <Badge variant="new" className="bg-safety-orange text-white border-none">{product.tag}</Badge>
               </div>
             </div>
+            {primaryImage.startsWith('/images/products/') && <p className="text-xs text-[var(--text-muted)]">Illustrative sample image. Refer to specifications for product details.</p>}
             {images.length > 1 && (
               <div className="grid grid-cols-4 gap-2 sm:gap-3">
                 {images.map((img: string, i: number) => (
@@ -189,12 +193,12 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
           {/* Details Section */}
           <div className="flex flex-col">
             <div className="mb-4 sm:mb-6">
-              <span className="text-[10px] font-black text-safety-orange uppercase tracking-widest block mb-2">{product.category} // {product.sku}</span>
+              <span className="text-[10px] font-black text-safety-orange uppercase tracking-widest block mb-2">{product.category} <span aria-hidden="true">/</span> {product.sku}</span>
               <h1 className="text-3xl sm:text-4xl font-black text-[var(--text-primary)] uppercase tracking-tighter leading-none mb-3 sm:mb-4">
                 {product.name}
               </h1>
               <div className="flex flex-wrap items-center gap-3">
-                <span className="text-2xl sm:text-3xl font-black text-[var(--text-primary)]">PHP {parseFloat(product.price).toFixed(2)}</span>
+                <span className="text-2xl sm:text-3xl font-black text-[var(--text-primary)]">PHP {Number(product.price).toFixed(2)}</span>
                 <Badge variant={product.stock > 0 ? 'completed' : 'warning'} className="text-[10px]">
                   {product.stock > 0 ? `${product.stock} IN STOCK` : 'OUT OF STOCK'}
                 </Badge>

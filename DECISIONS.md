@@ -30,3 +30,10 @@ repo's conventional style while showing which agent made each commit.
 Move data and storage to Supabase; keep NextAuth with a Supabase adapter rather than
 switching to Supabase Auth. **Why:** keeps Google login, sessions and role logic as
 they are, so the move touches data only. **Not locked** until the user approves the design doc.
+
+### D7 · XTS Mechatronics UI scope · 2026-10-29 · codex
+The user authorized Codex to edit the UI lane for the branding and storefront task
+on `codex/xts-mechatronics-ui`. Use the first supplied white geometric mark with
+the display name XTS Mechatronics, charcoal surfaces and warm brass accents.
+This is a task-scoped lane exception. Generated product imagery is illustrative,
+labeled and restricted to sample data; seller-uploaded photos retain priority.
