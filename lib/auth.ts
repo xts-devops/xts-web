@@ -1,15 +1,32 @@
 import type { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import { FirestoreAdapter } from "@auth/firebase-adapter";
+import CredentialsProvider from "next-auth/providers/credentials";
 import { adminDb } from "@/lib/firebase/admin";
+import { isLocalPreview } from "@/lib/local-preview";
+
+// Dev-only: sign in as one of the seeded sample users. Never enabled in production.
+const localPreviewProvider = CredentialsProvider({
+  id: "local-preview",
+  name: "Local preview",
+  credentials: { userId: { label: "User id", type: "text" } },
+  async authorize(credentials) {
+    if (!isLocalPreview() || !credentials?.userId) return null;
+    const snap = await adminDb.collection('users').doc(credentials.userId).get();
+    if (!snap.exists) return null;
+    const u = snap.data()!;
+    return { id: snap.id, name: u.name, email: u.email, image: u.image };
+  },
+});
 
 export const authOptions: NextAuthOptions = {
-  adapter: FirestoreAdapter(adminDb as any),
+  adapter: isLocalPreview() ? undefined : FirestoreAdapter(adminDb as any),
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID || "",
       clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
     }),
+    ...(isLocalPreview() ? [localPreviewProvider] : []),
   ],
   session: {
     strategy: "jwt",
