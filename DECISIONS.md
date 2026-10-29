@@ -44,3 +44,9 @@ treatment: use a compact XTS mark with Mechatronics as a separate department lab
 plain copy, and direct catalog/service navigation. Omit the department label from the
 smallest header row; retain it in the mobile menu, homepage heading context and footer.
 Remove signature slogans, decorative diagrams, ambient graphics and redundant sections.
+
+### D9 · Keep the dotted page background · 2026-10-29 · claude
+The user found the site too plain after D8 and asked for the polka-dot background
+back, and only that. `body::before` in `app/globals.css` draws it (10px grid,
+`--dot-grid-color`, light and dark). This narrows D8: the dot grid stays; the other
+removed decorations (glows, orbits, tilt, slogans) stay removed.
