@@ -174,7 +174,7 @@ export function buildSeed(): Record<string, Record<string, any>> {
 
   const post = (id: string, who: { name: string; email: string; hue: number }, uid: string, title: string, content: string, tag: string, d: number, likes: number, pinned = false) => {
     col('posts')[id] = {
-      title, content, author: who.name, avatar: avatar(who.name, who.hue), tag, likes, likedBy: [], comments: 0,
+      title, content, author: who.name, avatar: who.name[0].toUpperCase(), tag, likes, likedBy: [], comments: 0,
       isPinned: pinned, userId: uid, userEmail: who.email, createdAt: daysAgo(d),
     };
   };

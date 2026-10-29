@@ -16,6 +16,7 @@ import { useSession } from 'next-auth/react';
 import { useRouter, useSearchParams } from 'next/navigation';
 
 import { Suspense } from 'react';
+import { formatMoney } from '@/lib/currency';
 
 function AdminPanel() {
   const { data: session, status } = useSession();
@@ -493,8 +494,8 @@ function AdminPanel() {
     return (
       <PageShell>
         <div className="container mx-auto px-4 py-20 flex items-center justify-center min-h-[50vh]">
-          <div className="font-mono text-safety-orange animate-pulse uppercase tracking-widest">
-            Synchronizing Neural Link...
+          <div className="font-mono text-safety-orange animate-pulse">
+            Loading…
           </div>
         </div>
       </PageShell>
@@ -507,22 +508,22 @@ function AdminPanel() {
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16">
           <div>
             <Badge className={cn(
-              "mb-2 uppercase",
+              "mb-2",
               userRole.includes('admin') ? "bg-red-600 text-white" : "bg-safety-orange text-white"
             )}>
-              {userRole.includes('admin') ? 'Root Administrator Access' : 'Expert Consultant Status'}
+              {userRole.includes('admin') ? 'Administrator' : 'Expert'}
             </Badge>
             <SectionHeading 
-              title={userRole.includes('admin') ? "Command Terminal" : "Expert Portal"} 
-              annotation={userRole.includes('admin') ? "L-5 Clearance" : "Consultant Access"} 
+              title={userRole.includes('admin') ? "Admin" : "Expert portal"} 
+              annotation={userRole.includes('admin') ? "Store management" : "Your consultations"} 
               dark={true}
               className="mb-0"
             />
           </div>
           <div className="flex gap-4">
             <div className="hidden md:flex flex-col items-end gap-1">
-               <span className="text-[10px] font-black uppercase text-zinc-500 tracking-widest">Active Operator</span>
-               <span className="text-xs font-bold text-white uppercase tracking-tighter">{session?.user?.name || 'Administrator'}</span>
+               <span className="text-xs font-bold text-zinc-500">Signed in as</span>
+               <span className="text-xs font-bold text-white">{session?.user?.name || 'Administrator'}</span>
             </div>
             <div className="w-px h-10 bg-white/10 mx-2" />
             <Button variant="outline" size="sm" className="bg-zinc-800 text-white border-zinc-700 flex gap-2" onClick={fetchAuditLogs}><ClipboardList className="w-3 h-3" /> Audit Logs</Button>
@@ -548,14 +549,14 @@ function AdminPanel() {
               <TabsContent value="orders" className="space-y-8 mt-0">
                 <div className="mb-10 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
                    <div>
-                     <h3 className="text-2xl font-black uppercase text-white tracking-tighter">Transaction Registry</h3>
-                     <p className="text-zinc-500 text-xs font-medium uppercase tracking-widest mt-1">
-                       Confirmed Procurement History — Last {ORDERS_WINDOW_DAYS} Days
+                     <h3 className="text-2xl font-bold text-white">Orders</h3>
+                     <p className="text-zinc-500 text-xs font-medium mt-1">
+                       Confirmed orders from the last {ORDERS_WINDOW_DAYS} days
                      </p>
                    </div>
-                   <div className="text-xs font-mono text-zinc-500 uppercase tracking-widest">
+                   <div className="text-xs font-mono text-zinc-500">
                      {ordersTotal > 0 ? (
-                       <>Showing <span className="text-white font-bold">{Math.min((ordersPage - 1) * ORDERS_PAGE_SIZE + 1, ordersTotal)}</span>–<span className="text-white font-bold">{Math.min(ordersPage * ORDERS_PAGE_SIZE, ordersTotal)}</span> of <span className="text-safety-orange font-black">{ordersTotal}</span></>
+                       <>Showing <span className="text-white font-bold">{Math.min((ordersPage - 1) * ORDERS_PAGE_SIZE + 1, ordersTotal)}</span>–<span className="text-white font-bold">{Math.min(ordersPage * ORDERS_PAGE_SIZE, ordersTotal)}</span> of <span className="text-safety-orange font-bold">{ordersTotal}</span></>
                      ) : (
                        <>0 records</>
                      )}
@@ -569,23 +570,23 @@ function AdminPanel() {
                      <table className="w-full text-left border-collapse">
                         <thead>
                         <tr className="border-b border-white/10 bg-zinc-900/50">
-                          <th className="p-4 font-black uppercase text-[10px] text-zinc-500 tracking-widest">Order ID</th>
-                          <th className="p-4 font-black uppercase text-[10px] text-zinc-500 tracking-widest">Customer</th>
-                          <th className="p-4 font-black uppercase text-[10px] text-zinc-500 tracking-widest">Items</th>
-                          <th className="p-4 font-black uppercase text-[10px] text-zinc-500 tracking-widest">Delivery</th>
-                          <th className="p-4 font-black uppercase text-[10px] text-zinc-500 tracking-widest">Total</th>
-                          <th className="p-4 font-black uppercase text-[10px] text-zinc-500 tracking-widest">Status</th>
-                          <th className="p-4 font-black uppercase text-[10px] text-zinc-500 tracking-widest text-right">Actions</th>
+                          <th className="p-4 font-bold text-xs text-zinc-500">Order ID</th>
+                          <th className="p-4 font-bold text-xs text-zinc-500">Customer</th>
+                          <th className="p-4 font-bold text-xs text-zinc-500">Items</th>
+                          <th className="p-4 font-bold text-xs text-zinc-500">Delivery</th>
+                          <th className="p-4 font-bold text-xs text-zinc-500">Total</th>
+                          <th className="p-4 font-bold text-xs text-zinc-500">Status</th>
+                          <th className="p-4 font-bold text-xs text-zinc-500 text-right">Actions</th>
                         </tr>
                       </thead>
                       <tbody>
                         {orders.map((order: any) => (
                           <tr key={order.id} className="border-b border-white/5 hover:bg-white/[0.02] transition-colors">
-                            <td className="p-4 text-xs font-mono text-safety-orange font-black">{order.id?.slice(0, 8).toUpperCase()}</td>
+                            <td className="p-4 text-xs font-mono text-safety-orange font-bold">{order.id?.slice(0, 8).toUpperCase()}</td>
                             <td className="p-4">
                               <div>
-                                <span className="text-sm font-bold text-white uppercase tracking-tighter block">{order.customerName}</span>
-                                <span className="text-[10px] text-zinc-500 font-mono">{order.customerEmail}</span>
+                                <span className="text-sm font-bold text-white block">{order.customerName}</span>
+                                <span className="text-xs text-zinc-500 font-mono">{order.customerEmail}</span>
                               </div>
                             </td>
                             <td className="p-4">
@@ -593,7 +594,7 @@ function AdminPanel() {
                                 {(order.items || []).slice(0, 2).map((item: any, i: number) => (
                                   <span key={i} className="text-xs text-zinc-400 block">{item.name} x{item.quantity}</span>
                                 ))}
-                                {(order.items || []).length > 2 && <span className="text-[10px] text-zinc-600">+{order.items.length - 2} more</span>}
+                                {(order.items || []).length > 2 && <span className="text-xs text-zinc-600">+{order.items.length - 2} more</span>}
                               </div>
                             </td>
                             <td className="p-4">
@@ -609,17 +610,17 @@ function AdminPanel() {
                                 </div>
                               )}
                             </td>
-                            <td className="p-4 text-sm font-black text-white">PHP {(order.total || 0).toFixed(2)}</td>
+                            <td className="p-4 text-sm font-bold text-white">{formatMoney(order.total || 0)}</td>
                             <td className="p-4">
                                <Badge variant={order.status === 'delivered' ? 'completed' : order.status === 'shipped' ? 'in-progress' : 'pending'}>{(order.status || 'processing').toUpperCase()}</Badge>
                             </td>
                             <td className="p-4 text-right">
                               <div className="flex gap-2 justify-end">
                                {order.status === 'processing' && (
-                                 <Button variant="outline" size="sm" className="text-[10px] bg-blue-600/10 text-blue-400 border-blue-500/20 flex gap-1" onClick={() => shipOrder(order.id, 'shipped')}><Truck className="w-3 h-3" /> Ship</Button>
+                                 <Button variant="outline" size="sm" className="text-xs bg-blue-600/10 text-blue-400 border-blue-500/20 flex gap-1" onClick={() => shipOrder(order.id, 'shipped')}><Truck className="w-3 h-3" /> Ship</Button>
                                )}
                                {order.status === 'shipped' && (
-                                 <Button variant="outline" size="sm" className="text-[10px] bg-green-600/10 text-green-500 border-green-500/20 flex gap-1" onClick={() => shipOrder(order.id, 'delivered')}><CheckCircle2 className="w-3 h-3" /> Delivered</Button>
+                                 <Button variant="outline" size="sm" className="text-xs bg-green-600/10 text-green-500 border-green-500/20 flex gap-1" onClick={() => shipOrder(order.id, 'delivered')}><CheckCircle2 className="w-3 h-3" /> Delivered</Button>
                                )}
                                {order.status === 'delivered' && (
                                  <Badge variant="completed" className="text-[8px]">COMPLETE</Badge>
@@ -634,8 +635,8 @@ function AdminPanel() {
                 ) : (
                   <EmptyTerminalState
                     icon={Activity}
-                    title="No Transactions"
-                    description={`No procurements in the last ${ORDERS_WINDOW_DAYS} days.`}
+                    title="No orders"
+                    description={`No orders in the last ${ORDERS_WINDOW_DAYS} days.`}
                   />
                 )}
 
@@ -646,7 +647,7 @@ function AdminPanel() {
                       size="sm"
                       disabled={ordersPage <= 1 || loadingOrders}
                       onClick={() => fetchOrdersPage(ordersPage - 1)}
-                      className="text-[10px] uppercase font-black"
+                      className="text-xs font-bold"
                     >
                       Prev
                     </Button>
@@ -658,7 +659,7 @@ function AdminPanel() {
                       size="sm"
                       disabled={ordersPage >= ordersTotalPages || loadingOrders}
                       onClick={() => fetchOrdersPage(ordersPage + 1)}
-                      className="text-[10px] uppercase font-black"
+                      className="text-xs font-bold"
                     >
                       Next
                     </Button>
@@ -670,8 +671,8 @@ function AdminPanel() {
               <TabsContent value="users" className="space-y-8 mt-0">
                 <div className="flex justify-between items-center mb-10">
                     <div>
-                       <h3 className="text-2xl font-black uppercase text-white tracking-tighter">Clearance Registry</h3>
-                       <p className="text-zinc-500 text-xs font-medium uppercase tracking-widest mt-1">Personnel Permissions Control</p>
+                       <h3 className="text-2xl font-bold text-white">User roles</h3>
+                       <p className="text-zinc-500 text-xs font-medium mt-1">Choose who can use admin, expert and seller tools</p>
                     </div>
                 </div>
 
@@ -682,10 +683,10 @@ function AdminPanel() {
                      <table className="w-full text-left border-collapse">
                         <thead className="sticky top-0 z-10">
                           <tr className="border-b border-white/10 bg-zinc-900">
-                            <th className="p-4 font-black uppercase text-[10px] text-zinc-500 tracking-widest">Operational Name</th>
-                            <th className="p-4 font-black uppercase text-[10px] text-zinc-500 tracking-widest">Comm Link</th>
-                            <th className="p-4 font-black uppercase text-[10px] text-zinc-500 tracking-widest">Clearance</th>
-                            <th className="p-4 font-black uppercase text-[10px] text-zinc-500 tracking-widest text-right">Actions</th>
+                            <th className="p-4 font-bold text-xs text-zinc-500">Name</th>
+                            <th className="p-4 font-bold text-xs text-zinc-500">Email</th>
+                            <th className="p-4 font-bold text-xs text-zinc-500">Role</th>
+                            <th className="p-4 font-bold text-xs text-zinc-500 text-right">Actions</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -701,7 +702,7 @@ function AdminPanel() {
                                   )}>
                                     {(u.name || 'U').split(' ').map((n: string) => n[0]).join('')}
                                   </div>
-                                  <span className="text-sm font-bold text-white uppercase tracking-tighter truncate max-w-[150px]">{u.name || 'Anonymous User'}</span>
+                                  <span className="text-sm font-bold text-white truncate max-w-[150px]">{u.name || 'Anonymous User'}</span>
                                 </div>
                               </td>
                               <td className="p-4 text-xs font-mono text-zinc-500">{u.email}</td>
@@ -725,7 +726,7 @@ function AdminPanel() {
                                     variant="outline" 
                                     size="sm" 
                                     className={cn(
-                                      "h-7 text-[9px] border transition-all px-2 uppercase font-black",
+                                      "h-7 text-[11px] border transition-all px-2 font-bold",
                                       (u.role || '').includes('expert') ? "bg-safety-orange text-white border-safety-orange" : "bg-transparent text-zinc-500 border-white/5 hover:border-safety-orange"
                                     )}
                                     onClick={() => toggleRole(u.id, u.role, 'expert')}
@@ -736,7 +737,7 @@ function AdminPanel() {
                                     variant="outline" 
                                     size="sm" 
                                     className={cn(
-                                      "h-7 text-[9px] border transition-all px-2 uppercase font-black",
+                                      "h-7 text-[11px] border transition-all px-2 font-bold",
                                       (u.role || '').includes('admin') ? "bg-red-600 text-white border-red-600" : "bg-transparent text-zinc-500 border-white/5 hover:border-red-600"
                                     )}
                                     onClick={() => toggleRole(u.id, u.role, 'admin')}
@@ -756,8 +757,8 @@ function AdminPanel() {
               {/* Fabrication Management */}
               <TabsContent value="fabrication" className="space-y-8 mt-0">
                 <div className="mb-10">
-                   <h3 className="text-2xl font-black uppercase text-white tracking-tighter">Manufacturing Control</h3>
-                   <p className="text-zinc-500 text-xs font-medium uppercase tracking-widest mt-1">Active fabrication jobs and system status</p>
+                   <h3 className="text-2xl font-bold text-white">Fabrication jobs</h3>
+                   <p className="text-zinc-500 text-xs font-medium mt-1">Track and update customer fabrication requests</p>
                 </div>
 
                 {loadingFabJobs ? (
@@ -768,14 +769,14 @@ function AdminPanel() {
                       <Card key={job.id} className="border border-white/5 bg-black/40">
                         <div className="flex justify-between items-start mb-4">
                           <div className="flex-grow min-w-0 pr-4">
-                            <Badge variant="new" className="mb-2 uppercase text-[8px]">{job.id?.slice(0, 8)}</Badge>
-                            <h4 className="text-lg font-black text-white uppercase tracking-tight">{job.name}</h4>
-                            <p className="text-xs text-zinc-500 font-black mt-1 uppercase tracking-widest">Client: <span className="text-white bg-black/50 px-2 py-0.5 rounded-sm">{job.customerName}</span></p>
+                            <Badge variant="new" className="mb-2 text-[8px]">{job.id?.slice(0, 8)}</Badge>
+                            <h4 className="text-lg font-bold text-white">{job.name}</h4>
+                            <p className="text-xs text-zinc-500 font-bold mt-1">Client: <span className="text-white bg-black/50 px-2 py-0.5 rounded-sm">{job.customerName}</span></p>
                             
                             {/* Downloadable Files */}
                             {job.files && job.files.length > 0 && (
                               <div className="mt-4 flex flex-col gap-3">
-                                <span className="text-[9px] text-zinc-500 font-black uppercase tracking-widest border-b border-white/5 pb-2">Design Files</span>
+                                <span className="text-[11px] text-zinc-500 font-bold border-b border-white/5 pb-2">Design Files</span>
                                 {job.files.map((file: string, idx: number) => {
                                   // Fallback to # if the backend hasn't resolved fileUrl mappings
                                   const downloadUrl = (job.fileUrls && job.fileUrls[idx]) ? job.fileUrls[idx] : '#';
@@ -789,8 +790,8 @@ function AdminPanel() {
                                           <Download className="w-5 h-5 text-safety-orange" />
                                         </div>
                                         <div className="min-w-0 flex-grow pr-4">
-                                          <p className="text-sm font-black text-white truncate" title={file}>{file}</p>
-                                          <p className="text-[10px] text-zinc-500 uppercase tracking-widest mt-0.5">Ready for Download</p>
+                                          <p className="text-sm font-bold text-white truncate" title={file}>{file}</p>
+                                          <p className="text-xs text-zinc-500 mt-0.5">Ready for Download</p>
                                         </div>
                                         <a 
                                           href={downloadUrl} 
@@ -810,7 +811,7 @@ function AdminPanel() {
                                               URL.revokeObjectURL(url);
                                             }
                                           }}
-                                          className="z-10 shrink-0 px-6 py-3 bg-safety-orange hover:bg-safety-orange/90 text-white text-[10px] font-black uppercase tracking-widest rounded-sm shadow-[0_4px_0_0_#995400] active:translate-y-[4px] active:shadow-none transition-all flex items-center gap-2 border border-orange-400"
+                                          className="z-10 shrink-0 px-6 py-3 bg-safety-orange hover:bg-safety-orange/90 text-white text-xs font-bold rounded-sm shadow-[0_4px_0_0_#995400] active:translate-y-[4px] active:shadow-none transition-all flex items-center gap-2 border border-orange-400"
                                         >
                                           <Download className="w-4 h-4" /> Download
                                         </a>
@@ -824,11 +825,11 @@ function AdminPanel() {
                             {/* Service Parameters */}
                             {job.parameters && Object.keys(job.parameters).length > 0 && (
                               <div className="mt-4 bg-zinc-900/80 border border-white/5 rounded-sm p-3.5 w-full">
-                                <p className="text-[9px] text-zinc-500 font-black uppercase tracking-widest border-b border-white/5 pb-2 mb-3">Service Parameters</p>
+                                <p className="text-[11px] text-zinc-500 font-bold border-b border-white/5 pb-2 mb-3">Job details</p>
                                 <div className="grid grid-cols-2 gap-x-4 gap-y-3">
                                   {Object.entries(job.parameters).map(([k, v]) => (
                                     <div key={k} className="flex flex-col">
-                                      <span className="text-[8px] font-black tracking-widest uppercase text-zinc-600">{k}</span>
+                                      <span className="text-[8px] font-bold text-zinc-600">{k}</span>
                                       <span className="text-xs font-bold text-zinc-200 mt-0.5 break-words">{String(v)}</span>
                                     </div>
                                   ))}
@@ -839,7 +840,7 @@ function AdminPanel() {
                             {/* Notes */}
                             {job.notes && (
                               <div className="mt-3 bg-yellow-950/20 border border-yellow-900/50 p-3 rounded-sm">
-                                <p className="text-[9px] text-yellow-600/60 font-black uppercase tracking-widest mb-1.5">Client Notes</p>
+                                <p className="text-[11px] text-yellow-600/60 font-bold mb-1.5">Client Notes</p>
                                 <p className="text-xs text-yellow-500/90 italic leading-relaxed break-words">"{job.notes}"</p>
                               </div>
                             )}
@@ -851,7 +852,7 @@ function AdminPanel() {
 
                         {/* Progress Bar */}
                         <div className="mb-4">
-                          <div className="flex justify-between text-[10px] font-black text-zinc-500 uppercase mb-1">
+                          <div className="flex justify-between text-xs font-bold text-zinc-500 mb-1">
                             <span>Progress</span>
                             <span className="text-safety-orange">{job.progress || 0}%</span>
                           </div>
@@ -863,13 +864,13 @@ function AdminPanel() {
                         <div className="flex gap-2 flex-wrap">
                           {job.status !== 'completed' && (
                             <>
-                              <Button size="sm" className="text-[9px] uppercase font-black bg-blue-600 hover:bg-blue-700 h-7 px-3" onClick={() => updateFabJob(job.id, 'reviewing', 25)}>Review</Button>
-                              <Button size="sm" className="text-[9px] uppercase font-black bg-safety-orange hover:bg-safety-orange/80 h-7 px-3" onClick={() => updateFabJob(job.id, 'in-progress', 60)}>In Progress</Button>
-                              <Button size="sm" className="text-[9px] uppercase font-black bg-green-600 hover:bg-green-700 h-7 px-3" onClick={() => updateFabJob(job.id, 'completed', 100)}>Complete</Button>
+                              <Button size="sm" className="text-[11px] font-bold bg-blue-600 hover:bg-blue-700 h-7 px-3" onClick={() => updateFabJob(job.id, 'reviewing', 25)}>Review</Button>
+                              <Button size="sm" className="text-[11px] font-bold bg-safety-orange hover:bg-safety-orange/80 h-7 px-3" onClick={() => updateFabJob(job.id, 'in-progress', 60)}>In Progress</Button>
+                              <Button size="sm" className="text-[11px] font-bold bg-green-600 hover:bg-green-700 h-7 px-3" onClick={() => updateFabJob(job.id, 'completed', 100)}>Complete</Button>
                             </>
                           )}
                           {job.status === 'completed' && (
-                            <Badge variant="completed" className="text-[9px]">JOB FULFILLED</Badge>
+                            <Badge variant="completed" className="text-[11px]">Completed</Badge>
                           )}
                         </div>
                       </Card>
@@ -888,8 +889,8 @@ function AdminPanel() {
               <TabsContent value="pickuppoints" className="space-y-8 mt-0">
                 <div className="flex flex-col md:flex-row gap-6 justify-between items-center mb-10">
                   <div>
-                    <h3 className="text-2xl font-black uppercase text-white tracking-tighter">Pickup Point Registry</h3>
-                    <p className="text-zinc-500 text-xs font-medium uppercase tracking-widest mt-1">Manage local meetup locations for order pickups</p>
+                    <h3 className="text-2xl font-bold text-white">Pickup points</h3>
+                    <p className="text-zinc-500 text-xs font-medium mt-1">Manage local meetup locations for order pickups</p>
                   </div>
                   <Button className="w-full md:w-auto flex gap-2" onClick={() => setShowAddPickupForm(!showAddPickupForm)}>
                     {showAddPickupForm ? <AlertTriangle className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
@@ -902,16 +903,16 @@ function AdminPanel() {
                     <form onSubmit={handleAddPickupPoint} className="p-8 space-y-6">
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="space-y-2">
-                          <label className="text-[10px] font-black uppercase text-zinc-500 tracking-widest">Location Name</label>
+                          <label className="text-xs font-bold text-zinc-500">Location Name</label>
                           <Input required placeholder="Central Philippine University" className="bg-zinc-900 border-zinc-800" value={newPickupPoint.name} onChange={e => setNewPickupPoint({...newPickupPoint, name: e.target.value})} />
                         </div>
                         <div className="space-y-2">
-                          <label className="text-[10px] font-black uppercase text-zinc-500 tracking-widest">Address / Details</label>
+                          <label className="text-xs font-bold text-zinc-500">Address / Details</label>
                           <Input required placeholder="CPU GAD Office, Jaro, Iloilo City" className="bg-zinc-900 border-zinc-800" value={newPickupPoint.address} onChange={e => setNewPickupPoint({...newPickupPoint, address: e.target.value})} />
                         </div>
                       </div>
                       <div className="flex justify-end">
-                        <Button type="submit" disabled={addingPickupPoint} className="bg-blue-600 hover:bg-blue-700 h-12 px-10 uppercase text-xs font-black shadow-[0_4px_0_0_#1d4ed8]">
+                        <Button type="submit" disabled={addingPickupPoint} className="bg-blue-600 hover:bg-blue-700 h-12 px-10 text-xs font-bold shadow-[0_4px_0_0_#1d4ed8]">
                           {addingPickupPoint ? 'Adding...' : 'Add Pickup Point'}
                         </Button>
                       </div>
@@ -929,11 +930,11 @@ function AdminPanel() {
                           <div className="space-y-4">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                               <div className="space-y-1">
-                                <label className="text-[10px] font-black uppercase text-zinc-500 tracking-widest">Name</label>
+                                <label className="text-xs font-bold text-zinc-500">Name</label>
                                 <Input className="bg-zinc-800 border-zinc-700" value={editingPickupPoint.name} onChange={e => setEditingPickupPoint({...editingPickupPoint, name: e.target.value})} />
                               </div>
                               <div className="space-y-1">
-                                <label className="text-[10px] font-black uppercase text-zinc-500 tracking-widest">Address</label>
+                                <label className="text-xs font-bold text-zinc-500">Address</label>
                                 <Input className="bg-zinc-800 border-zinc-700" value={editingPickupPoint.address} onChange={e => setEditingPickupPoint({...editingPickupPoint, address: e.target.value})} />
                               </div>
                             </div>
@@ -949,7 +950,7 @@ function AdminPanel() {
                                 <MapPin className="w-6 h-6 text-blue-500" />
                               </div>
                               <div>
-                                <h4 className="text-sm font-black text-white uppercase tracking-tight">{point.name}</h4>
+                                <h4 className="text-sm font-bold text-white">{point.name}</h4>
                                 <p className="text-xs text-zinc-500 font-medium">{point.address}</p>
                               </div>
                             </div>
@@ -976,8 +977,8 @@ function AdminPanel() {
           {/* Consultation Management (For Admins and Experts) */}
           <TabsContent value="consultations" className="space-y-8 mt-0">
             <div className="mb-10">
-               <h3 className="text-2xl font-black uppercase text-white tracking-tighter">Session Control</h3>
-               <p className="text-zinc-500 text-xs font-medium uppercase tracking-widest mt-1">Manage technical consultations and design reviews</p>
+               <h3 className="text-2xl font-bold text-white">Consultations</h3>
+               <p className="text-zinc-500 text-xs font-medium mt-1">Manage technical consultations and design reviews</p>
             </div>
 
              {loadingConsultations ? (
@@ -994,10 +995,10 @@ function AdminPanel() {
                     <Card key={consult.id} className="border border-white/5 bg-black/40">
                       <div className="flex justify-between items-start mb-4">
                         <div>
-                            <Badge variant="new" className="mb-2 uppercase">{consult.consultationType?.replace('-', ' ') || 'General'}</Badge>
-                            <h4 className="text-xl font-black text-white uppercase tracking-tight">{consult.expertName}</h4>
+                            <Badge variant="new" className="mb-2">{consult.consultationType?.replace('-', ' ') || 'General'}</Badge>
+                            <h4 className="text-xl font-bold text-white">{consult.expertName}</h4>
                             <p className="text-xs text-zinc-500 font-medium">Client: {consult.clientName || consult.clientEmail}</p>
-                            <p className="text-[10px] text-zinc-600 font-mono mt-1">{consult.expertTitle}</p>
+                            <p className="text-xs text-zinc-600 font-mono mt-1">{consult.expertTitle}</p>
                         </div>
                         <Badge variant={statusVariant}>
                           {(consult.status || 'pending').toUpperCase()}
@@ -1011,7 +1012,7 @@ function AdminPanel() {
 
                       {consult.projectDescription && (
                         <div className="mb-4 p-3 bg-zinc-900/30 rounded-sm border border-white/5">
-                          <p className="text-[10px] font-black text-zinc-500 uppercase tracking-widest mb-1">Project Brief</p>
+                          <p className="text-xs font-bold text-zinc-500 mb-1">Project Brief</p>
                           <p className="text-xs text-zinc-400 line-clamp-2">{consult.projectDescription}</p>
                         </div>
                       )}
@@ -1019,16 +1020,16 @@ function AdminPanel() {
                       <div className="flex flex-wrap gap-2">
                           {consult.status === 'pending' && (
                             <>
-                              <Button size="sm" className="flex-1 min-w-0 bg-green-600 hover:bg-green-700 uppercase font-black text-[10px]" onClick={() => confirmSession(consult.id)}>Accept</Button>
-                              <Button size="sm" className="flex-1 min-w-0 bg-red-600/80 hover:bg-red-600 uppercase font-black text-[10px]" onClick={() => updateConsultation(consult.id, 'cancelled')}>Decline</Button>
+                              <Button size="sm" className="flex-1 min-w-0 bg-green-600 hover:bg-green-700 font-bold text-xs" onClick={() => confirmSession(consult.id)}>Accept</Button>
+                              <Button size="sm" className="flex-1 min-w-0 bg-red-600/80 hover:bg-red-600 font-bold text-xs" onClick={() => updateConsultation(consult.id, 'cancelled')}>Decline</Button>
                             </>
                           )}
                           {consult.status === 'confirmed' && (
                             <>
-                              <Button size="sm" className="flex-1 min-w-0 bg-green-600 hover:bg-green-700 uppercase font-black text-[10px]" onClick={() => updateConsultation(consult.id, 'completed')}>
+                              <Button size="sm" className="flex-1 min-w-0 bg-green-600 hover:bg-green-700 font-bold text-xs" onClick={() => updateConsultation(consult.id, 'completed')}>
                                 <CheckCircle2 className="w-3 h-3 mr-1" /> Complete
                               </Button>
-                              <Button size="sm" className="flex-1 min-w-0 bg-red-600/80 hover:bg-red-600 uppercase font-black text-[10px]" onClick={() => updateConsultation(consult.id, 'cancelled')}>Cancel</Button>
+                              <Button size="sm" className="flex-1 min-w-0 bg-red-600/80 hover:bg-red-600 font-bold text-xs" onClick={() => updateConsultation(consult.id, 'cancelled')}>Cancel</Button>
                             </>
                           )}
                           {(consult.status === 'completed' || consult.status === 'cancelled') && (
@@ -1036,7 +1037,7 @@ function AdminPanel() {
                               {consult.status.toUpperCase()}
                             </Badge>
                           )}
-                          <Button size="sm" variant="outline" className="flex-1 min-w-0 uppercase font-black text-[10px]" onClick={() => {
+                          <Button size="sm" variant="outline" className="flex-1 min-w-0 font-bold text-xs" onClick={() => {
                             setSelectedConsultation(consult);
                             setConsultationEdits({
                               expertName: consult.expertName || '',
@@ -1054,7 +1055,7 @@ function AdminPanel() {
               <EmptyTerminalState
                 icon={MessageCircle}
                 title="No Sessions"
-                description="Engineering consultation docket is currently clear."
+                description="New consultation requests will appear here."
               />
             )}
           </TabsContent>
@@ -1069,8 +1070,8 @@ function AdminPanel() {
               <div className="bg-safety-orange p-1">
                 <div className="bg-zinc-900 p-6 flex items-center justify-between">
                   <div>
-                    <h3 className="text-xl font-black text-white uppercase tracking-tighter">Session Details</h3>
-                    <p className="text-[10px] text-zinc-500 uppercase tracking-widest mt-1">{selectedConsultation.consultationType?.replace('-', ' ') || 'General Consultation'}</p>
+                    <h3 className="text-xl font-bold text-white">Session Details</h3>
+                    <p className="text-xs text-zinc-500 mt-1">{selectedConsultation.consultationType?.replace('-', ' ') || 'General Consultation'}</p>
                   </div>
                   <button onClick={() => { setSelectedConsultation(null); setConsultationEdits(null); setConsultationMessages([]); }} className="text-zinc-500 hover:text-white"><X className="w-5 h-5" /></button>
                 </div>
@@ -1078,7 +1079,7 @@ function AdminPanel() {
               <div className="p-6 overflow-y-auto flex-grow custom-scrollbar space-y-5">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Status</p>
+                    <p className="text-xs font-bold text-zinc-500">Status</p>
                     <Badge variant={
                       selectedConsultation.status === 'completed' ? 'completed'
                       : selectedConsultation.status === 'confirmed' ? 'confirmed'
@@ -1089,31 +1090,31 @@ function AdminPanel() {
                     </Badge>
                   </div>
                   <div className="text-right">
-                    <p className="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Submitted</p>
+                    <p className="text-xs font-bold text-zinc-500">Submitted</p>
                     <p className="text-xs text-zinc-400 font-mono mt-1">{selectedConsultation.createdAt ? new Date(selectedConsultation.createdAt).toLocaleDateString() : 'N/A'}</p>
                   </div>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <p className="text-[10px] font-black text-zinc-500 uppercase tracking-widest mb-1">Client</p>
+                    <p className="text-xs font-bold text-zinc-500 mb-1">Client</p>
                     <p className="text-sm text-white font-bold">{selectedConsultation.clientName}</p>
-                    <p className="text-[10px] text-zinc-500 font-mono">{selectedConsultation.clientEmail}</p>
+                    <p className="text-xs text-zinc-500 font-mono">{selectedConsultation.clientEmail}</p>
                   </div>
                   <div>
-                    <p className="text-[10px] font-black text-zinc-500 uppercase tracking-widest mb-1">Assigned Expert</p>
+                    <p className="text-xs font-bold text-zinc-500 mb-1">Assigned Expert</p>
                     <p className="text-sm text-white font-bold">{selectedConsultation.expertName}</p>
-                    <p className="text-[10px] text-zinc-500 font-mono">{selectedConsultation.expertTitle}</p>
+                    <p className="text-xs text-zinc-500 font-mono">{selectedConsultation.expertTitle}</p>
                   </div>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <p className="text-[10px] font-black text-zinc-500 uppercase tracking-widest mb-1">Schedule</p>
+                    <p className="text-xs font-bold text-zinc-500 mb-1">Schedule</p>
                     <p className="text-xs text-zinc-300 font-medium">{selectedConsultation.slot || 'TBD'}</p>
                   </div>
                   <div>
-                    <p className="text-[10px] font-black text-zinc-500 uppercase tracking-widest mb-1">Budget</p>
+                    <p className="text-xs font-bold text-zinc-500 mb-1">Budget</p>
                     <p className="text-xs text-zinc-300 font-medium">{selectedConsultation.expertPrice || 'TBD'}</p>
                   </div>
                 </div>
@@ -1121,11 +1122,11 @@ function AdminPanel() {
                 {/* Editable Fields */}
                 {consultationEdits && (selectedConsultation.status === 'pending' || selectedConsultation.status === 'confirmed') && (
                   <div className="space-y-4 p-4 bg-black/20 rounded-sm border border-white/5">
-                    <p className="text-[10px] font-black text-safety-orange uppercase tracking-widest">Edit Session</p>
+                    <p className="text-xs font-bold text-safety-orange">Edit Session</p>
 
                     {/* Expert Assignment */}
                     <div>
-                      <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest block mb-1">Assign Expert</label>
+                      <label className="text-xs font-bold text-zinc-500 block mb-1">Assign Expert</label>
                       <select
                         value={consultationEdits.expertId}
                         onChange={(e) => {
@@ -1147,7 +1148,7 @@ function AdminPanel() {
 
                     {/* Price */}
                     <div>
-                      <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest block mb-1">Session Price</label>
+                      <label className="text-xs font-bold text-zinc-500 block mb-1">Session Price</label>
                       <Input
                         value={consultationEdits.expertPrice}
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => setConsultationEdits(prev => prev ? { ...prev, expertPrice: e.target.value } : null)}
@@ -1158,7 +1159,7 @@ function AdminPanel() {
 
                     {/* Schedule */}
                     <div>
-                      <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest block mb-1">Schedule / Slot</label>
+                      <label className="text-xs font-bold text-zinc-500 block mb-1">Schedule / Slot</label>
                       <Input
                         value={consultationEdits.slot}
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => setConsultationEdits(prev => prev ? { ...prev, slot: e.target.value } : null)}
@@ -1168,7 +1169,7 @@ function AdminPanel() {
                     </div>
 
                     <Button
-                      className="w-full bg-safety-orange hover:bg-safety-orange/80 uppercase font-black text-[10px]"
+                      className="w-full bg-safety-orange hover:bg-safety-orange/80 font-bold text-xs"
                       onClick={saveConsultationEdits}
                       disabled={savingConsultation}
                     >
@@ -1179,7 +1180,7 @@ function AdminPanel() {
 
                 {selectedConsultation.projectDescription && (
                   <div>
-                    <p className="text-[10px] font-black text-zinc-500 uppercase tracking-widest mb-2">Project Description</p>
+                    <p className="text-xs font-bold text-zinc-500 mb-2">Project Description</p>
                     <div className="p-4 bg-black/30 rounded-sm border border-white/5">
                       <p className="text-xs text-zinc-300 leading-relaxed whitespace-pre-wrap">{selectedConsultation.projectDescription}</p>
                     </div>
@@ -1188,7 +1189,7 @@ function AdminPanel() {
 
                 {selectedConsultation.requiredSkills && (
                   <div>
-                    <p className="text-[10px] font-black text-zinc-500 uppercase tracking-widest mb-2">Required Skills / Tools</p>
+                    <p className="text-xs font-bold text-zinc-500 mb-2">Required Skills / Tools</p>
                     <div className="p-4 bg-black/30 rounded-sm border border-white/5">
                       <p className="text-xs text-zinc-300 leading-relaxed">{selectedConsultation.requiredSkills}</p>
                     </div>
@@ -1197,7 +1198,7 @@ function AdminPanel() {
 
                 {/* Consultation Chat */}
                 <div>
-                  <p className="text-[10px] font-black text-zinc-500 uppercase tracking-widest mb-2">Consultation Chat</p>
+                  <p className="text-xs font-bold text-zinc-500 mb-2">Consultation Chat</p>
                   <div className="border border-white/5 rounded-sm overflow-hidden bg-black/20">
                     <div
                       ref={consultationMessagesContainerRef}
@@ -1214,7 +1215,7 @@ function AdminPanel() {
                                 isAdmin ? 'bg-safety-orange text-white' : 'bg-zinc-800 text-zinc-300 border border-white/5'
                               }`}>
                                 <p className="text-xs">{msg.content}</p>
-                                <p className={`text-[9px] mt-1 ${isAdmin ? 'text-white/50' : 'text-zinc-600'}`}>
+                                <p className={`text-[11px] mt-1 ${isAdmin ? 'text-white/50' : 'text-zinc-600'}`}>
                                   {msg.senderName} · {new Date(msg.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                 </p>
                               </div>
@@ -1222,7 +1223,7 @@ function AdminPanel() {
                           );
                         })
                       ) : (
-                        <p className="text-center text-[10px] text-zinc-600 py-6">No messages yet. Start the conversation.</p>
+                        <p className="text-center text-xs text-zinc-600 py-6">No messages yet. Start the conversation.</p>
                       )}
                       <div ref={consultationMessagesEndRef} />
                     </div>
@@ -1250,16 +1251,16 @@ function AdminPanel() {
                 <div className="pt-4 border-t border-white/5 flex gap-3">
                   {selectedConsultation.status === 'pending' && (
                     <>
-                      <Button className="flex-grow bg-green-600 hover:bg-green-700 uppercase font-black text-[10px]" onClick={() => updateConsultation(selectedConsultation.id, 'confirmed')}>Accept Session</Button>
-                      <Button className="flex-grow bg-red-600/80 hover:bg-red-600 uppercase font-black text-[10px]" onClick={() => updateConsultation(selectedConsultation.id, 'cancelled')}>Decline</Button>
+                      <Button className="flex-grow bg-green-600 hover:bg-green-700 font-bold text-xs" onClick={() => updateConsultation(selectedConsultation.id, 'confirmed')}>Accept Session</Button>
+                      <Button className="flex-grow bg-red-600/80 hover:bg-red-600 font-bold text-xs" onClick={() => updateConsultation(selectedConsultation.id, 'cancelled')}>Decline</Button>
                     </>
                   )}
                   {selectedConsultation.status === 'confirmed' && (
                     <>
-                      <Button className="flex-grow bg-green-600 hover:bg-green-700 uppercase font-black text-[10px]" onClick={() => updateConsultation(selectedConsultation.id, 'completed')}>
+                      <Button className="flex-grow bg-green-600 hover:bg-green-700 font-bold text-xs" onClick={() => updateConsultation(selectedConsultation.id, 'completed')}>
                         <CheckCircle2 className="w-3 h-3 mr-1" /> Mark Complete
                       </Button>
-                      <Button className="flex-grow bg-red-600/80 hover:bg-red-600 uppercase font-black text-[10px]" onClick={() => updateConsultation(selectedConsultation.id, 'cancelled')}>Cancel</Button>
+                      <Button className="flex-grow bg-red-600/80 hover:bg-red-600 font-bold text-xs" onClick={() => updateConsultation(selectedConsultation.id, 'cancelled')}>Cancel</Button>
                     </>
                   )}
                 </div>
@@ -1277,8 +1278,8 @@ function AdminPanel() {
               <div className="bg-safety-orange p-1">
                 <div className="bg-zinc-900 p-6 flex items-center justify-between">
                   <div>
-                    <h3 className="text-xl font-black text-white uppercase tracking-tighter">System Audit Trail</h3>
-                    <p className="text-[10px] text-zinc-500 uppercase tracking-widest mt-1">Recent administrative actions</p>
+                    <h3 className="text-xl font-bold text-white">Audit log</h3>
+                    <p className="text-xs text-zinc-500 mt-1">Recent administrative actions</p>
                   </div>
                   <button onClick={() => setShowAuditModal(false)} className="text-zinc-500 hover:text-white"><X className="w-5 h-5" /></button>
                 </div>
@@ -1296,10 +1297,10 @@ function AdminPanel() {
                         <div className="flex-grow min-w-0">
                           <div className="flex items-center gap-2 mb-1">
                             <Badge variant="new" className="text-[7px] px-1 h-4 shrink-0">{log.action}</Badge>
-                            <span className="text-[10px] text-zinc-600 truncate">{log.createdAt ? new Date(log.createdAt).toLocaleString() : ''}</span>
+                            <span className="text-xs text-zinc-600 truncate">{log.createdAt ? new Date(log.createdAt).toLocaleString() : ''}</span>
                           </div>
                           <p className="text-xs text-zinc-400">{log.details}</p>
-                          <p className="text-[10px] text-zinc-600 font-mono mt-1">by {log.actor}</p>
+                          <p className="text-xs text-zinc-600 font-mono mt-1">by {log.actor}</p>
                         </div>
                       </div>
                     ))}
@@ -1307,7 +1308,7 @@ function AdminPanel() {
                 ) : (
                   <div className="py-12 text-center">
                     <ClipboardList className="w-10 h-10 text-zinc-700 mx-auto mb-4" />
-                    <p className="text-sm text-zinc-500 font-bold uppercase">No audit entries yet</p>
+                    <p className="text-sm text-zinc-500 font-bold">No audit entries yet</p>
                     <p className="text-xs text-zinc-600 mt-1">Actions will be logged as they occur.</p>
                   </div>
                 )}
@@ -1321,7 +1322,7 @@ function AdminPanel() {
 }
 
 const AdminTabTrigger = ({ value, icon: Icon, label }: { value: string, icon: any, label: string }) => (
-  <TabsTrigger value={value} className="px-6 py-4 rounded-sm font-black uppercase text-[10px] tracking-widest transition-all data-[state=active]:bg-red-600 data-[state=active]:text-white data-[state=active]:shadow-[0_4px_0_0_#991b1b] text-zinc-500 flex items-center gap-2 border-none bg-transparent whitespace-nowrap">
+  <TabsTrigger value={value} className="px-6 py-4 rounded-sm font-bold text-xs transition-all data-[state=active]:bg-red-600 data-[state=active]:text-white data-[state=active]:shadow-[0_4px_0_0_#991b1b] text-zinc-500 flex items-center gap-2 border-none bg-transparent whitespace-nowrap">
     <Icon className="w-3 h-3" />
     {label}
   </TabsTrigger>
@@ -1332,7 +1333,7 @@ const EmptyTerminalState = ({ icon: Icon, title, description }: any) => (
     <div className="w-16 h-16 bg-zinc-900 border border-white/10 rounded-sm flex items-center justify-center mb-6">
       <Icon className="w-8 h-8 text-zinc-700" />
     </div>
-    <h4 className="text-2xl font-black text-white uppercase tracking-tighter mb-2">{title}</h4>
+    <h4 className="text-2xl font-bold text-white mb-2">{title}</h4>
     <p className="text-sm text-zinc-500 max-w-sm font-medium">{description}</p>
   </div>
 );
@@ -1342,8 +1343,8 @@ export default function AdminPage() {
     <Suspense fallback={
       <PageShell>
         <div className="container mx-auto px-4 py-20 flex items-center justify-center min-h-[50vh]">
-          <div className="font-mono text-safety-orange animate-pulse uppercase tracking-widest">
-            Initializing Encrypted Link...
+          <div className="font-mono text-safety-orange animate-pulse">
+            Loading…
           </div>
         </div>
       </PageShell>

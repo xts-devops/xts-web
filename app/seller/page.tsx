@@ -192,7 +192,7 @@ export default function SellerDashboard() {
   return (
     <PageShell>
       <div className="container mx-auto px-4 sm:px-6 py-16 sm:py-20">
-        <SectionHeading title="Seller Portal" annotation="Manage Your Store" dark={true} />
+        <SectionHeading title="Seller portal" annotation="Manage your store" dark={true} />
 
         {/* Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 mb-8 sm:mb-12">
@@ -204,8 +204,8 @@ export default function SellerDashboard() {
           ].map(stat => (
             <div key={stat.label} className="p-4 bg-[var(--bg-surface)] border border-[var(--border-primary)] rounded-sm">
               <stat.icon className="w-5 h-5 text-safety-orange mb-2" />
-              <p className="text-2xl font-black text-[var(--text-primary)]">{stat.value}</p>
-              <p className="text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-widest">{stat.label}</p>
+              <p className="text-2xl font-bold text-[var(--text-primary)]">{stat.value}</p>
+              <p className="text-xs font-bold text-[var(--text-muted)]">{stat.label}</p>
             </div>
           ))}
         </div>
@@ -216,7 +216,7 @@ export default function SellerDashboard() {
               <TabsTrigger
                 key={tab}
                 value={tab}
-                className="px-4 sm:px-6 py-2.5 rounded-sm font-black uppercase text-xs tracking-tighter transition-all data-[state=active]:bg-safety-orange data-[state=active]:text-white text-[var(--text-muted)]"
+                className="px-4 sm:px-6 py-2.5 rounded-sm font-bold text-xs capitalize transition-all data-[state=active]:bg-safety-orange data-[state=active]:text-white text-[var(--text-muted)]"
               >
                 {tab}
               </TabsTrigger>
@@ -226,7 +226,7 @@ export default function SellerDashboard() {
           {/* Products Tab */}
           <TabsContent value="products">
             <div className="flex justify-between items-center mb-6">
-              <h3 className="text-lg font-black text-[var(--text-primary)] uppercase">My Products ({products.length})</h3>
+              <h3 className="text-lg font-bold text-[var(--text-primary)]">My Products ({products.length})</h3>
               <Button size="sm" onClick={() => { resetForm(); setShowAddProduct(true); }}>
                 <Plus className="w-4 h-4 mr-1" /> Add Product
               </Button>
@@ -237,18 +237,18 @@ export default function SellerDashboard() {
               {showAddProduct && (
                 <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }}>
                   <Card className="mb-8 border-2 border-safety-orange/30">
-                    <h4 className="text-lg font-black text-[var(--text-on-card)] uppercase mb-6">
+                    <h4 className="text-lg font-bold text-[var(--text-on-card)] mb-6">
                       {editingProduct ? 'Edit Product' : 'New Product'}
                     </h4>
                     <div className="space-y-4">
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div className="space-y-1.5">
-                          <label className="text-[10px] font-black uppercase text-[var(--text-muted)] tracking-widest">Product Name</label>
+                          <label className="text-xs font-bold text-[var(--text-muted)]">Product Name</label>
                           <Input placeholder="e.g., Arduino Mega 2560" className="h-10 text-sm" value={formData.name}
                             onChange={e => setFormData({ ...formData, name: e.target.value })} />
                         </div>
                         <div className="space-y-1.5">
-                          <label className="text-[10px] font-black uppercase text-[var(--text-muted)] tracking-widest">SKU</label>
+                          <label className="text-xs font-bold text-[var(--text-muted)]">SKU</label>
                           <Input placeholder="e.g., XTS-ARD-001" className="h-10 text-sm" value={formData.sku}
                             onChange={e => setFormData({ ...formData, sku: e.target.value })} />
                         </div>
@@ -256,22 +256,22 @@ export default function SellerDashboard() {
 
                       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                         <div className="space-y-1.5">
-                          <label className="text-[10px] font-black uppercase text-[var(--text-muted)] tracking-widest">Price (PHP)</label>
+                          <label className="text-xs font-bold text-[var(--text-muted)]">Price (PHP)</label>
                           <Input type="number" placeholder="0.00" min="0" className="h-10 text-sm" value={formData.price}
                             onChange={e => setFormData({ ...formData, price: e.target.value })} />
                         </div>
                         <div className="space-y-1.5">
-                          <label className="text-[10px] font-black uppercase text-[var(--text-muted)] tracking-widest">Stock</label>
+                          <label className="text-xs font-bold text-[var(--text-muted)]">Stock</label>
                           <Input type="number" placeholder="0" min="0" className="h-10 text-sm" value={formData.stock}
                             onChange={e => setFormData({ ...formData, stock: e.target.value })} />
                         </div>
                         <div className="space-y-1.5">
-                          <label className="text-[10px] font-black uppercase text-[var(--text-muted)] tracking-widest">Rating</label>
+                          <label className="text-xs font-bold text-[var(--text-muted)]">Rating</label>
                           <Input type="number" placeholder="4.5" step="0.1" min="0" max="5" className="h-10 text-sm" value={formData.rating}
                             onChange={e => setFormData({ ...formData, rating: e.target.value })} />
                         </div>
                         <div className="space-y-1.5">
-                          <label className="text-[10px] font-black uppercase text-[var(--text-muted)] tracking-widest">Total Sold</label>
+                          <label className="text-xs font-bold text-[var(--text-muted)]">Total Sold</label>
                           <Input type="number" placeholder="0" min="0" className="h-10 text-sm" value={formData.totalSold}
                             onChange={e => setFormData({ ...formData, totalSold: e.target.value })} />
                         </div>
@@ -279,14 +279,14 @@ export default function SellerDashboard() {
 
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div className="space-y-1.5">
-                          <label className="text-[10px] font-black uppercase text-[var(--text-muted)] tracking-widest">Category</label>
+                          <label className="text-xs font-bold text-[var(--text-muted)]">Category</label>
                           <select className="flex h-10 w-full rounded-sm border border-[var(--border-primary)] bg-[var(--bg-input)] px-3 py-2 text-sm text-[var(--text-on-input)] appearance-none"
                             value={formData.category} onChange={e => setFormData({ ...formData, category: e.target.value })}>
                             {['Components', 'Modules', 'Sensors', 'Tools', 'Kits', 'Accessories'].map(c => <option key={c} value={c}>{c}</option>)}
                           </select>
                         </div>
                         <div className="space-y-1.5">
-                          <label className="text-[10px] font-black uppercase text-[var(--text-muted)] tracking-widest">Tag</label>
+                          <label className="text-xs font-bold text-[var(--text-muted)]">Tag</label>
                           <select className="flex h-10 w-full rounded-sm border border-[var(--border-primary)] bg-[var(--bg-input)] px-3 py-2 text-sm text-[var(--text-on-input)] appearance-none"
                             value={formData.tag} onChange={e => setFormData({ ...formData, tag: e.target.value })}>
                             {['New', 'Best Seller', 'Sale', 'Featured', 'Limited'].map(t => <option key={t} value={t}>{t}</option>)}
@@ -295,7 +295,7 @@ export default function SellerDashboard() {
                       </div>
 
                       <div className="space-y-1.5">
-                        <label className="text-[10px] font-black uppercase text-[var(--text-muted)] tracking-widest">Description</label>
+                        <label className="text-xs font-bold text-[var(--text-muted)]">Description</label>
                         <Textarea placeholder="Product description..." className="min-h-[80px] text-sm" value={formData.description}
                           onChange={e => setFormData({ ...formData, description: e.target.value })} />
                       </div>
@@ -303,8 +303,8 @@ export default function SellerDashboard() {
                       {/* Specifications */}
                       <div className="space-y-2">
                         <div className="flex items-center justify-between">
-                          <label className="text-[10px] font-black uppercase text-[var(--text-muted)] tracking-widest">Specifications</label>
-                          <Button size="sm" variant="outline" className="text-[10px] h-7 px-2" onClick={addSpecField}>
+                          <label className="text-xs font-bold text-[var(--text-muted)]">Specifications</label>
+                          <Button size="sm" variant="outline" className="text-xs h-7 px-2" onClick={addSpecField}>
                             <Plus className="w-3 h-3 mr-1" /> Add Spec
                           </Button>
                         </div>
@@ -323,7 +323,7 @@ export default function SellerDashboard() {
 
                       {/* Image Upload */}
                       <div className="space-y-2">
-                        <label className="text-[10px] font-black uppercase text-[var(--text-muted)] tracking-widest">Product Images</label>
+                        <label className="text-xs font-bold text-[var(--text-muted)]">Product Images</label>
                         <div className="flex flex-wrap gap-3">
                           {existingImages.map((url, i) => (
                             <div key={`existing-${i}`} className="relative w-20 h-20 rounded-sm overflow-hidden border border-[var(--border-primary)]">
@@ -343,7 +343,7 @@ export default function SellerDashboard() {
                           ))}
                           <label className="w-20 h-20 border-2 border-dashed border-[var(--border-primary)] rounded-sm flex flex-col items-center justify-center cursor-pointer hover:border-safety-orange transition-colors">
                             <Upload className="w-5 h-5 text-[var(--text-muted)] mb-1" />
-                            <span className="text-[8px] text-[var(--text-muted)] font-bold">ADD</span>
+                            <span className="text-[8px] text-[var(--text-muted)] font-bold">Add</span>
                             <input type="file" accept="image/*" multiple className="hidden" onChange={handleImageSelect} />
                           </label>
                         </div>
@@ -374,15 +374,15 @@ export default function SellerDashboard() {
                   </div>
                   <div className="flex justify-between items-start mb-2">
                     <div>
-                      <h4 className="text-sm font-black text-[var(--text-on-card)] uppercase">{product.name}</h4>
-                      <p className="text-[10px] text-[var(--text-muted)]">{product.sku}</p>
+                      <h4 className="text-sm font-bold text-[var(--text-on-card)]">{product.name}</h4>
+                      <p className="text-xs text-[var(--text-muted)]">{product.sku}</p>
                     </div>
                     <Badge variant={product.stock > 0 ? 'completed' : 'warning'} className="text-[8px] shrink-0">
                       {product.stock > 0 ? `${product.stock} qty` : 'Out'}
                     </Badge>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="font-black text-safety-orange text-lg">₱{parseFloat(product.price).toLocaleString()}</span>
+                    <span className="font-bold text-safety-orange text-lg">₱{parseFloat(product.price).toLocaleString()}</span>
                     <div className="flex gap-1">
                       <button onClick={() => startEdit(product)} className="p-1.5 text-[var(--text-muted)] hover:text-safety-orange transition-colors">
                         <Edit className="w-4 h-4" />
@@ -405,7 +405,7 @@ export default function SellerDashboard() {
 
           {/* Orders Tab */}
           <TabsContent value="orders">
-            <h3 className="text-lg font-black text-[var(--text-primary)] uppercase mb-6">Orders ({orders.length})</h3>
+            <h3 className="text-lg font-bold text-[var(--text-primary)] mb-6">Orders ({orders.length})</h3>
             <div className="space-y-4">
               {orders.length === 0 ? (
                 <div className="py-16 text-center">
@@ -422,9 +422,9 @@ export default function SellerDashboard() {
                       {order.paymentMethod && (
                         <div className="flex items-center gap-1 mt-1">
                           {order.paymentMethod === 'gcash' ? (
-                            <><CreditCard className="w-3 h-3 text-blue-400" /><span className="text-[10px] text-blue-400 font-bold uppercase">GCash</span></>
+                            <><CreditCard className="w-3 h-3 text-blue-400" /><span className="text-xs text-blue-400 font-bold">GCash</span></>
                           ) : (
-                            <><Banknote className="w-3 h-3 text-green-500" /><span className="text-[10px] text-green-400 font-bold uppercase">COD</span></>
+                            <><Banknote className="w-3 h-3 text-green-500" /><span className="text-xs text-green-400 font-bold">COD</span></>
                           )}
                         </div>
                       )}
@@ -474,7 +474,7 @@ export default function SellerDashboard() {
                       return (
                         <div key={phase} className="flex-1 flex flex-col items-center gap-1">
                           <div className={`h-1.5 w-full rounded-full transition-colors ${isActive ? 'bg-safety-orange' : 'bg-[var(--border-primary)]'}`} />
-                          <span className={`text-[8px] font-bold uppercase tracking-wider ${isActive ? 'text-safety-orange' : 'text-[var(--text-muted)]'}`}>
+                          <span className={`text-[8px] font-bold ${isActive ? 'text-safety-orange' : 'text-[var(--text-muted)]'}`}>
                             {phase.slice(0, 4)}
                           </span>
                         </div>
@@ -485,13 +485,13 @@ export default function SellerDashboard() {
                   {/* Status History */}
                   {order.statusHistory && order.statusHistory.length > 0 && (
                     <details className="mt-3 pt-3 border-t border-[var(--border-secondary)]">
-                      <summary className="text-[10px] font-black uppercase text-[var(--text-muted)] tracking-widest cursor-pointer hover:text-[var(--text-secondary)] transition-colors">
+                      <summary className="text-xs font-bold text-[var(--text-muted)] cursor-pointer hover:text-[var(--text-secondary)] transition-colors">
                         Status History ({order.statusHistory.length})
                       </summary>
                       <div className="mt-2 space-y-1.5">
                         {order.statusHistory.map((h: any, i: number) => (
-                          <div key={i} className="flex items-center gap-2 text-[10px] text-[var(--text-muted)]">
-                            <span className="font-bold text-[var(--text-secondary)] uppercase">{h.status}</span>
+                          <div key={i} className="flex items-center gap-2 text-xs text-[var(--text-muted)]">
+                            <span className="font-bold text-[var(--text-secondary)]">{h.status}</span>
                             <span>—</span>
                             <span>{h.updatedBy}</span>
                             <span className="ml-auto font-mono">{new Date(h.timestamp).toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}</span>
@@ -507,15 +507,15 @@ export default function SellerDashboard() {
 
           {/* Analytics Tab */}
           <TabsContent value="analytics">
-            <h3 className="text-lg font-black text-[var(--text-primary)] uppercase mb-6">Analytics</h3>
+            <h3 className="text-lg font-bold text-[var(--text-primary)] mb-6">Analytics</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <Card hoverEffect={false}>
-                <h4 className="text-sm font-black text-[var(--text-on-card)] uppercase mb-4">Revenue Overview</h4>
-                <p className="text-4xl font-black text-safety-orange mb-2">₱{totalRevenue.toLocaleString()}</p>
+                <h4 className="text-sm font-bold text-[var(--text-on-card)] mb-4">Revenue Overview</h4>
+                <p className="text-4xl font-bold text-safety-orange mb-2">₱{totalRevenue.toLocaleString()}</p>
                 <p className="text-xs text-[var(--text-muted)]">Total revenue from {orders.length} orders</p>
               </Card>
               <Card hoverEffect={false}>
-                <h4 className="text-sm font-black text-[var(--text-on-card)] uppercase mb-4">Product Performance</h4>
+                <h4 className="text-sm font-bold text-[var(--text-on-card)] mb-4">Product Performance</h4>
                 <div className="space-y-3">
                   {products.slice(0, 5).map((p: any) => (
                     <div key={p.id} className="flex justify-between text-sm">

@@ -25,14 +25,14 @@ export function DateTimePicker({
   return (
     <div className="space-y-3">
       {label && (
-        <label className="text-[10px] font-black uppercase text-[var(--text-muted)] tracking-widest block">
+        <label className="text-xs font-bold text-[var(--text-muted)] block">
           {label}
         </label>
       )}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         {/* Start */}
         <div className="space-y-2 p-3 bg-[var(--bg-surface)] border border-[var(--border-primary)] rounded-sm">
-          <span className="text-[9px] font-black uppercase text-[var(--text-muted)] tracking-widest">Start</span>
+          <span className="text-[11px] font-bold text-[var(--text-muted)]">Start</span>
           <div className="flex gap-2">
             <input
               type="date"
@@ -52,7 +52,7 @@ export function DateTimePicker({
 
         {/* End */}
         <div className="space-y-2 p-3 bg-[var(--bg-surface)] border border-[var(--border-primary)] rounded-sm">
-          <span className="text-[9px] font-black uppercase text-[var(--text-muted)] tracking-widest">End</span>
+          <span className="text-[11px] font-bold text-[var(--text-muted)]">End</span>
           <div className="flex gap-2">
             <input
               type="date"

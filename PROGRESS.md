@@ -12,6 +12,35 @@ Append-only. Newest at top. Never edit past entries. Format:
 
 ---
 
+## 2026-10-29 · claude · claude/ui-polish · remaining pages + dotted background
+**Did:**
+- **Dotted page background is back** (`body::before` in `app/globals.css`, as it was
+  before PR #5's last cleanup). The user found the site too plain and asked for
+  only this. Recorded as D9, which narrows D8.
+- Same wording/sentence-case pass on admin, seller, chat, consultation, community,
+  fabrication pages and `components/fabrication/*`, ConfirmModal, DateTimePicker.
+  Kept colors, cards and bold weights (user: "too plain"). Admin: "Command Terminal /
+  L-5 Clearance / Transaction Registry / Clearance Registry / Comm Link /
+  Synchronizing Neural Link…" → "Admin / Orders / User roles / Email / Loading…", etc.
+- `Badge` no longer forces caps; it turns plain status words into sentence case
+  ("PENDING"/"in-progress" → "Pending"/"In progress"), leaving names and ids alone.
+  `Button` size `lg` no longer uppercases.
+- Admin order totals use `formatMoney`.
+- **Codex-lane flag:** `lib/firebase/local-seed.ts` sample posts stored an image data
+  URI as `avatar`, which rendered as raw text; the real API stores one letter. Seed
+  now uses the first letter. Existing local `db.json` files in both checkouts were
+  patched (3 posts each), so no reset is needed.
+**Why:** finish the consistency pass the user approved; dots per the user's request.
+**Verify:** `npx tsc --noEmit` passes; ESLint counts unchanged on every edited file.
+Local preview 1280px: admin, seller, chat, consultation, community, fabrication, home
+(dots visible). Fresh tab shows no console errors. Note: Turbopack served stale CSS
+after the edit until `.next` was deleted. If a CSS change doesn't show, clear `.next`.
+**Next:** User reviews PR #6. Owner should decide on the community "Hackathon #4" box
+(March event, its "Register Now" button does nothing) and the consultation
+"Guarantees" (NDA coverage, 24-hour response). Both were left as-is. Seller page
+product cards still show SVG placeholders instead of the sample photos (seller page
+doesn't use `productImage`). That's a small follow-up.
+
 ## 2026-10-29 · claude · claude/ui-polish (built on codex/xts-mechatronics-ui)
 **Did:** UI/UX review of PR #5, then carried its plain style into the inner pages.
 - `SectionHeading` (used by ~14 pages): sentence case, plain weight, small label

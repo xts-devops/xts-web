@@ -25,10 +25,10 @@ Lanes: **claude** = UI + docs · **codex** = backend + data · **shared** = coor
 - [ ] **Update UI for any changed API shapes** ... owner: claude · status: todo
 
 ## Backlog — UI consistency (after `claude/ui-polish`)
-- [ ] **Plain style for staff pages** (admin, seller) ... owner: claude · status: todo
-- [ ] **Plain style for chat, consultation, community, fabrication pages + their components** ... owner: claude · status: todo
-- [ ] **Badge component: stop forcing uppercase** (`components/ui/Badge.tsx`) ... owner: claude · status: todo
-- [ ] **Confirm product-page promises (1-year warranty, fast shipping, 30-day returns)** ... owner: user · status: todo
+- [ ] **Plain style for admin, seller, chat, consultation, community, fabrication pages + their components (Badge, Tabs, modals)** (`claude/ui-polish`, PR #6) ... owner: claude · status: review
+- [ ] **Confirm product-page promises (1-year warranty, fast shipping, 30-day returns) and consultation "Guarantees"** ... owner: user · status: todo
+- [ ] **Community "Hackathon #4" box: update or remove (old March event, dead button)** ... owner: user · status: todo
+- [ ] **Seller page product cards: use sample photos via `productImage`** ... owner: claude · status: todo
 
 ## Backlog — bugs and hardening
 - [ ] **Unread markers break on dotted emails** (`lib/chat.ts`, `lib/consultations.ts`) ... owner: codex · status: todo

@@ -95,8 +95,8 @@ export default function ConsultationPage() {
     <PageShell>
       <div className="container mx-auto px-4 sm:px-6 py-16 sm:py-20">
         <SectionHeading
-          title="Expert Consultation"
-          annotation="Unblock your Project"
+          title="Expert consultation"
+          annotation="Get help from an expert"
           dark={true}
         />
 
@@ -105,14 +105,14 @@ export default function ConsultationPage() {
             <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: 'spring' }}>
               <CheckCircle2 className="w-16 h-16 text-green-500 mb-6" />
             </motion.div>
-            <h3 className="text-3xl font-black text-[var(--text-primary)] uppercase mb-3">Request Submitted</h3>
+            <h3 className="text-3xl font-bold text-[var(--text-primary)] mb-3">Request submitted</h3>
             <p className="text-[var(--text-muted)] max-w-md">An expert will be matched to your request. Check your dashboard for updates.</p>
           </div>
         ) : !selectedOption ? (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
             {/* Consultation Options */}
             <div className="lg:col-span-2">
-              <h3 className="text-xl font-black text-[var(--text-primary)] uppercase mb-6">Choose a Consultation Type</h3>
+              <h3 className="text-xl font-bold text-[var(--text-primary)] mb-6">Choose a consultation type</h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                 {consultationOptions.map((option, i) => (
                   <motion.div
@@ -128,7 +128,7 @@ export default function ConsultationPage() {
                       <div className="w-10 h-10 bg-safety-orange/10 flex items-center justify-center rounded-sm mb-4 group-hover:bg-safety-orange group-hover:scale-110 transition-all">
                         <option.icon className="w-5 h-5 text-safety-orange group-hover:text-white" />
                       </div>
-                      <h4 className="text-lg font-black text-[var(--text-on-card)] uppercase mb-2">{option.name}</h4>
+                      <h4 className="text-lg font-bold text-[var(--text-on-card)] mb-2">{option.name}</h4>
                       <p className="text-xs text-[var(--text-on-card-muted)] leading-relaxed mb-4">{option.description}</p>
                       <div className="flex items-center justify-end pt-3 border-t border-[var(--border-secondary)]">
                         <ArrowRight className="w-4 h-4 text-[var(--text-on-card-muted)] group-hover:text-safety-orange group-hover:translate-x-1 transition-all" />
@@ -142,14 +142,14 @@ export default function ConsultationPage() {
             {/* Sidebar */}
             <div className="space-y-6">
               <div className="p-6 bg-[var(--bg-surface)] border border-[var(--border-primary)] rounded-sm">
-                <h4 className="text-lg font-black text-[var(--text-primary)] uppercase mb-4 tracking-tighter">How it Works</h4>
+                <h4 className="text-lg font-bold text-[var(--text-primary)] mb-4">How it works</h4>
                 <div className="space-y-5">
                   <div className="flex gap-3">
                     <div className="w-8 h-8 rounded-sm bg-safety-orange/10 flex items-center justify-center shrink-0">
                       <FileText className="w-4 h-4 text-safety-orange" />
                     </div>
                     <div>
-                      <h5 className="text-[var(--text-primary)] font-bold text-sm uppercase">1. Submit Request</h5>
+                      <h5 className="text-[var(--text-primary)] font-bold text-sm">1. Submit a request</h5>
                       <p className="text-xs text-[var(--text-muted)] mt-0.5">Fill out what you need help with.</p>
                     </div>
                   </div>
@@ -158,7 +158,7 @@ export default function ConsultationPage() {
                       <Star className="w-4 h-4 text-safety-orange" />
                     </div>
                     <div>
-                      <h5 className="text-[var(--text-primary)] font-bold text-sm uppercase">2. Expert Match</h5>
+                      <h5 className="text-[var(--text-primary)] font-bold text-sm">2. Expert match</h5>
                       <p className="text-xs text-[var(--text-muted)] mt-0.5">We match you with the right specialist.</p>
                     </div>
                   </div>
@@ -167,7 +167,7 @@ export default function ConsultationPage() {
                       <Video className="w-4 h-4 text-safety-orange" />
                     </div>
                     <div>
-                      <h5 className="text-[var(--text-primary)] font-bold text-sm uppercase">3. Session</h5>
+                      <h5 className="text-[var(--text-primary)] font-bold text-sm">3. Session</h5>
                       <p className="text-xs text-[var(--text-muted)] mt-0.5">1:1 video or chat consultation.</p>
                     </div>
                   </div>
@@ -175,7 +175,7 @@ export default function ConsultationPage() {
               </div>
 
               <div className="p-6 bg-[var(--bg-surface)] border border-[var(--border-primary)] rounded-sm">
-                <h4 className="text-lg font-black text-[var(--text-primary)] uppercase mb-4 tracking-tighter">Guarantees</h4>
+                <h4 className="text-lg font-bold text-[var(--text-primary)] mb-4">Guarantees</h4>
                 <div className="space-y-3">
                   <div className="flex items-center gap-2 text-sm text-[var(--text-secondary)]">
                     <ShieldCheck className="w-4 h-4 text-safety-orange shrink-0" /> NDA coverage included
@@ -198,7 +198,7 @@ export default function ConsultationPage() {
               className="flex items-center gap-2 text-[var(--text-muted)] hover:text-[var(--text-primary)] mb-8 transition-colors group"
             >
               <X className="w-4 h-4" />
-              <span className="text-xs font-black uppercase tracking-widest">Back to Options</span>
+              <span className="text-xs font-bold">Back to options</span>
             </button>
 
             <Card className="border-2 border-safety-orange/20">
@@ -213,7 +213,7 @@ export default function ConsultationPage() {
                           <Icon className="w-5 h-5 text-safety-orange" />
                         </div>
                         <div>
-                          <h3 className="text-xl font-black text-[var(--text-on-card)] uppercase">{opt?.name}</h3>
+                          <h3 className="text-xl font-bold text-[var(--text-on-card)]">{opt?.name}</h3>
                         </div>
                       </>
                     );
@@ -221,7 +221,7 @@ export default function ConsultationPage() {
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-[10px] font-black uppercase text-[var(--text-muted)] tracking-widest">Specific Specialty Needed</label>
+                  <label className="text-xs font-bold text-[var(--text-muted)]">Specialty needed</label>
                   <Input
                     placeholder="e.g., ROS2 navigation, PCB power design, servo tuning"
                     className="bg-[var(--bg-input)] border-[var(--border-primary)] text-[var(--text-on-input)] text-sm h-10"
@@ -231,7 +231,7 @@ export default function ConsultationPage() {
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-[10px] font-black uppercase text-[var(--text-muted)] tracking-widest">Project Description</label>
+                  <label className="text-xs font-bold text-[var(--text-muted)]">Project description</label>
                   <Textarea
                     placeholder="Describe your project, the specific problem you're facing, and what outcome you expect from the consultation..."
                     className="bg-[var(--bg-input)] border-[var(--border-primary)] text-[var(--text-on-input)] text-sm min-h-[100px]"
@@ -242,7 +242,7 @@ export default function ConsultationPage() {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-1.5">
-                    <label className="text-[10px] font-black uppercase text-[var(--text-muted)] tracking-widest">Required Skills / Tools</label>
+                    <label className="text-xs font-bold text-[var(--text-muted)]">Required skills or tools</label>
                     <Input
                       placeholder="e.g., KiCad, SolidWorks, C++"
                       className="bg-[var(--bg-input)] border-[var(--border-primary)] text-[var(--text-on-input)] text-sm h-10"
@@ -251,7 +251,7 @@ export default function ConsultationPage() {
                     />
                   </div>
                   <div className="space-y-1.5">
-                    <label className="text-[10px] font-black uppercase text-[var(--text-muted)] tracking-widest">Budget Range</label>
+                    <label className="text-xs font-bold text-[var(--text-muted)]">Budget range</label>
                     <Input
                       placeholder="e.g., PHP 2,000 - 5,000"
                       className="bg-[var(--bg-input)] border-[var(--border-primary)] text-[var(--text-on-input)] text-sm h-10"
