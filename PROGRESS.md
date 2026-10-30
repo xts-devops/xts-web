@@ -12,6 +12,21 @@ Append-only. Newest at top. Never edit past entries. Format:
 
 ---
 
+## 2026-10-30 · codex · codex/xts-mechatronics-ui · four recommendation rows
+**Commit:** 447520c; base 4c48d3d, shared branch fetched/pulled before file claim.
+**Files:** RelatedProducts, app/globals.css, UI docs and coordination notes.
+**Did:** Per latest user request, four stacked recommendation rows across viewports,
+replacing the phone rail and desktop recommendation grid. Compact image/content/price/
+cart arrangement, 44px cart targets, matching loading rows. Removed horizontal-scroll
+instructions/tab stop. Existing ranking/limit, detail links and stock handling retained;
+homepage/shop grids unchanged. Smaller catalogs show only real suggestions.
+**Verify:** TypeScript, changed-file ESLint, existing SSR/helper regressions, HTTP
+product preview and git diff --check pass. Browser visual QA remains pending due
+previously recorded CUA initialization failure. No backend/data/contract changes.
+**Preview:** http://localhost:3001/shop/p-esp32 · same branch and PR #5.
+**Next:** Review row proportions on phones/desktops when browser tooling is restored.
+
+
 ## 2026-10-30 · codex · codex/xts-mechatronics-ui · mobile product refinement
 **Commit:** 6cd64a4; base d28356a, fetched/pulled before exact file claim.
 **Files:** app/shop/[id]/page.tsx, app/globals.css, ProductGallery, RelatedProducts,

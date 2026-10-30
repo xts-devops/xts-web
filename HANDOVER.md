@@ -135,3 +135,8 @@ Third illustrative *-angle.webp views extend each local sample to original/top/a
 including old one/two-image demo records without resetting the ignored local database.
 Seller galleries remain intact. Preview and PR stay on port 3001 / shared PR #5.
 See current PROGRESS for verification limits; CUA interaction/viewport QA is pending.
+
+### Four-row recommendations · 2026-10-30
+The user's latest request supersedes the mobile horizontal recommendation rail above:
+You may also like now uses four compact stacked rows on desktop and mobile. The
+recommendation limit/ranking and shared card links/cart behavior remain unchanged.

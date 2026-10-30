@@ -212,3 +212,12 @@ checks pass. The generated asset contact sheet is inspected separately from UI Q
 CUA still fails initialization with the missing kernel-assets path, so viewport,
 actual swipe/scroll, accordion, keyboard/dialog focus and cart/chat interaction QA
 remain pending. No production data, dependencies or API/DTO changes.
+
+## Four recommendation rows (2026-10-30)
+The user's latest request replaces the horizontal phone rail and desktop recommendation
+grid with four stacked rows (one product per row) across viewport sizes. Each row uses
+a compact left image, middle name/description/availability, and right price/44px cart
+control. Loading uses the same row geometry; real card links and stock guards remain.
+The existing limit of four is unchanged; smaller catalogs show only actual available
+suggestions. Homepage and shop grids remain unchanged. TypeScript, changed-file lint,
+SSR/helper regressions and HTTP preview checks pass; visual browser QA remains pending.
