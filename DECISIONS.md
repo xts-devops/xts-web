@@ -78,3 +78,11 @@ Keep four desktop product columns, bounded microinteractions and reduced-motion 
 Predictive suggestions reuse the existing catalog response; no search endpoint, added
 dependency, external assets or backend contract change. Trust content describes actual
 product information, dashboard updates and messaging, without invented guarantees.
+
+### D12 · Bounded product gallery and catalog recommendations · 2026-10-30 · codex
+Product details use a compact 4:3 image stage, scrollable thumbnail strip and native
+modal image viewer; preserve every unique seller-uploaded image. Recommendations reuse
+the catalog API, exclude the current item, prioritize stock/category/price proximity,
+and make no claim of electrical compatibility or personalization. Alternate sample
+views are illustrative, indexed by exact demo id/SKU and only synthesized in local
+preview outside production. No DTO, API, dependency or purchase/chat contract changes.

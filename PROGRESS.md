@@ -12,6 +12,36 @@ Append-only. Newest at top. Never edit past entries. Format:
 
 ---
 
+## 2026-10-30 · codex · codex/xts-mechatronics-ui · product detail refinement
+**Commit:** 99bc3f5 (implementation/assets); this handoff accompanies it in PR #5.
+**Base:** 7da8f11, shared checkout/port 3001; fetched/pulled before claiming files.
+**Files:** app/shop/[id]/page.tsx, app/globals.css, ProductGallery, RelatedProducts,
+lib/sample-assets.ts, lib/product-recommendations.ts, lib/firebase/local-seed.ts,
+eight public/images/products/*-top.webp assets, UI docs and coordination notes.
+**Did:** Bounded 4:3 gallery with scrollable thumbnails, previous/next and keyboard
+controls, native larger-image dialog, useful zero/one-image fallbacks. Reduced title,
+price and vertical scale; desktop purchase controls precede specifications; mobile
+bar/footer respect safe areas. Added four catalog suggestions below the purchase area,
+ranked by stock/category/price with current/duplicate exclusions, loading/error/empty
+states and existing clickable cart-enabled cards. Added one labeled illustrative
+alternate view per demo product via built-in imagegen, compressed as 800px WebP.
+Seller galleries remain intact; demo URL synthesis is exact-id/SKU, dev-preview only.
+Product changes cancel old requests/reset state; failures have retry, stock guards
+cover add/buy handlers. Purchase/cart/chat contracts and production data unchanged.
+**Why:** User explicitly requested UI-lane exception for smaller product detail layout,
+multiple product views and recommendations, retaining the existing visual foundation.
+**Verify:** TypeScript and changed-file ESLint pass with zero warnings/errors. React
+SSR/pure assertions pass for ranking, exclusions, small catalogs, seller images,
+demo production guards, gallery labels/dialog and zero/one-image states. HTTP product,
+product API and catalog API return 200. Alternate-image contact sheet visually inspected.
+Verification scripts remain ignored in .local-preview. CUA initialization still fails
+(missing kernel-assets path); no new browser/viewport/touch/real purchase or chat test
+claimed. Existing warranty/shipping/returns copy confirmation remains on TASKS.
+**Preview:** http://localhost:3001/shop/p-esp32 · PR #5; no new branch/server.
+**Next:** Review PR #5 and perform pending viewport, keyboard/dialog focus, gallery
+navigation, cart-vs-card click, stock and mobile sticky-action checks when CUA works.
+
+
 ## 2026-10-30 · codex · codex/xts-mechatronics-ui · commerce refinement
 **Base:** `48a6ad5`, fetched/pulled fast-forward before the file claim.
 **Files:** app/page.tsx, app/globals.css, CatalogSearch, ProductCard, ProductImage,

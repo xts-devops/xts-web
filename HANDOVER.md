@@ -115,3 +115,14 @@ Claude's dotted background and inner-page fixes remain. PR #5 is the shared revi
 main is unchanged. Follow AGENTS.md's sync/file-claim format before every edit and
 use the commit SHA/files/checks/preview/next handoff format. The user's existing sample
 data and ignored environment files were not copied, reset or committed.
+
+
+### Product detail continuation · 2026-10-30
+Shared PR #5 now includes a compact ProductGallery and RelatedProducts beneath the
+purchase area. productImages preserves unique seller images and supplies a second
+illustrative view only to exact known local demo records outside production. New
+seeds have both images; no local database reset needed. Recommendation ranking lives
+in lib/product-recommendations.ts and reuses the catalog API; no compatibility claim.
+Preview: http://localhost:3001/shop/p-esp32. Type/lint, helper/SSR and HTTP pass;
+CUA missing-kernel-assets failure prevents new browser interaction/viewport signoff.
+See newest PROGRESS and docs/xts-mechatronics-ui.md; keep existing policy-copy task.

@@ -126,3 +126,41 @@ this refinement. Physical-device testing and formal performance/a11y audits are 
 
 No production data, real orders/payments, auth changes or backend contract changes were
 made. The production build requires the real Firebase environment and was not attempted.
+
+## Product detail refinement (2026-10-30)
+
+The detail page uses a bounded 540px-wide 4:3 gallery instead of a full-column square.
+Desktop purchase controls appear before specifications; mobile keeps its compact fixed
+action bar with safe-area spacing. Titles/prices and vertical spacing are reduced.
+Gallery controls include horizontally scrollable thumbnails, previous/next, keyboard
+arrows/Home/End and a native dialog for a larger view with Escape/close behavior.
+Missing and single images do not create fake thumbnails. Seller image arrays are
+preserved and deduplicated. Product changes reset gallery/cart feedback and cancel old
+requests; request failures offer retry rather than incorrectly reporting a missing item.
+
+"You may also like" follows the product/purchase area. Up to four unique products from
+the existing catalog are ranked by stock availability, exact category, then price
+proximity. Current product is excluded. Cards retain detail links/cart controls;
+loading, failure and empty catalogs have deliberate fallbacks. Suggestions do not
+assert compatibility. No additional API or dependencies were introduced.
+
+Alternate demo image files: public/images/products/{esp32,nema17,mg996r,pla,lidar,
+bme280,buck,pi5}-top.webp. Generated with built-in imagegen using each existing sample
+as its edit target, then converted to 800px WebP with Sharp. Shared prompt: create one
+alternate elevated front view looking more directly from above; preserve geometry,
+component count, colors, pins, connectors, cable and visible markings; do not invent
+internal parts/unseen rear circuitry; center the complete product with generous margin
+on the same warm off-white studio background, soft shadow, no added captions/text.
+These are illustrative demo views, not manufacturer photography. Only exact known
+local demo records get synthesized alternate image URLs, with production disabled;
+real seller galleries remain as supplied. New local seeds include both views.
+
+Checks: TypeScript and changed-file ESLint pass with zero warnings/errors. Product
+ranking/gallery-source and React SSR checks pass (ignored verification script under
+.local-preview/verify-product-detail.cjs), including duplicate/current exclusions,
+stock/category priority, small catalogs, seller-photo preservation, demo-only behavior,
+thumbnail labels/selection, larger-view dialog and zero/one-image fallback. HTTP product
+and catalog routes return 200. CUA still fails initialization with missing kernel assets;
+visual viewport checks, keyboard events, dialog focus/scroll restoration, touch and
+real cart/chat interactions are pending. No production orders or data were accessed.
+Existing warranty/shipping/return policy-copy confirmation remains in TASKS.
