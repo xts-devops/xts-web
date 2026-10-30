@@ -50,14 +50,14 @@ export function ProductGallery({ images, name, sample = false }: { images: strin
     </div>
     {count > 1 && <div className="gallery-strip"><div className="gallery-thumbnails" ref={thumbnails} aria-label="Product image views">
       {images.map((src, index) => <button type="button" key={src} aria-label={`Show ${name}, view ${index + 1}`} aria-pressed={selected === index} onClick={() => select(index)}>
-        <ProductImage src={src} name={`${name}, thumbnail ${index + 1}`} sizes="76px" />
+        <span className="gallery-thumbnail-image"><ProductImage src={src} name={`${name}, thumbnail ${index + 1}`} sizes="(max-width: 639px) 48px, 70px" /></span>
       </button>)}
     </div><div className="gallery-controls">{navigation}</div></div>}
     {sample && <p className="gallery-caption">Illustrative sample views. Refer to specifications for product details.</p>}
     <dialog ref={dialog} className="gallery-dialog" aria-label={name + ' image viewer'} onClose={() => setExpanded(false)} onClick={event => { if (event.target === event.currentTarget) dialog.current?.close(); }}>
       <div className="gallery-dialog-content">
         <div className="gallery-dialog-header"><span>{name}</span><button type="button" autoFocus onClick={() => dialog.current?.close()} aria-label="Close image viewer"><X size={22} /></button></div>
-        {expanded && <div className="gallery-large-image"><ProductImage src={images[selected]} name={`${name}, view ${selected + 1}`} sizes="(max-width: 900px) 90vw, 850px" /></div>}
+        {expanded && <div className="gallery-large-image"><div className="gallery-large-image-frame"><ProductImage src={images[selected]} name={`${name}, view ${selected + 1}`} sizes="(max-width: 900px) 90vw, 850px" /></div></div>}
         {navigation}
         {sample && <p className="gallery-caption">Illustrative sample view</p>}
       </div>

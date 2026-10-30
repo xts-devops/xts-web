@@ -14,5 +14,6 @@ export function ProductImage({ src, name, priority = false, sizes = '(max-width:
   );
   return <Image src={src} alt={name} fill sizes={sizes} priority={priority}
     unoptimized={!src.startsWith('/images/products/')}
-    onError={() => setFailedSrc(src)} className="object-contain" />;
+    onError={() => setFailedSrc(src)} draggable={false}
+    className="product-media" style={{ objectFit: 'contain', objectPosition: 'center' }} />;
 }
