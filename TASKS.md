@@ -5,7 +5,8 @@ Rule: set `owner` + `status: in-progress` **before** editing. Keep tasks small a
 Lanes: **claude** = UI + docs · **codex** = backend + data · **shared** = coordinate first (see AGENTS.md).
 
 ## In flight
-- [ ] **Shared branch, checkout and preview workflow** (`AGENTS.md`, `CLAUDE.md`, coordination docs; integrate `claude/ui-polish` into `codex/xts-mechatronics-ui`, preserve both histories; shared checkout `XTS SHOP WEB`, preview 3001). User explicitly supersedes separate-task-branch workflow. Reserve files through TASKS before edits and sync via Git; no PR/main merge. ... owner: codex · status: in-progress
+- [ ] **UI/UX consistency pass on top of PR #5** (`claude/ui-polish`: SectionHeading, Navbar, login, cart, product detail, dashboard, apply pages, skeletons; one-line locale fix in `lib/currency.ts`, flagged). Carry PR #5's plain style into the inner pages: plain copy, readable product names, one price format, no fake login options. ... owner: claude · status: review
+- [ ] **Shared branch, checkout and preview workflow** — owner: codex · status: review · files: AGENTS.md, CLAUDE.md, DECISIONS.md, HANDOVER.md, PROGRESS.md, TASKS.md; integrated Claude UI commits · base: 7c572ec · next: both agents use `XTS SHOP WEB` / `codex/xts-mechatronics-ui` / port 3001 and review combined PR #5. User explicitly supersedes separate-task-branch workflow; histories retained, no main merge.
 - [ ] **Minimal welcome hero and catalog quick search, PR #5** (`app/page.tsx`, `app/shop/page.tsx`, hero CSS and docs; user-authorized UI lane). Welcome, parts search, compact service links and reduced-motion-aware transitions; TypeScript/lint and HTTP preview checks pass. New visual/interactive QA pending because CUA initialization fails after reset/retry. ... owner: codex · status: review
 - [ ] **Compact public storefront cleanup, PR #5** (layout/brand/product-image components, homepage/shop/metadata, storefront CSS, SVG and docs; user-authorized UI lane). Compact XTS identity with separate Mechatronics department label, plain copy and direct catalog/service functionality. Earlier decorative iterations superseded. TypeScript/lint and 320px/375px/1280px preview checks passed. ... owner: codex · status: review
 - [ ] **Header brand presence follow-up to PR #5** (`components/layout/Brand.tsx`, `Navbar.tsx`, `app/brand.css`, layout CSS import, brand SVG and evaluation notes; user-authorized UI lane). Larger aligned lockup, desktop signature, mobile navigation space; TypeScript/lint and 320px/375px/1280px preview checked. ... owner: codex · status: review
@@ -24,6 +25,12 @@ Lanes: **claude** = UI + docs · **codex** = backend + data · **shared** = coor
 - [ ] **NextAuth adapter swap** (`lib/auth.ts`, shared) ... owner: codex · status: todo
 - [ ] **Storage → Supabase Storage + URL rewrite** (`app/api/upload`, data) ... owner: codex · status: todo
 - [ ] **Update UI for any changed API shapes** ... owner: claude · status: todo
+
+## Backlog — UI consistency (after `claude/ui-polish`)
+- [ ] **Plain style for admin, seller, chat, consultation, community, fabrication pages + their components (Badge, Tabs, modals)** (`claude/ui-polish`, PR #6) ... owner: claude · status: review
+- [ ] **Confirm product-page promises (1-year warranty, fast shipping, 30-day returns) and consultation "Guarantees"** ... owner: user · status: todo
+- [x] **Community "Hackathon #4" box: update or remove (old March event, dead button)** ... owner: user · status: done (2026-10-29: user said keep it as is for now; don't change it unless asked)
+- [ ] **Seller page product cards: use sample photos via `productImage`** ... owner: claude · status: todo
 
 ## Backlog — bugs and hardening
 - [ ] **Unread markers break on dotted emails** (`lib/chat.ts`, `lib/consultations.ts`) ... owner: codex · status: todo

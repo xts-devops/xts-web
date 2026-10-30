@@ -7,6 +7,15 @@ interface BadgeProps {
   className?: string;
 }
 
+// Status words arrive as "PENDING", "pending" or "in-progress". Show them in
+// sentence case ("In progress"). Leave mixed-case text, ids and numbers alone.
+const toLabel = (children: React.ReactNode) => {
+  if (typeof children !== 'string' || !/^[A-Za-z _-]+$/.test(children)) return children;
+  if (children !== children.toUpperCase() && children !== children.toLowerCase()) return children;
+  const words = children.toLowerCase().replace(/[-_]+/g, ' ').trim();
+  return words.charAt(0).toUpperCase() + words.slice(1);
+};
+
 export const Badge = ({ children, variant = 'new', className }: BadgeProps) => {
   const variants = {
     pending: 'bg-zinc-200 text-zinc-800',
@@ -20,11 +29,11 @@ export const Badge = ({ children, variant = 'new', className }: BadgeProps) => {
 
   return (
     <span className={cn(
-      'inline-flex items-center px-2 py-0.5 rounded-sm text-xs font-bold uppercase tracking-tighter border border-black/10 shadow-[1px_1px_0_0_rgba(0,0,0,0.1)]',
+      'inline-flex items-center px-2 py-0.5 rounded-sm text-xs font-semibold border border-black/10',
       variants[variant],
       className
     )}>
-      {children}
+      {toLabel(children)}
     </span>
   );
 };

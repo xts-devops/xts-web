@@ -51,3 +51,21 @@ compact branding from D8; add catalog search and concise service entry points ra
 than restoring decorative panels. Intro motion is CSS-only, under half a second,
 visible and usable immediately, and disabled for reduced-motion preferences. No splash
 screen, autoplay, typewriter effect, new image assets or new dependencies.
+
+### D9 · Keep the dotted page background · 2026-10-29 · claude
+The user found the site too plain after D8 and asked for the polka-dot background
+back, and only that. `body::before` in `app/globals.css` draws it (10px grid,
+`--dot-grid-color`, light and dark). This narrows D8: the dot grid stays; the other
+removed decorations (glows, orbits, tilt, slogans) stay removed.
+
+### D10 · One shared working copy and branch · 2026-10-30 · codex
+The user explicitly requested both agents work on the same branch and always use a
+shared sync/handoff format. Canonical checkout: `D:\DEV WORKS\XTS PROJECT DEVS\XTS SHOP WEB`;
+branch: `codex/xts-mechatronics-ui`; development preview: localhost:3001; review: PR #5.
+This supersedes the old per-agent task-branch workflow. Integrate completed Claude
+commits without dropping Codex work; keep older worktrees as snapshots, not active forks.
+Before editing, fetch/pull fast-forward when clean, claim exact files in TASKS, and
+preserve peer changes. Serialize Git mutations, push the shared branch after checks,
+and log SHA/files/checks/preview/next in PROGRESS. Never force-push or push to main.
+The two inherited D9 entries are distinct (author/date/title disambiguate them);
+preserve both the bounded hero motion and the user-requested dotted background.

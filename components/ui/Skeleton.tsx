@@ -15,21 +15,21 @@ export const Skeleton = ({ className }: { className?: string }) => (
   />
 );
 
-/** A shop product card placeholder, sized to match real cards. */
+/** A shop product card placeholder, same shape and surface as ProductCard. */
 export const ProductCardSkeleton = () => (
-  <div className="h-full">
-    <div className="paper-card paper-texture p-6 rounded-sm relative h-full flex flex-col">
-      <div className="aspect-square mb-3">
-        <Skeleton className="w-full h-full" />
-      </div>
-      <div className="flex flex-col gap-2 flex-grow">
-        <Skeleton className="h-3 w-1/3" />
-        <Skeleton className="h-4 w-3/4" />
-        <Skeleton className="h-3 w-1/4" />
-        <Skeleton className="h-6 w-1/2 mt-auto" />
+  <div className="catalog-card" aria-hidden="true">
+    <div className="catalog-photo">
+      <Skeleton className="w-full h-full rounded-none" />
+    </div>
+    <div className="flex flex-col gap-2 p-4">
+      <Skeleton className="h-3 w-1/3" />
+      <Skeleton className="h-4 w-3/4" />
+      <Skeleton className="h-3 w-1/4" />
+      <div className="flex items-center justify-between mt-4">
+        <Skeleton className="h-6 w-1/3" />
+        <Skeleton className="h-10 w-10" />
       </div>
     </div>
-    <Skeleton className="h-8 w-full mt-2" />
   </div>
 );
 

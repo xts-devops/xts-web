@@ -22,7 +22,7 @@ const navLinks = [
 
 export const Navbar = () => {
   const pathname = usePathname();
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const role = (session?.user as { role?: string } | undefined)?.role;
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [loggingOut, setLoggingOut] = useState(false);
@@ -90,7 +90,7 @@ export const Navbar = () => {
         <div className="flex items-center gap-2 sm:gap-3">
           <ThemeToggle />
 
-          <Link href="/chat" className="hidden md:inline-flex relative p-2 text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors" title="Messages">
+          <Link href="/chat" className="hidden md:inline-flex relative p-2 text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors" title="Messages" aria-label="Messages">
             <MessageCircle className="w-5 h-5 sm:w-6 sm:h-6" />
             {unreadChats > 0 && (
               <span className="absolute top-1 right-1 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-[var(--nav-bg)] animate-pulse" />
@@ -112,7 +112,10 @@ export const Navbar = () => {
           </Link>
 
           <div className="hidden md:flex items-center gap-3">
-            {session ? (
+            {status === 'loading' ? (
+              // Holds the space while the session loads, so "Sign in" doesn't flash for signed-in users.
+              <div className="h-9 w-24 rounded-md bg-[var(--bg-surface)] animate-pulse" aria-hidden="true" />
+            ) : session ? (
               <div className="flex items-center gap-3">
                 {(role?.includes('admin') || role?.includes('expert')) && (
                   <Link href="/admin" className="mr-1">
@@ -120,7 +123,7 @@ export const Navbar = () => {
                       "border-[var(--border-primary)] text-[var(--text-secondary)] hover:bg-[var(--bg-surface)]",
                       role?.includes('admin') && "border-red-500/50 text-red-500 hover:bg-red-500/10"
                     )}>
-                      {role?.includes('admin') ? 'Terminal' : 'Portal'}
+                      {role?.includes('admin') ? 'Admin' : 'Expert'}
                     </Button>
                   </Link>
                 )}
@@ -131,24 +134,21 @@ export const Navbar = () => {
                     </Button>
                   </Link>
                 )}
-                <Link href="/dashboard" className="flex items-center gap-2 group">
+                <Link href="/dashboard" className="flex items-center gap-2 group" title="Your account">
                   {session.user?.image ? (
-                    <img src={session.user.image} alt="Profile" className="w-8 h-8 rounded-full border border-[var(--border-primary)]" />
+                    <img src={session.user.image} alt="" className="w-8 h-8 rounded-full border border-[var(--border-primary)]" />
                   ) : (
                     <div className="w-8 h-8 rounded-full bg-[var(--bg-surface)] flex items-center justify-center border border-[var(--border-primary)]">
                       <UserIcon className="w-4 h-4 text-[var(--text-primary)]" />
                     </div>
                   )}
-                  <div className="flex flex-col">
-                    <span className="text-[10px] font-black uppercase text-[var(--text-muted)] leading-none mb-1">Authenticated</span>
-                    <span className="text-xs font-bold text-[var(--text-primary)] leading-none">{session.user?.name?.split(' ')[0]}</span>
-                  </div>
+                  <span className="text-sm font-medium text-[var(--text-primary)] group-hover:text-safety-orange transition-colors">{session.user?.name?.split(' ')[0] || 'Account'}</span>
                 </Link>
                 <button
                   onClick={handleSignOut}
                   disabled={loggingOut}
                   className="p-2 text-[var(--text-muted)] hover:text-red-500 transition-colors disabled:opacity-50"
-                  title="Sign Out"
+                  title="Sign out" aria-label="Sign out"
                 >
                   {loggingOut ? (
                     <Loader2 className="w-4 h-4 animate-spin" />
@@ -159,7 +159,7 @@ export const Navbar = () => {
               </div>
             ) : (
               <Link href="/login">
-                <Button size="md" variant="outline">Sign In</Button>
+                <Button size="md" variant="outline">Sign in</Button>
               </Link>
             )}
           </div>
@@ -208,7 +208,7 @@ export const Navbar = () => {
                   key={link.name}
                   href={link.href}
                   onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center gap-4 text-lg font-black uppercase tracking-tighter text-[var(--text-primary)] hover:text-safety-orange transition-colors"
+                  className="flex items-center gap-4 text-base font-semibold text-[var(--text-primary)] hover:text-safety-orange transition-colors"
                 >
                   <link.icon className="w-5 h-5" />
                   {link.name}
@@ -218,7 +218,7 @@ export const Navbar = () => {
               <Link
                 href="/cart"
                 onClick={() => setMobileMenuOpen(false)}
-                className="flex items-center gap-4 text-lg font-black uppercase tracking-tighter text-[var(--text-primary)] hover:text-safety-orange transition-colors"
+                className="flex items-center gap-4 text-base font-semibold text-[var(--text-primary)] hover:text-safety-orange transition-colors"
               >
                 <ShoppingCart className="w-5 h-5" />
                 Cart {cartCount > 0 && `(${cartCount})`}
@@ -227,7 +227,7 @@ export const Navbar = () => {
               <Link
                 href="/chat"
                 onClick={() => setMobileMenuOpen(false)}
-                className="flex items-center gap-4 text-lg font-black uppercase tracking-tighter text-[var(--text-primary)] hover:text-safety-orange transition-colors relative"
+                className="flex items-center gap-4 text-base font-semibold text-[var(--text-primary)] hover:text-safety-orange transition-colors relative"
               >
                 <MessageCircle className="w-5 h-5" />
                 Messages
@@ -241,12 +241,12 @@ export const Navbar = () => {
                   href="/admin"
                   onClick={() => setMobileMenuOpen(false)}
                   className={cn(
-                    "flex items-center gap-4 text-lg font-black uppercase tracking-tighter transition-colors",
+                    "flex items-center gap-4 text-base font-semibold transition-colors",
                     role?.includes('admin') ? "text-red-500 hover:text-red-400" : "text-safety-orange hover:text-safety-orange/80"
                   )}
                 >
                   <LayoutDashboard className="w-5 h-5" />
-                  {role?.includes('admin') ? 'Terminal' : 'Expert Portal'}
+                  {role?.includes('admin') ? 'Admin' : 'Expert Portal'}
                 </Link>
               )}
 
@@ -254,7 +254,7 @@ export const Navbar = () => {
                 <Link
                   href="/seller"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center gap-4 text-lg font-black uppercase tracking-tighter text-blue-500 hover:text-blue-400 transition-colors"
+                  className="flex items-center gap-4 text-base font-semibold text-blue-500 hover:text-blue-400 transition-colors"
                 >
                   <Wrench className="w-5 h-5" />
                   Seller Portal
@@ -271,15 +271,15 @@ export const Navbar = () => {
                 >
                   {loggingOut ? (
                     <>
-                      <Loader2 className="w-4 h-4 animate-spin" /> Signing Out...
+                      <Loader2 className="w-4 h-4 animate-spin" /> Signing out…
                     </>
                   ) : (
-                    'Sign Out'
+                    'Sign out'
                   )}
                 </Button>
               ) : (
                 <Link href="/login" onClick={() => setMobileMenuOpen(false)}>
-                  <Button className="w-full">Sign In</Button>
+                  <Button className="w-full">Sign in</Button>
                 </Link>
               )}
             </div>

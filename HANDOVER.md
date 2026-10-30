@@ -99,3 +99,15 @@ Shared UI: `components/layout/Brand.tsx`,
 `lib/sample-assets.ts`; image provenance, evaluation, and verification scope are in
 `docs/xts-mechatronics-ui.md`. Bundled samples are labeled and never overwrite seller
 photos. No production product data was seeded. Review this branch before merging.
+
+## 10. Shared development workflow (2026-10-30)
+The user replaced separate active agent branches/worktrees with one shared checkout:
+`D:\DEV WORKS\XTS PROJECT DEVS\XTS SHOP WEB`, branch `codex/xts-mechatronics-ui`.
+Both agents must work there and preview `http://localhost:3001`. `xts-web-claude`
+is a retained snapshot; its updated AGENTS/CLAUDE instructions redirect to this folder.
+Claude's UI consistency commits through `803831e` and Codex's hero/search work through
+`e33179c` are integrated, preserving both histories and all progress/decision entries.
+Claude's dotted background and inner-page fixes remain. PR #5 is the shared review PR;
+main is unchanged. Follow AGENTS.md's sync/file-claim format before every edit and
+use the commit SHA/files/checks/preview/next handoff format. The user's existing sample
+data and ignored environment files were not copied, reset or committed.

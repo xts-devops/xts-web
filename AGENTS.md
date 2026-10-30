@@ -12,6 +12,38 @@ Claude loads it through `CLAUDE.md`.
 
 The user's current message always wins over a stale handoff note.
 
+## Shared working copy — user directive, 2026-10-30
+
+Both agents work in **one checkout on one branch**:
+- Repository folder: `D:\DEV WORKS\XTS PROJECT DEVS\XTS SHOP WEB`
+- Shared branch: `codex/xts-mechatronics-ui`
+- Shared local preview: `http://localhost:3001`
+- Review PR: #5 into `main`. The user merges it.
+
+This overrides the old per-agent/per-task branch workflow and stale worktree notes.
+If opened in `xts-web-claude` or another worktree, stop editing there and use the
+shared folder above. Do not create another branch or preview server for normal work.
+Older branches/worktrees are retained as history, not parallel active working copies.
+
+### Sync and ownership format (every task)
+1. Read the coordination files, then run `git status --short`,
+   `git branch --show-current`, and `git fetch origin` in the shared folder.
+2. With a clean working tree, run `git pull --ff-only origin codex/xts-mechatronics-ui`.
+   If peer changes are uncommitted, preserve them and coordinate through TASKS/PROGRESS;
+   never stash, reset, clean, rebase, switch branches or overwrite them to force a sync.
+3. Claim a small task before edits, using this format:
+   `- [ ] **Task** — owner: codex|claude · status: in-progress · files: exact paths · base: short SHA · next: concrete step`
+   An in-progress file claim is exclusive. Another agent must wait, work on other
+   files, or receive the user's explicit reassignment before touching those files.
+4. Keep Git mutations serial: do not stage/commit/pull/merge while the other agent is
+   doing a Git operation. Stage only your named files; never commit peer work by accident.
+5. Verify, commit, push this same branch, then record the SHA, files, checks, preview
+   URL and next step in PROGRESS. Update the task to review/done and keep PR #5 current.
+   If push is rejected, preserve work and integrate normally; never force-push.
+
+Shared branch does not mean simultaneous edits to the same file. Layer ownership
+below still applies unless the user explicitly assigns an exception.
+
 ## Lanes (who edits what)
 
 | Lane | Owner | Paths |
@@ -30,13 +62,14 @@ The API contract between lanes is `lib/types.ts` (DTOs) plus the JSON each route
 
 ## Session ritual
 1. **Start:** read the 4 files → claim a task in `TASKS.md`
-   (`owner: <you> · status: in-progress`) → branch `<you>/<short-desc>` off `main`.
+   (`owner: <you> · status: in-progress`, exact files + base SHA) → sync the shared
+   branch using the rules above; do not create a separate task branch.
 2. **Work:** stay in your lane. Keep tasks small and file-scoped so branches merge cleanly.
 3. **Verify** (below) before calling anything done.
 4. **Commit:** small and atomic, `[<you>] <type>: <what>`, e.g. `[codex] fix: keep dotted emails in lastReadBy`.
 5. **Hand off:** append a `PROGRESS.md` entry (append-only, newest on top) → set the
    task `review`/`done`/`blocked` → add a `DECISIONS.md` entry for any architectural
-   choice → push your branch and open a PR into `main`.
+   choice → push the shared branch and update PR #5 into `main`.
 
 ## Verify gate (same for both agents)
 ```bash

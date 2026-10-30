@@ -6,6 +6,13 @@ The user authorized Codex to work in the UI lane for this change. The branch sta
 from main and includes the existing coordination and dev-only local-preview commits
 as dependencies. Main and production data are untouched.
 
+Shared workflow (2026-10-30): both agents now use `D:\DEV WORKS\XTS PROJECT DEVS\XTS SHOP WEB`
+on `codex/xts-mechatronics-ui`, preview port 3001, and PR #5. Claude's inner-page
+consistency work and user-requested dotted background are integrated with the hero.
+Follow AGENTS.md's fetch/fast-forward, exclusive file claims and commit/checks/next
+handoff format. The old `xts-web-claude` worktree is a retained snapshot, not an active
+parallel checkout. Earlier per-agent branch and port references are historical.
+
 ## Brand asset index
 
 - Reference selected: `Screenshot 2026-10-15 023555.png` (white mark).

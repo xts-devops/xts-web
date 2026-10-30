@@ -88,7 +88,7 @@ export function ConfirmModal({
                   )}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <h3 className="text-sm font-black text-[var(--text-on-card)] uppercase tracking-wide mb-1">{title}</h3>
+                  <h3 className="text-sm font-bold text-[var(--text-on-card)] mb-1">{title}</h3>
                   <p className="text-xs text-[var(--text-muted)] leading-relaxed">{message}</p>
                 </div>
               </div>

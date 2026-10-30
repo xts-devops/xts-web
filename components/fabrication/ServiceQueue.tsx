@@ -17,10 +17,10 @@ const LoadingGauge = ({
   return (
     <div className="w-full">
       <div className="flex justify-between items-end mb-2">
-        <span className="text-[10px] font-black uppercase tracking-widest text-zinc-500">
+        <span className="text-xs font-bold text-zinc-500">
           SYSTEM STATE: {status}
         </span>
-        <span className="text-[10px] font-mono leading-none text-safety-orange">
+        <span className="text-xs font-mono leading-none text-safety-orange">
           {progress}%
         </span>
       </div>
@@ -118,17 +118,17 @@ export const ServiceQueue = ({
         <div className="w-16 h-16 bg-zinc-900 border border-white/10 rounded-sm flex items-center justify-center mb-6 rotate-45 group">
           <PenTool className="w-8 h-8 text-zinc-700 -rotate-45 group-hover:text-safety-orange transition-colors" />
         </div>
-        <h4 className="text-xl font-black text-white uppercase tracking-tighter mb-2">
-          Queue Is Nominal
+        <h4 className="text-xl font-bold text-white mb-2">
+          No active jobs
         </h4>
         <p className="text-sm text-zinc-500 max-w-sm mb-8 font-medium">
-          No fabrication requests are currently being processed by our facility.
+          No fabrication requests are being worked on right now.
         </p>
         <button
           onClick={() => (window.location.href = "/services")}
-          className="px-8 py-3 bg-zinc-800 text-white text-xs font-black uppercase tracking-widest hover:bg-safety-orange transition-all border border-white/10"
+          className="px-8 py-3 bg-zinc-800 text-white text-xs font-bold hover:bg-safety-orange transition-all border border-white/10"
         >
-          Initialize New Request
+          Start a new request
         </button>
       </div>
     );
@@ -152,11 +152,11 @@ export const ServiceQueue = ({
                 >
                   {job.id.slice(0, 8).toUpperCase()}
                 </Badge>
-                <span className="text-zinc-400 text-xs font-bold uppercase">
+                <span className="text-zinc-400 text-xs font-bold">
                   {timeAgo(job.createdAt)}
                 </span>
               </div>
-              <h4 className="text-xl font-black text-esd-dark uppercase mb-2">
+              <h4 className="text-xl font-bold text-esd-dark mb-2">
                 {job.name}
               </h4>
               {job.files && job.files.length > 0 && (
@@ -165,7 +165,7 @@ export const ServiceQueue = ({
                 </p>
               )}
               {job.customerName && (
-                <p className="text-[10px] text-zinc-400 font-bold uppercase tracking-widest mb-4">
+                <p className="text-xs text-zinc-400 font-bold mb-4">
                   Client: {job.customerName}
                 </p>
               )}
@@ -174,7 +174,7 @@ export const ServiceQueue = ({
             </div>
 
             <div className="flex flex-col gap-2 shrink-0 md:text-right">
-              <span className="text-[10px] font-black uppercase text-zinc-400">
+              <span className="text-xs font-bold text-zinc-400">
                 Target Dept
               </span>
               <span className="text-sm font-bold text-esd-dark">

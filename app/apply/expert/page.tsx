@@ -47,8 +47,8 @@ export default function ApplyExpertPage() {
           <div className="w-20 h-20 bg-green-600/10 border border-green-600/20 rounded-sm flex items-center justify-center mb-8 rotate-45">
             <Award className="w-10 h-10 text-green-600 -rotate-45" />
           </div>
-          <h2 className="text-4xl font-black text-white uppercase tracking-tighter mb-4">Application Transmitted</h2>
-          <p className="text-zinc-500 max-w-md font-medium uppercase text-xs tracking-widest leading-loose">
+          <h2 className="text-4xl font-semibold text-white mb-4">Application sent</h2>
+          <p className="text-zinc-500 max-w-md font-medium text-xs leading-loose">
             Your technical dossier has been received and queued for manual verification. 
             A senior engineer will review your credentials within 72 hours.
           </p>
@@ -77,7 +77,7 @@ export default function ApplyExpertPage() {
           <div className="p-8 space-y-8">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
-                <label className="text-[10px] font-black uppercase text-zinc-500 tracking-widest px-1">Full Legal Name</label>
+                <label className="text-xs font-semibold text-zinc-500 px-1">Full Legal Name</label>
                 <Input 
                   placeholder="Engineering Lead" 
                   className="bg-black/50 border-zinc-800 text-white" 
@@ -86,7 +86,7 @@ export default function ApplyExpertPage() {
                 />
               </div>
               <div className="space-y-2">
-                <label className="text-[10px] font-black uppercase text-zinc-500 tracking-widest px-1">Primary Discipline</label>
+                <label className="text-xs font-semibold text-zinc-500 px-1">Primary Discipline</label>
                 <Input 
                   placeholder="Mechatronics / Aerospace" 
                   className="bg-black/50 border-zinc-800 text-white" 
@@ -97,7 +97,7 @@ export default function ApplyExpertPage() {
             </div>
             
             <div className="space-y-2">
-              <label className="text-[10px] font-black uppercase text-zinc-500 tracking-widest px-1">Certifications & Experience</label>
+              <label className="text-xs font-semibold text-zinc-500 px-1">Certifications & Experience</label>
               <Textarea 
                 placeholder="List your professional background, degrees, and specific hardware expertise (e.g. ROS2, CNC, PLC)..." 
                 className="bg-black/50 border-zinc-800 text-white min-h-[150px]" 
@@ -116,7 +116,7 @@ export default function ApplyExpertPage() {
                 onClick={handleSubmit}
                 disabled={loading}
               >
-                {loading ? 'Transmitting...' : 'Apply to Consult'}
+                {loading ? 'Sending…' : 'Apply to Consult'}
               </Button>
             </div>
           </div>
@@ -131,7 +131,7 @@ const Feature = ({ icon: Icon, title, description }: any) => (
     <div className="w-12 h-12 bg-safety-orange/10 rounded-sm flex items-center justify-center mb-4">
       <Icon className="w-6 h-6 text-safety-orange" />
     </div>
-    <h4 className="text-white font-black uppercase text-xs tracking-widest mb-2">{title}</h4>
-    <p className="text-zinc-500 text-[10px] leading-relaxed uppercase">{description}</p>
+    <h4 className="text-white font-semibold text-xs mb-2">{title}</h4>
+    <p className="text-zinc-500 text-xs leading-relaxed">{description}</p>
   </div>
 );

@@ -165,9 +165,9 @@ export const UploadZone = () => {
           <div className="w-20 h-20 bg-zinc-900 rounded-sm flex items-center justify-center mb-6 shadow-lg border border-white/5">
             <UploadIcon className={cn("w-10 h-10 transition-colors", dragActive ? "text-safety-orange" : "text-zinc-500")} />
           </div>
-          <h3 className="text-2xl font-black text-white uppercase tracking-tighter mb-2">FABRICATION IN-TRAY</h3>
+          <h3 className="text-2xl font-bold text-white mb-2">Upload design files</h3>
           <p className="text-zinc-500 font-handwriting text-lg mb-2">Drop STL, 3MF, DXF, SVG, or Gerber files here</p>
-          <p className="text-zinc-600 text-[10px] font-bold uppercase tracking-widest mb-8">
+          <p className="text-zinc-600 text-xs font-bold mb-8">
             Accepted: .stl, .3mf, .dxf, .svg, .step, .iges, .zip, .gerber
           </p>
 
@@ -179,7 +179,7 @@ export const UploadZone = () => {
               className="hidden"
               onChange={handleFileInput}
             />
-            <Button variant="secondary" size="md" className="pointer-events-none">Select Files</Button>
+            <Button variant="secondary" size="md" className="pointer-events-none">Select files</Button>
           </label>
         </div>
 
@@ -196,7 +196,7 @@ export const UploadZone = () => {
                 <div className="flex items-center gap-3">
                   <FileText className="w-5 h-5 text-safety-orange" />
                   <span className="text-zinc-300 font-bold text-sm truncate max-w-[200px]">{file.name}</span>
-                  <span className="text-zinc-600 text-[10px] uppercase font-black">{(file.size / 1024 / 1024).toFixed(2)} MB</span>
+                  <span className="text-zinc-600 text-xs font-bold">{(file.size / 1024 / 1024).toFixed(2)} MB</span>
                 </div>
                 <button
                   onClick={() => removeFile(file.name)}
@@ -219,7 +219,7 @@ export const UploadZone = () => {
           onClick={handleRequestQuote}
         >
           {submitting ? (
-            <><Loader2 className="w-6 h-6 mr-3 animate-spin" /> PROCESSING...</>
+            <><Loader2 className="w-6 h-6 mr-3 animate-spin" /> Uploading…</>
           ) : (
             'REQUEST QUOTE'
           )}

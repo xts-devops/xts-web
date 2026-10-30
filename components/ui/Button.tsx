@@ -31,7 +31,7 @@ export const Button = ({
   const sizes = {
     sm: 'px-3 py-1.5 text-sm',
     md: 'px-6 py-3 text-base font-semibold',
-    lg: 'px-8 py-4 text-lg font-bold uppercase tracking-wider',
+    lg: 'px-8 py-4 text-lg font-semibold',
   };
 
   return (
