@@ -12,6 +12,18 @@ Append-only. Newest at top. Never edit past entries. Format:
 
 ---
 
+## 2026-10-30 · codex · codex/xts-mechatronics-ui · single-checkout verification
+**Commit:** Integration `78a2003`; shared preview/sync instructions `e65a086`.
+**Did:** Rechecked the worktree inventory before the planned old-worktree snapshot
+operation. The old `xts-web-claude` folder/worktree was already no longer present;
+the attempted operation never started and Codex performed no deletion there.
+Updated current handover/docs to reflect the observed single-checkout state rather
+than the earlier snapshot plan. Both agents' commit histories remain integrated.
+**Verify:** `git worktree list` shows only XTS SHOP WEB on the shared branch; tracked
+working tree was clean before this documentation correction. Port 3001 uses this
+checkout. The original Claude branch ref remains available as history.
+**Next:** Work only in the canonical folder/branch using file claims; review PR #5.
+
 ## 2026-10-30 · codex · codex/xts-mechatronics-ui · shared sync checkpoint
 **Commit:** Integration checkpoint `78a2003` preserves both agents' histories.
 **Files:** AGENTS.md, app/admin/page.tsx, app/fabrication/page.tsx, PROGRESS.md;

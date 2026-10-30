@@ -10,8 +10,8 @@ Shared workflow (2026-10-30): both agents now use `D:\DEV WORKS\XTS PROJECT DEVS
 on `codex/xts-mechatronics-ui`, preview port 3001, and PR #5. Claude's inner-page
 consistency work and user-requested dotted background are integrated with the hero.
 Follow AGENTS.md's fetch/fast-forward, exclusive file claims and commit/checks/next
-handoff format. The old `xts-web-claude` worktree is a retained snapshot, not an active
-parallel checkout. Earlier per-agent branch and port references are historical.
+handoff format. The old `xts-web-claude` worktree is retired and no longer present;
+both agents' commit histories are retained. Earlier branch/port references are historical.
 
 ## Brand asset index
 

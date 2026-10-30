@@ -103,8 +103,9 @@ photos. No production product data was seeded. Review this branch before merging
 ## 10. Shared development workflow (2026-10-30)
 The user replaced separate active agent branches/worktrees with one shared checkout:
 `D:\DEV WORKS\XTS PROJECT DEVS\XTS SHOP WEB`, branch `codex/xts-mechatronics-ui`.
-Both agents must work there and preview `http://localhost:3001`. `xts-web-claude`
-is a retained snapshot; its updated AGENTS/CLAUDE instructions redirect to this folder.
+Both agents must work there and preview `http://localhost:3001`. The former
+`xts-web-claude` worktree is retired and no longer present; Git lists only the canonical
+checkout. Both histories remain preserved in the integration commit and branch refs.
 Claude's UI consistency commits through `803831e` and Codex's hero/search work through
 `e33179c` are integrated, preserving both histories and all progress/decision entries.
 Claude's dotted background and inner-page fixes remain. PR #5 is the shared review PR;
