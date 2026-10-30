@@ -164,3 +164,15 @@ and catalog routes return 200. CUA still fails initialization with missing kerne
 visual viewport checks, keyboard events, dialog focus/scroll restoration, touch and
 real cart/chat interactions are pending. No production orders or data were accessed.
 Existing warranty/shipping/return policy-copy confirmation remains in TASKS.
+
+## Brief product descriptions (2026-10-30)
+Shared ProductCard now displays the existing description below each product name,
+clamped to two lines at 12px with secondary text contrast. The two-line slot remains
+reserved for missing descriptions to keep adjacent cards aligned; no invented copy.
+The detail link references the description for assistive technology. Featured, shop
+and related cards all inherit this change. Related loading now reuses the shared
+ProductCardSkeleton, including its matching description slot. All eight local products
+already contain brief descriptions. No data/API change or local database reset.
+TypeScript, changed-file ESLint, existing SSR/helper regressions and HTTP home/catalog
+checks pass. Browser visual testing remains pending due the previously recorded CUA
+initialization failure.

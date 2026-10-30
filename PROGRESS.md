@@ -12,6 +12,22 @@ Append-only. Newest at top. Never edit past entries. Format:
 
 ---
 
+## 2026-10-30 · codex · codex/xts-mechatronics-ui · brief product descriptions
+**Commit:** 182e03d; base 7eb8f5f, fetched/pulled before claiming files.
+**Files:** ProductCard, ProductCardSkeleton, RelatedProducts, app/globals.css,
+UI docs and task/progress notes (user-authorized UI lane follow-up).
+**Did:** Existing descriptions now appear beneath product names on featured, shop
+and related cards. Two-line clamp/reserved slot keeps heights consistent; descriptions
+are associated with detail links for assistive technology. Related cards reuse the
+shared loading skeleton including its matching description slot. No product data edits.
+**Verify:** TypeScript and changed-file ESLint pass. Existing SSR/helper regression
+checks pass; HTTP homepage 200 and all eight local sample products have descriptions.
+git diff --check passes. Browser visual QA remains pending due recorded CUA failure.
+**Preview:** http://localhost:3001 · same shared branch, PR #5.
+**Next:** Review description density/wrapping on mobile and desktop when browser
+preview tooling is restored. Full descriptions remain available on product detail.
+
+
 ## 2026-10-30 · codex · codex/xts-mechatronics-ui · product detail refinement
 **Commit:** 99bc3f5 (implementation/assets); this handoff accompanies it in PR #5.
 **Base:** 7da8f11, shared checkout/port 3001; fetched/pulled before claiming files.
