@@ -247,3 +247,15 @@ TypeScript, changed-file ESLint, existing SSR/helper regressions, explicit 16-it
 uniqueness/exclusion assertion, HTTP preview and git diff --check pass. CUA was retried
 and still fails missing-kernel-assets initialization; desktop/mobile visual overflow,
 keyboard and touch signoff remain pending. No catalog/data/API changes.
+
+## Product image fitting (2026-10-30)
+ProductImage explicitly centers and contains the full image with preserved aspect
+ratio, and disables native image dragging so gallery gestures remain predictable.
+Thumbnail padding now belongs to a bounded inner frame instead of the img element;
+selected thumbnail borders do not crop the photo. The larger viewer also uses a
+padded inner frame with overflow containment. Gallery, thumbnail and larger-view
+surfaces match the existing off-white card photo surface, avoiding dark letterboxing.
+Original card geometry and four-desktop/two-mobile recommendation columns are retained.
+TypeScript, changed-file ESLint, existing SSR/helper regressions, HTTP product preview
+and git diff --check pass. Visual desktop/mobile verification remains pending due the
+previously recorded CUA initialization failure. No source assets or product data changed.

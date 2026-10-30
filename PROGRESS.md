@@ -12,6 +12,22 @@ Append-only. Newest at top. Never edit past entries. Format:
 
 ---
 
+## 2026-10-30 · codex · codex/xts-mechatronics-ui · product image fitting
+**Commit:** b034678; base 4a16fe8, fetched/pulled shared branch before file claim.
+**Files:** ProductImage, ProductGallery, app/globals.css, UI docs, TASKS/PROGRESS.
+**Did:** Explicit centered contain fitting preserves source proportions. Disabled
+native image dragging. Bounded padded thumbnail/lightbox inner frames prevent image
+padding from interacting with fill dimensions. Gallery photo surfaces match existing
+card matte; original card geometry and desktop/mobile recommendation grids retained.
+No image assets, seller photos, product data or backend behavior changed.
+**Verify:** TypeScript, changed-file ESLint, existing SSR/helper regressions, HTTP
+product preview and git diff --check pass. No new browser visual validation claimed;
+CUA initialization issue recorded in prior entries still leaves viewport QA pending.
+**Preview:** http://localhost:3001/shop/p-esp32 · same shared branch and PR #5.
+**Next:** Visually review varied source aspect ratios and thumbnail/lightbox sizing
+on phones/desktops when browser tooling is restored.
+
+
 ## 2026-10-30 · codex · codex/xts-mechatronics-ui · original cards and 4×4 capacity
 **Commit:** ce19d2e; base cb1485e, fetched/pulled shared branch before file claim.
 **Files:** RelatedProducts, app/globals.css, UI docs and coordination notes.
