@@ -20,6 +20,10 @@ Both agents work in **one checkout on one branch**:
 - Shared local preview: `http://localhost:3001`
 - Review PR: #5 into `main`. The user merges it.
 
+Reuse the running port-3001 server. If it is stopped, start it in the canonical
+folder with `npm run dev -- --hostname 127.0.0.1 --port 3001`, using both local-preview
+flags and `NEXTAUTH_URL=http://localhost:3001` in ignored `.env.local`.
+
 This overrides the old per-agent/per-task branch workflow and stale worktree notes.
 If opened in `xts-web-claude` or another worktree, stop editing there and use the
 shared folder above. Do not create another branch or preview server for normal work.

@@ -514,8 +514,8 @@ function AdminPanel() {
               {userRole.includes('admin') ? 'Administrator' : 'Expert'}
             </Badge>
             <SectionHeading 
-              title={userRole.includes('admin') ? "Admin" : "Expert portal"} 
-              annotation={userRole.includes('admin') ? "Store management" : "Your consultations"} 
+              title={userRole.includes('admin') ? "Admin" : "Expert portal"}
+              annotation={userRole.includes('admin') ? "Store management" : "Your consultations"}
               dark={true}
               className="mb-0"
             />

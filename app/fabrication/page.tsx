@@ -12,8 +12,8 @@ export default function FabricationPage() {
     <PageShell>
       <div className="container mx-auto px-4 py-20">
         <SectionHeading 
-          title="Fabrication" 
-          annotation="Custom parts from your designs" 
+          title="Fabrication"
+          annotation="Custom parts from your designs"
           dark={true} 
         />
         

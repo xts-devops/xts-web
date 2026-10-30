@@ -12,6 +12,21 @@ Append-only. Newest at top. Never edit past entries. Format:
 
 ---
 
+## 2026-10-30 · codex · codex/xts-mechatronics-ui · shared sync checkpoint
+**Commit:** Integration checkpoint `78a2003` preserves both agents' histories.
+**Files:** AGENTS.md, app/admin/page.tsx, app/fabrication/page.tsx, PROGRESS.md;
+ignored `.env.local` NEXTAUTH_URL only (not staged).
+**Did:** Documented the exact shared-server command, aligned local NEXTAUTH_URL with
+port 3001, and removed four inherited trailing spaces found during integration review.
+**Why:** Make the same-branch workflow repeatable without starting a second preview
+or routing dev sessions back to port 3000.
+**Verify:** `git diff --check` passes. `.env.local` remains ignored. The combined-code
+type/lint baseline results are in the preceding shared-working-format entry; the four
+source-line edits here are whitespace only.
+**Preview:** http://localhost:3001 from the canonical XTS SHOP WEB checkout.
+**Next:** Both agents use this checkout and shared branch. The old Claude worktree is
+a detached snapshot/redirect; preserve it and do not resume edits there.
+
 ## 2026-10-30 · codex · codex/xts-mechatronics-ui · shared working format
 **Did:** Integrated Claude's completed `claude/ui-polish` commits through `803831e`
 with Codex's hero/search work. Resolved only coordination-file conflicts by retaining
