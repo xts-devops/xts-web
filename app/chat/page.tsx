@@ -296,7 +296,7 @@ function ChatPageInner() {
             )}
             <div className="flex-grow min-w-0">
               <p className={`text-sm font-bold truncate ${isMe ? 'text-white' : 'text-[var(--text-primary)]'}`}>{productRef.name}</p>
-              <p className={`text-lg font-black ${isMe ? 'text-white' : 'text-safety-orange'}`}>₱{productRef.price?.toLocaleString('en-PH', { minimumFractionDigits: 2 })}</p>
+              <p className={`text-lg font-bold ${isMe ? 'text-white' : 'text-safety-orange'}`}>₱{productRef.price?.toLocaleString('en-PH', { minimumFractionDigits: 2 })}</p>
             </div>
             <Link href={`/shop/${productRef.id}`} className={`shrink-0 p-1.5 rounded-sm ${isMe ? 'hover:bg-white/10' : 'hover:bg-[var(--border-secondary)]'} transition-colors`}>
               <ExternalLink className={`w-4 h-4 ${isMe ? 'text-white/60' : 'text-[var(--text-muted)]'}`} />
@@ -307,7 +307,7 @@ function ChatPageInner() {
           <p className={`text-sm ${isMe ? 'text-white' : 'text-[var(--text-primary)]'}`}>
             Hi! I&apos;m interested in this product. Could you help me with more details?
           </p>
-          <p className={`text-[10px] mt-2 ${isMe ? 'text-white/60' : 'text-[var(--text-muted)]'}`}>
+          <p className={`text-xs mt-2 ${isMe ? 'text-white/60' : 'text-[var(--text-muted)]'}`}>
             {msg.senderName} · {new Date(msg.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
           </p>
         </div>
@@ -349,7 +349,7 @@ function ChatPageInner() {
           {/* Conversation List */}
           <div className={`flex flex-col h-full overflow-hidden border border-[var(--border-primary)] rounded-sm bg-[var(--bg-secondary)] ${selected ? 'hidden lg:flex' : ''}`}>
             <div className="p-3 border-b border-[var(--border-primary)] bg-[var(--bg-surface)]">
-              <h4 className="text-xs font-black text-[var(--text-muted)] uppercase tracking-widest">
+              <h4 className="text-xs font-bold text-[var(--text-muted)]">
                 {activeTab === 'consultations' ? 'Expert Conversations' : 'Conversations'} ({visibleList.length})
               </h4>
             </div>
@@ -373,8 +373,8 @@ function ChatPageInner() {
                             <UserIcon className="w-4 h-4 text-safety-orange" />
                           </div>
                           <div className="flex-grow min-w-0">
-                            <h4 className={`text-sm font-bold text-[var(--text-primary)] truncate ${convo.hasUnread ? 'font-black' : ''}`}>{getOtherName(convo)}</h4>
-                            <p className={`text-[10px] truncate ${convo.hasUnread ? 'text-[var(--text-primary)] font-bold' : 'text-[var(--text-muted)]'}`}>{convo.lastMessage || (convo.source === 'consultation' ? convo.consultation?.expertTitle : 'No messages yet')}</p>
+                            <h4 className={`text-sm font-bold text-[var(--text-primary)] truncate ${convo.hasUnread ? 'font-bold' : ''}`}>{getOtherName(convo)}</h4>
+                            <p className={`text-xs truncate ${convo.hasUnread ? 'text-[var(--text-primary)] font-bold' : 'text-[var(--text-muted)]'}`}>{convo.lastMessage || (convo.source === 'consultation' ? convo.consultation?.expertTitle : 'No messages yet')}</p>
                           </div>
                           {convo.hasUnread && (
                             <span className="w-2.5 h-2.5 bg-safety-orange rounded-full shrink-0 animate-pulse" />
@@ -401,13 +401,13 @@ function ChatPageInner() {
                             ) : (
                               <Package className="w-3 h-3 text-safety-orange shrink-0" />
                             )}
-                            <span className="text-[9px] font-bold text-[var(--text-secondary)] truncate">{convo.productRef.name}</span>
+                            <span className="text-[11px] font-bold text-[var(--text-secondary)] truncate">{convo.productRef.name}</span>
                           </div>
                         )}
                         {convo.source === 'consultation' && convo.consultation && (
                           <div className="ml-12 flex items-center gap-2 mt-1 px-2 py-1 bg-[var(--bg-surface-elevated)] rounded-sm border border-[var(--border-secondary)]">
                             <PenTool className="w-3 h-3 text-safety-orange shrink-0" />
-                            <span className="text-[9px] font-bold text-[var(--text-secondary)] truncate">{convo.consultation.expertTitle || 'Consultation'}</span>
+                            <span className="text-[11px] font-bold text-[var(--text-secondary)] truncate">{convo.consultation.expertTitle || 'Consultation'}</span>
                           </div>
                         )}
                       </div>
@@ -417,7 +417,7 @@ function ChatPageInner() {
               ) : (
                 <div className="py-20 flex flex-col items-center text-center px-4">
                   <MessageCircle className="w-12 h-12 text-[var(--text-muted)] mb-4" />
-                  <h4 className="text-lg font-black text-[var(--text-primary)] uppercase mb-2">No Conversations</h4>
+                  <h4 className="text-lg font-bold text-[var(--text-primary)] mb-2">No conversations yet</h4>
                   <p className="text-xs text-[var(--text-muted)]">
                     {activeTab === 'consultations'
                       ? 'Book a consultation to chat with an expert.'
@@ -441,7 +441,7 @@ function ChatPageInner() {
                   </div>
                   <div className="flex-grow min-w-0">
                     <h4 className="font-bold text-[var(--text-primary)] text-sm truncate">{getOtherName(selected)}</h4>
-                    <p className="text-[10px] text-[var(--text-muted)] uppercase font-bold tracking-widest truncate">
+                    <p className="text-xs text-[var(--text-muted)] font-bold truncate">
                       {selected.source === 'consultation'
                         ? `${selected.consultation?.expertTitle || ''} · ${selected.consultation?.slot || ''}`
                         : `${selected.type} chat`}
@@ -457,7 +457,7 @@ function ChatPageInner() {
                       ) : (
                         <Package className="w-3 h-3 text-safety-orange" />
                       )}
-                      <span className="text-[10px] font-bold text-safety-orange">{selected.productRef.name}</span>
+                      <span className="text-xs font-bold text-safety-orange">{selected.productRef.name}</span>
                     </Link>
                   )}
                   {selected.source === 'consultation' && selected.consultation && (
@@ -497,7 +497,7 @@ function ChatPageInner() {
                                 : 'bg-[var(--bg-surface)] text-[var(--text-primary)] border border-[var(--border-primary)]'
                             }`}>
                               <p className="text-sm whitespace-pre-wrap">{msg.content}</p>
-                              <p className={`text-[10px] mt-1 ${isMe ? 'text-white/60' : 'text-[var(--text-muted)]'}`}>
+                              <p className={`text-xs mt-1 ${isMe ? 'text-white/60' : 'text-[var(--text-muted)]'}`}>
                                 {msg.senderName} · {new Date(msg.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                               </p>
                             </div>
@@ -535,7 +535,7 @@ function ChatPageInner() {
             ) : (
               <div className="hidden lg:flex flex-col items-center justify-center h-full border border-[var(--border-primary)] rounded-sm bg-[var(--bg-surface)]">
                 <MessageCircle className="w-16 h-16 text-[var(--text-muted)] mb-4" />
-                <h4 className="text-xl font-black text-[var(--text-primary)] uppercase mb-2">Select a Conversation</h4>
+                <h4 className="text-xl font-bold text-[var(--text-primary)] mb-2">Select a conversation</h4>
                 <p className="text-sm text-[var(--text-muted)]">Choose a chat from the sidebar to start messaging.</p>
               </div>
             )}
@@ -576,7 +576,7 @@ const TabButton = ({
     type="button"
     onClick={onClick}
     className={cn(
-      'relative flex items-center gap-2 px-4 py-2.5 text-xs font-black uppercase tracking-widest transition-all border-b-2 -mb-px',
+      'relative flex items-center gap-2 px-4 py-2.5 text-xs font-bold transition-all border-b-2 -mb-px',
       active
         ? 'border-safety-orange text-safety-orange'
         : 'border-transparent text-[var(--text-muted)] hover:text-[var(--text-primary)]'
@@ -584,9 +584,9 @@ const TabButton = ({
   >
     <Icon className="w-4 h-4" />
     {label}
-    <span className="text-[10px] opacity-60">({count})</span>
+    <span className="text-xs opacity-60">({count})</span>
     {unread > 0 && (
-      <span className="ml-1 inline-flex items-center justify-center min-w-[16px] h-4 px-1 rounded-full bg-safety-orange text-white text-[9px] font-black">
+      <span className="ml-1 inline-flex items-center justify-center min-w-[16px] h-4 px-1 rounded-full bg-safety-orange text-white text-[11px] font-bold">
         {unread > 9 ? '9+' : unread}
       </span>
     )}
@@ -598,7 +598,7 @@ export default function ChatPage() {
     <Suspense fallback={
       <PageShell>
         <div className="container mx-auto px-4 py-20 flex items-center justify-center min-h-[50vh]">
-          <div className="font-mono text-safety-orange animate-pulse uppercase tracking-widest">Loading Messages...</div>
+          <div className="font-mono text-safety-orange animate-pulse">Loading messages…</div>
         </div>
       </PageShell>
     }>

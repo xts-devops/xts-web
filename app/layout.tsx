@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Architects_Daughter } from "next/font/google";
 import "./globals.css";
+import "./brand.css";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -14,8 +15,8 @@ const architectsDaughter = Architects_Daughter({
 });
 
 export const metadata: Metadata = {
-  title: "XTS WEB | Engineering Solutions & Fabrication",
-  description: "E-Commerce, Fabrication Services, and Technical Community for Engineers.",
+  title: "XTS Mechatronics | Components & Fabrication",
+  description: "Shop electronics and robotics components, request custom fabrication, and get engineering support from XTS Mechatronics.",
   icons: {
     icon: "/icon.svg",
   },

@@ -1,0 +1,12 @@
+/* Compact identity with a separate department label. */
+.navbar-inner { gap: 16px; min-height: 40px; }
+.navbar-brand { flex-shrink: 0; border-radius: 3px; }
+.brand-lockup { display: inline-flex; align-items: center; gap: 9px; color: var(--text-primary); white-space: nowrap; }
+.brand-symbol { display: inline-flex; align-items: center; }
+.brand-mark { width: 34px; height: 34px; }
+.brand-name { font-size: 24px; line-height: 1; letter-spacing: -.02em; font-weight: 750; }
+.brand-department { border-left: 1px solid var(--border-primary); padding-left: 12px; margin-left: 3px; font-size: 12px; line-height: 20px; color: var(--text-secondary); font-weight: 500; }
+.brand-lockup-footer { color: #f3f0e9; }
+.brand-lockup-footer .brand-department { border-color: #ffffff26; color: #a1a1aa; }
+@media (max-width: 600px) { .navbar-inner { gap: 10px; } .brand-mark { width: 30px; height: 30px; } .brand-name { font-size: 23px; } .brand-department { padding-left: 10px; margin-left: 1px; font-size: 11px; } }
+@media (max-width: 399px) { .navbar-brand .brand-department { display: none; } .navbar-inner { gap: 8px; } }

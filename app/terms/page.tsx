@@ -13,7 +13,7 @@ export default function TermsPage() {
         <div className="prose prose-sm max-w-none text-[var(--text-secondary)] space-y-6">
           <section>
             <h3 className="text-lg font-black text-[var(--text-primary)] uppercase mb-3">1. Acceptance of Terms</h3>
-            <p className="leading-relaxed">By accessing and using XTS WEB (&quot;the Platform&quot;), you agree to be bound by these Terms of Service. If you do not agree to these terms, you must not use the Platform.</p>
+            <p className="leading-relaxed">By accessing and using XTS Mechatronics (&quot;the Platform&quot;), you agree to be bound by these Terms of Service. If you do not agree to these terms, you must not use the Platform.</p>
           </section>
 
           <section>
@@ -28,22 +28,22 @@ export default function TermsPage() {
 
           <section>
             <h3 className="text-lg font-black text-[var(--text-primary)] uppercase mb-3">4. Fabrication Services</h3>
-            <p className="leading-relaxed">Custom fabrication services (3D printing, laser cutting, PCB manufacturing) are provided on a best-effort basis. Turnaround times are estimates. XTS WEB is not liable for delays caused by design issues, material availability, or force majeure.</p>
+            <p className="leading-relaxed">Custom fabrication services (3D printing, laser cutting, PCB manufacturing) are provided on a best-effort basis. Turnaround times are estimates. XTS Mechatronics is not liable for delays caused by design issues, material availability, or force majeure.</p>
           </section>
 
           <section>
             <h3 className="text-lg font-black text-[var(--text-primary)] uppercase mb-3">5. Expert Consultations</h3>
-            <p className="leading-relaxed">Expert consultations are advisory in nature. XTS WEB does not guarantee specific outcomes from consultation sessions. All intellectual property shared during sessions remains the property of the respective parties.</p>
+            <p className="leading-relaxed">Expert consultations are advisory in nature. XTS Mechatronics does not guarantee specific outcomes from consultation sessions. All intellectual property shared during sessions remains the property of the respective parties.</p>
           </section>
 
           <section>
             <h3 className="text-lg font-black text-[var(--text-primary)] uppercase mb-3">6. Community Guidelines</h3>
-            <p className="leading-relaxed">Users must not post content that is illegal, harmful, threatening, abusive, defamatory, or otherwise objectionable. XTS WEB reserves the right to remove content and suspend accounts that violate these guidelines.</p>
+            <p className="leading-relaxed">Users must not post content that is illegal, harmful, threatening, abusive, defamatory, or otherwise objectionable. XTS Mechatronics reserves the right to remove content and suspend accounts that violate these guidelines.</p>
           </section>
 
           <section>
             <h3 className="text-lg font-black text-[var(--text-primary)] uppercase mb-3">7. Limitation of Liability</h3>
-            <p className="leading-relaxed">XTS WEB shall not be liable for any indirect, incidental, special, or consequential damages arising from your use of the Platform or any products/services purchased through it.</p>
+            <p className="leading-relaxed">XTS Mechatronics shall not be liable for any indirect, incidental, special, or consequential damages arising from your use of the Platform or any products/services purchased through it.</p>
           </section>
 
           <section>

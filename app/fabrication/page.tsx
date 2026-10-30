@@ -12,18 +12,18 @@ export default function FabricationPage() {
     <PageShell>
       <div className="container mx-auto px-4 py-20">
         <SectionHeading 
-          title="Fabrication Portal" 
-          annotation="From CAD to Component" 
+          title="Fabrication"
+          annotation="Custom parts from your designs"
           dark={true} 
         />
         
         <Tabs defaultValue="upload" className="w-full">
           <TabsList className="mb-12 flex gap-4 bg-zinc-900/50 p-1 rounded-sm border border-white/5 inline-flex">
-            <TabsTrigger value="upload" className="px-8 py-3 rounded-sm font-black uppercase text-sm tracking-tighter transition-all data-[state=active]:bg-safety-orange data-[state=active]:text-white text-zinc-500">
+            <TabsTrigger value="upload" className="px-8 py-3 rounded-sm font-bold text-sm transition-all data-[state=active]:bg-safety-orange data-[state=active]:text-white text-zinc-500">
               New Request
             </TabsTrigger>
-            <TabsTrigger value="queue" className="px-8 py-3 rounded-sm font-black uppercase text-sm tracking-tighter transition-all data-[state=active]:bg-safety-orange data-[state=active]:text-white text-zinc-500">
-              Live Queue
+            <TabsTrigger value="queue" className="px-8 py-3 rounded-sm font-bold text-sm transition-all data-[state=active]:bg-safety-orange data-[state=active]:text-white text-zinc-500">
+              Current jobs
             </TabsTrigger>
           </TabsList>
 
@@ -35,7 +35,7 @@ export default function FabricationPage() {
               <div>
                 <div className="sticky top-32">
                   <div className="p-8 bg-zinc-800/50 border border-white/5 rounded-sm mb-8">
-                    <h4 className="text-xl font-black text-white uppercase mb-4 tracking-tighter">Guidelines</h4>
+                    <h4 className="text-xl font-bold text-white mb-4">Guidelines</h4>
                     <ul className="space-y-4 font-medium text-zinc-400 text-sm">
                       <li className="flex gap-3">
                         <span className="text-safety-orange">•</span>

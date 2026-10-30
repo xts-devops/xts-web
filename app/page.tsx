@@ -1,352 +1,114 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { motion } from 'framer-motion';
+import { ArrowRight, ArrowDown, Layers, Wrench, MessageSquare, Cpu, ScanLine, Cog, Zap, CircuitBoard, Printer, Scissors, FileText, ClipboardList } from 'lucide-react';
 import { PageShell } from '@/components/layout/PageShell';
-import { Button } from '@/components/ui/Button';
-import { Card } from '@/components/ui/Card';
-import { SectionHeading } from '@/components/ui/SectionHeading';
-import { Badge } from '@/components/ui/Badge';
-import { FabricationIcon, ConsultationIcon, ShopIcon, CommunityIcon } from '@/components/icons';
-import { ArrowRight, Box, Cpu, Hammer, Activity, Check } from 'lucide-react';
+import { ProductCard } from '@/components/ui/ProductCard';
+import { ProductCardSkeleton } from '@/components/ui/Skeleton';
+import { CatalogSearch } from '@/components/ui/CatalogSearch';
 import { useCart } from '@/lib/cart-context';
+import { productImage } from '@/lib/sample-assets';
+import type { ProductDTO } from '@/lib/types';
 
-const serviceCards = [
-  { 
-    title: '3D Printing', 
-    desc: 'High-precision FDM and SLA printing for prototypes and parts.',
-    icon: FabricationIcon,
-    annotation: "24h Turnaround"
-  },
-  { 
-    title: 'Laser Cutting', 
-    desc: 'Custom cut acrylic, wood, and metal with millimetric accuracy.',
-    icon: Hammer,
-    annotation: "Precision 0.1mm"
-  },
-  { 
-    title: 'PCB Fabrication', 
-    desc: 'Single or multi-layer custom boards with rapid manufacturing.',
-    icon: Cpu,
-    annotation: "Gerber Validated"
-  },
+const quickLinks = [
+  { icon: Layers, title: 'Custom fabrication', short: 'Services', text: '3D printing, laser cutting & PCB services', href: '/services' },
+  { icon: Wrench, title: 'Talk to an expert', short: 'Experts', text: 'Help with hardware, CAD & robotics', href: '/consultation' },
+  { icon: MessageSquare, title: 'Explore the community', short: 'Community', text: 'Questions, projects & shared experience', href: '/community' },
+];
+
+const categoryLinks = [
+  { name: 'Microcontrollers', category: 'Microcontrollers', query: 'microcontrollers', icon: Cpu, detail: 'Development boards & controllers' },
+  { name: 'Sensors', category: 'Sensors', query: 'sensors', icon: ScanLine, detail: 'Sensing & measurement modules' },
+  { name: 'Motors', category: 'Motors', query: 'motors', icon: Cog, detail: 'Motion & robotics components' },
+  { name: 'Power modules', category: 'Power', query: 'power', icon: Zap, detail: 'Converters & power electronics' },
+  { name: 'Single-board computers', category: 'Single-Board Computers', query: 'single-board', icon: CircuitBoard, detail: 'Compact computing platforms' },
+  { name: '3D printing', category: '3D Printing', query: '3d printing', icon: Layers, detail: 'Filament & printing supplies' },
+];
+
+const engineeringServices = [
+  { icon: Printer, name: '3D printing', description: 'Turn a 3D model into a prototype, enclosure, or functional part.', href: '/services?type=3d-printing', action: 'Start a print request' },
+  { icon: Scissors, name: 'Laser cutting', description: 'Submit your design for custom panels, profiles, and cut parts.', href: '/services?type=laser-cutting', action: 'Explore laser cutting' },
+  { icon: CircuitBoard, name: 'PCB fabrication', description: 'Upload your board files and configure a fabrication request.', href: '/services?type=pcb-fabrication', action: 'Start a PCB request' },
+  { icon: Wrench, name: 'Technical consultation', description: 'Discuss hardware, CAD, or robotics challenges with an expert.', href: '/consultation', action: 'Find technical help' },
+];
+
+const supportLinks = [
+  { icon: FileText, name: 'Product information', description: 'Review specifications, pricing, and availability before ordering.', href: '/shop' },
+  { icon: ClipboardList, name: 'Order updates', description: 'Keep track of orders and their status in your dashboard.', href: '/dashboard' },
+  { icon: MessageSquare, name: 'Direct support', description: 'Message sellers or contact the XTS team about your order.', href: '/chat' },
 ];
 
 export default function Home() {
-  const [products, setProducts] = useState<any[]>([]);
-  const [loadingProducts, setLoadingProducts] = useState(true);
+  const [products, setProducts] = useState<ProductDTO[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
   const [addedIds, setAddedIds] = useState<Set<string>>(new Set());
+  const [announcement, setAnnouncement] = useState('');
   const { addToCart } = useCart();
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const res = await fetch('/api/products');
-        if (res.ok) {
-          const data = await res.json();
-          setProducts(data.slice(0, 4)); // show max 4 featured
-        }
-      } catch (e) {
-        console.error("Failed to fetch featured products", e);
-      } finally {
-        setLoadingProducts(false);
-      }
-    };
-    fetchProducts();
+    const controller = new AbortController();
+    fetch('/api/products', { signal: controller.signal })
+      .then(res => { if (!res.ok) throw new Error('Products unavailable'); return res.json(); })
+      .then((data: ProductDTO[]) => setProducts(data))
+      .catch(err => { if (err.name !== 'AbortError') setError(true); })
+      .finally(() => setLoading(false));
+    return () => controller.abort();
   }, []);
 
-  const handleAddToCart = (product: any) => {
-    addToCart({
-      id: product.id,
-      name: product.name,
-      price: parseFloat(product.price),
-      category: product.category,
-      sku: product.sku,
-      tag: product.tag,
-      imageUrl: product.imageUrls?.[0] || '',
-    });
-    setAddedIds(prev => new Set(prev).add(product.id));
-    setTimeout(() => {
-      setAddedIds(prev => {
-        const next = new Set(prev);
-        next.delete(product.id);
-        return next;
-      });
-    }, 1500);
+  const add = (product: ProductDTO) => {
+    if (product.stock <= 0) return;
+    addToCart({ ...product, price: Number(product.price), imageUrl: productImage(product) });
+    setAddedIds(previous => new Set(previous).add(product.id));
+    setAnnouncement(`${product.name} added to cart`);
+    setTimeout(() => setAddedIds(previous => { const next = new Set(previous); next.delete(product.id); return next; }), 1800);
   };
 
   return (
     <PageShell>
-      {/* Hero Section */}
-      <section className="relative overflow-hidden py-20 lg:py-32">
-        <div className="container mx-auto px-6 relative z-10">
-          <div className="max-w-4xl">
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5 }}
-            >
-              <Badge variant="new" className="mb-6">Project Horizon v1.0</Badge>
-              <h1 className="text-4xl sm:text-6xl md:text-8xl font-black text-white uppercase tracking-tighter leading-none mb-6">
-                Engineering. <br />
-                <span className="text-safety-orange transition-all hover:tracking-normal cursor-default">Fabrication.</span> <br />
-                Community.
-              </h1>
-              <p className="text-xl text-zinc-400 max-w-2xl mb-10 leading-relaxed">
-                Unlock the tools, services, and expertise to build the impossible. From hardware kits to custom-machined parts, XTS WEB is your digital workbench.
-              </p>
-              <div className="flex flex-wrap gap-4">
-                <Link href="/shop">
-                  <Button size="lg" className="group">
-                    Browse Shop <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" />
-                  </Button>
-                </Link>
-                <Link href="/services">
-                  <Button variant="outline" size="lg">
-                    Request Services
-                  </Button>
-                </Link>
-              </div>
-            </motion.div>
+      <section className="store-hero welcome-hero" aria-labelledby="welcome-title">
+        <div className="store-container welcome-layout">
+          <div className="hero-copy welcome-copy">
+            <p className="welcome-greeting">Welcome to XTS <span>Mechatronics</span></p>
+            <h1 id="welcome-title">Parts and support<br />for your next project.</h1>
+            <p className="hero-description">Find electronics and robotics components, request custom parts, or get help with your project.</p>
+            <CatalogSearch products={products} />
+            <nav className="category-shortcuts" aria-label="Browse product categories">
+              <span>Browse</span>
+              {['Microcontrollers', 'Motors', 'Sensors'].map(category => <Link key={category} href={'/shop?category=' + encodeURIComponent(category)}>{category}</Link>)}
+            </nav>
+            <div className="welcome-shopping-actions"><Link href="/shop" className="welcome-catalog-link">Shop all products <ArrowRight size={15} aria-hidden="true" /></Link><Link href="#categories" className="welcome-category-link">Shop by category <ArrowDown size={14} aria-hidden="true" /></Link></div>
           </div>
-        </div>
-
-        {/* Decorative background element */}
-        <div className="absolute top-1/2 right-0 -translate-y-1/2 w-1/2 h-full opacity-10 pointer-events-none">
-          <div className="w-full h-full border-4 border-dashed border-white rounded-full scale-150" />
+          <aside className="welcome-guide" aria-labelledby="welcome-guide-title">
+            <h2 id="welcome-guide-title">More ways we can help</h2>
+            {quickLinks.map(service => <Link href={service.href} key={service.title} className="welcome-route"><service.icon size={21} aria-hidden="true" /><span><strong><span className="route-full-label">{service.title}</span><span className="route-short-label">{service.short}</span></strong><span className="route-description">{service.text}</span></span><ArrowRight size={17} aria-hidden="true" /></Link>)}
+          </aside>
         </div>
       </section>
-
-      {/* Featured Products — fetched from Firestore */}
-      <section className="bg-zinc-100 py-24">
-        <div className="container mx-auto px-6">
-          <SectionHeading 
-            title="Essential Gear" 
-            annotation="Stocked & Ready" 
-            dark={false}
-          />
-
-          {loadingProducts ? (
-            <div className="py-16 flex justify-center">
-              <Activity className="w-8 h-8 text-safety-orange animate-spin" />
-            </div>
-          ) : products.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-              {products.map((p) => (
-                <Card key={p.id} annotation={p.tag} className="flex flex-col h-full">
-                  <Link href={`/shop/${p.id}`} className="group block">
-                    <div className="aspect-square bg-[var(--bg-surface)] mb-4 rounded-sm flex items-center justify-center relative overflow-hidden border border-[var(--border-secondary)]">
-                      {p.imageUrls?.[0] ? (
-                        <img src={p.imageUrls[0]} alt={p.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
-                      ) : (
-                        <Box className="w-20 h-20 text-zinc-400 opacity-50 group-hover:scale-110 transition-transform duration-500" />
-                      )}
-                      <div className="absolute top-2 right-2">
-                        <Badge variant={p.stock < 10 ? 'warning' : 'new'}>
-                          {p.stock < 10 ? 'Low Stock' : 'In Stock'}
-                        </Badge>
-                      </div>
-                    </div>
-                    <div className="flex-grow">
-                      <span className="text-xs font-bold text-zinc-500 uppercase tracking-widest">{p.category}</span>
-                      <h3 className="text-xl font-bold text-esd-dark mb-2 group-hover:text-safety-orange transition-colors">{p.name}</h3>
-                    </div>
-                  </Link>
-                  <div className="flex items-center justify-between mt-4">
-                    <span className="text-lg font-black text-safety-orange">PHP {parseFloat(p.price).toFixed(2)}</span>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className={`p-2 min-w-0 transition-all ${addedIds.has(p.id) ? 'bg-green-600 text-white border-green-600' : ''}`}
-                      onClick={() => handleAddToCart(p)}
-                    >
-                      {addedIds.has(p.id) ? (
-                        <Check className="w-5 h-5" />
-                      ) : (
-                        <ShopIcon className="w-5 h-5" />
-                      )}
-                    </Button>
-                  </div>
-                </Card>
-              ))}
-            </div>
-          ) : (
-            <div className="py-16 text-center">
-              <p className="text-zinc-500 font-medium uppercase text-xs tracking-widest mb-6">Inventory is being loaded into the system.</p>
-              <Link href="/shop">
-                <Button variant="outline" className="text-esd-dark border-esd-dark">
-                  View Full Inventory
-                </Button>
-              </Link>
-            </div>
-          )}
-
-          {products.length > 0 && (
-            <div className="mt-12 text-center">
-              <Link href="/shop">
-                <Button variant="outline" className="text-esd-dark border-esd-dark hover:bg-esd-dark hover:text-white">
-                  View Full Inventory
-                </Button>
-              </Link>
-            </div>
-          )}
+      <section className="store-section store-container featured-section" id="featured-products" aria-labelledby="featured-heading">
+        <div className="store-section-heading"><div><h2 id="featured-heading">Featured products</h2><p className="section-description">Components and essentials from the catalog.</p></div><Link href="/shop" className="text-link">View all products <ArrowRight size={16} aria-hidden="true" /></Link></div>
+        <div aria-busy={loading}>
+          {loading ? <><span className="sr-only" role="status">Loading featured products</span><div className="store-product-grid">{Array.from({ length: 4 }, (_, i) => <ProductCardSkeleton key={i} />)}</div></> : products.length ? <div className="store-product-grid">{products.slice(0, 4).map(product => <ProductCard key={product.id} product={product} onAdd={add} added={addedIds.has(product.id)} />)}</div> : <div className="store-empty"><h3>{error ? 'Products could not be loaded' : 'No products available'}</h3><p>{error ? 'Open the shop to try again.' : 'Please check back for new listings.'}</p><Link className="text-link" href="/shop">Open shop <ArrowRight size={16} /></Link></div>}
         </div>
       </section>
-
-      {/* Services Section */}
-      <section className="py-24">
-        <div className="container mx-auto px-6">
-          <SectionHeading 
-            title="Custom Fab" 
-            annotation="From CAD to Reality" 
-            dark={true}
-            className="text-white"
-          />
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {serviceCards.map((s, i) => (
-              <motion.div
-                key={s.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-              >
-                <Card annotation={s.annotation} className="h-full border-l-4 border-l-safety-orange">
-                  <div className="w-12 h-12 bg-safety-orange/10 flex items-center justify-center rounded-sm mb-6">
-                    <s.icon className="w-6 h-6 text-safety-orange" />
-                  </div>
-                  <h3 className="text-2xl font-black text-esd-dark uppercase mb-4">{s.title}</h3>
-                  <p className="text-zinc-600 mb-8 leading-relaxed">
-                    {s.desc}
-                  </p>
-                  <Link href="/services">
-                    <Button variant="primary" className="w-full">
-                      Upload Files
-                    </Button>
-                  </Link>
-                </Card>
-              </motion.div>
-            ))}
-          </div>
-        </div>
+      <section className="store-section store-container category-section" id="categories" aria-labelledby="categories-heading">
+        <div className="store-section-heading"><div><h2 id="categories-heading">Shop by category</h2><p className="section-description">Go straight to the parts you need.</p></div></div>
+        <div className="commerce-category-grid">{categoryLinks.map(category => {
+          const count = products.filter(product => product.category === category.category).length;
+          const href = '/shop?' + new URLSearchParams(count ? { category: category.category } : { q: category.query });
+          return <Link key={category.category} href={href} className="commerce-category"><category.icon size={23} strokeWidth={1.6} aria-hidden="true" /><div><h3>{category.name}</h3><span>{category.detail}</span>{!loading && !error && count > 0 && <small>{count} {count === 1 ? 'product' : 'products'}</small>}</div><ArrowRight size={16} aria-hidden="true" /></Link>;
+        })}</div>
       </section>
-
-      {/* Expert Consultation CTA */}
-      <section className="py-24 relative overflow-hidden">
-        <div className="container mx-auto px-6">
-          <div className="bg-safety-orange p-1 px-1 rounded-sm shadow-2xl skew-y-[-1deg]">
-            <div className="bg-esd-dark p-12 md:p-20 flex flex-col items-center text-center skew-y-[1deg]">
-              <div className="w-16 h-16 bg-white/10 rounded-full flex items-center justify-center mb-8">
-                <ConsultationIcon className="w-8 h-8 text-safety-orange" />
-              </div>
-              <h2 className="text-4xl md:text-6xl font-black text-white uppercase tracking-tighter mb-6">
-                Stuck on a Bug? <br />
-                <span className="text-safety-orange">Talk to an Expert.</span>
-              </h2>
-              <p className="text-xl text-zinc-400 max-w-2xl mb-12">
-                Don't let technical hurdles stop your progress. Book a 1-on-1 session with our engineers for CAD design, robotics logic, or hardware debugging.
-              </p>
-              <Link href="/consultation">
-                <Button size="lg" className="bg-white text-esd-dark hover:bg-zinc-200 shadow-[0_4px_0_0_#d4d4d8]">
-                  Schedule Session
-                </Button>
-              </Link>
-            </div>
-          </div>
-        </div>
+      <section className="engineering-section" aria-labelledby="engineering-heading"><div className="store-container store-section">
+        <div className="store-section-heading"><div><h2 id="engineering-heading">Engineering services</h2><p className="section-description">From a design file to a custom part, with help along the way.</p></div><Link href="/services" className="text-link">View services <ArrowRight size={16} aria-hidden="true" /></Link></div>
+        <div className="engineering-grid">{engineeringServices.map(service => <Link href={service.href} key={service.name} className="engineering-card"><service.icon size={25} strokeWidth={1.6} aria-hidden="true" /><h3>{service.name}</h3><p>{service.description}</p><span>{service.action} <ArrowRight size={15} aria-hidden="true" /></span></Link>)}</div>
+      </div></section>
+      <section className="store-section store-container support-section" aria-labelledby="support-heading">
+        <h2 id="support-heading">Information and support, before and after your order.</h2>
+        <div className="commerce-support-grid">{supportLinks.map(item => <Link href={item.href} key={item.name}><item.icon size={22} strokeWidth={1.6} aria-hidden="true" /><div><h3>{item.name}</h3><span>{item.description}</span></div></Link>)}</div>
       </section>
-
-      {/* Community Section */}
-      <section className="py-24 bg-zinc-100">
-        <div className="container mx-auto px-6">
-          <SectionHeading 
-            title="The Feed" 
-            annotation="Build Logs & Reviews" 
-            dark={false}
-          />
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <Card annotation="Recent Build" className="group">
-              <div className="flex gap-6">
-                <div className="hidden sm:flex w-32 h-32 bg-zinc-200 rounded-sm shrink-0 items-center justify-center">
-                  <FabricationIcon className="w-12 h-12 text-zinc-400" />
-                </div>
-                <div>
-                  <h4 className="text-xl font-bold text-esd-dark mb-2 group-hover:text-safety-orange transition-colors cursor-pointer">Autonomous Rover with LiDAR Mapping</h4>
-                  <p className="text-zinc-600 mb-4 line-clamp-2">Just finished the first version of my mapping rover. Used the Core V4 from the shop and some custom laser-cut chassis parts...</p>
-                  <div className="flex items-center gap-4 text-xs font-bold text-zinc-500 uppercase">
-                    <span>By @RobotDave</span>
-                    <span>•</span>
-                    <span>12 Comments</span>
-                  </div>
-                </div>
-              </div>
-            </Card>
-            <Card annotation="Question" className="group">
-              <div className="flex gap-6">
-                <div className="hidden sm:flex w-32 h-32 bg-zinc-200 rounded-sm shrink-0 items-center justify-center">
-                  <CommunityIcon className="w-12 h-12 text-zinc-400" />
-                </div>
-                <div>
-                  <h4 className="text-xl font-bold text-esd-dark mb-2 group-hover:text-safety-orange transition-colors cursor-pointer">Best way to shield I2C lines in high EMI?</h4>
-                  <p className="text-zinc-600 mb-4 line-clamp-2">Having some issues with data corruption when the motors are running. Has anyone tried twisted pair or specific shielding...</p>
-                  <div className="flex items-center gap-4 text-xs font-bold text-zinc-500 uppercase">
-                    <span>By @CircuitQueen</span>
-                    <span>•</span>
-                    <span>5 Answers</span>
-                  </div>
-                </div>
-              </div>
-            </Card>
-          </div>
-          <div className="mt-12 text-center">
-            <Link href="/community">
-              <Button variant="outline" className="text-esd-dark border-esd-dark hover:bg-esd-dark hover:text-white">Join the Community</Button>
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* Newsletter */}
-      <NewsletterSignup />
-      </PageShell>
+      <span className="sr-only" role="status" aria-live="polite">{announcement}</span>
+    </PageShell>
   );
 }
-
-function NewsletterSignup() {
-  const [email, setEmail] = React.useState('');
-  const [subscribed, setSubscribed] = React.useState(false);
-
-  const submit = () => {
-    if (!email.includes('@')) return;
-    setEmail('');
-    setSubscribed(true);
-    setTimeout(() => setSubscribed(false), 3000);
-  };
-
-  return (
-    <section className="py-24 border-t border-white/5">
-      <div className="container mx-auto px-6 flex flex-col items-center">
-        <h3 className="text-3xl font-black uppercase tracking-tighter text-white mb-8 text-center">Get Engineering Updates</h3>
-        <div className="flex w-full max-w-md gap-2">
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && submit()}
-            placeholder="engineer@example.com"
-            aria-label="Email address"
-            className="grow bg-zinc-800 border-2 border-zinc-700 px-4 py-3 text-white focus:outline-none focus:border-safety-orange transition-colors"
-          />
-          <Button onClick={submit} disabled={!email.includes('@')}>Join</Button>
-        </div>
-        {subscribed ? (
-          <p className="mt-4 text-green-400 text-sm font-bold uppercase tracking-widest">Thanks for subscribing!</p>
-        ) : (
-          <p className="mt-4 text-zinc-600 text-sm font-handwriting">No spam, just schematics and new part drops.</p>
-        )}
-      </div>
-    </section>
-  );
-}
-

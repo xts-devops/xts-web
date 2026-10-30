@@ -276,7 +276,7 @@ export default function CommunityPage() {
 
       <div className="container mx-auto px-4 sm:px-6 py-16 sm:py-20 overflow-x-hidden">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 sm:gap-8 mb-10 sm:mb-16">
-          <SectionHeading title="The Feed" annotation="Engineering Community" dark={true} className="mb-0" />
+          <SectionHeading title="Community" annotation="Projects and questions" dark={true} className="mb-0" />
           <Button onClick={() => setShowCreate(!showCreate)} className="whitespace-nowrap">
             {showCreate ? 'Close Editor' : 'Create Post'}
           </Button>
@@ -290,13 +290,13 @@ export default function CommunityPage() {
                 <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} transition={{ duration: 0.2 }}>
                   <Card className="mb-4 border-2 border-safety-orange/30">
                     <div className="space-y-6">
-                      <h3 className="text-xl font-black uppercase text-esd-dark">Share your Work</h3>
+                      <h3 className="text-xl font-bold text-esd-dark">Share your work</h3>
                       <div>
-                        <label className="text-[10px] font-black uppercase text-zinc-500 tracking-widest block mb-2">Post Type</label>
+                        <label className="text-xs font-bold text-zinc-500 block mb-2">Post type</label>
                         <div className="flex flex-wrap gap-2">
                           {tagOptions.map(tag => (
                             <button key={tag} onClick={() => setPostTag(tag)}
-                              className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-tighter transition-all border ${
+                              className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all border ${
                                 postTag === tag ? 'bg-safety-orange border-safety-orange text-white' : 'bg-zinc-100 border-zinc-200 text-zinc-500 hover:border-zinc-400'
                               }`}
                             >{tag}</button>
@@ -308,7 +308,7 @@ export default function CommunityPage() {
 
                       {/* Photo Upload */}
                       <div className="space-y-2">
-                        <label className="text-[10px] font-black uppercase text-zinc-500 tracking-widest">Photos</label>
+                        <label className="text-xs font-bold text-zinc-500">Photos</label>
                         <div className="flex flex-wrap gap-3">
                           {imagePreviews.map((url, i) => (
                             <div key={i} className="relative w-20 h-20 rounded-sm overflow-hidden border-2 border-safety-orange">
@@ -320,14 +320,14 @@ export default function CommunityPage() {
                           ))}
                           <label className="w-20 h-20 border-2 border-dashed border-zinc-300 rounded-sm flex flex-col items-center justify-center cursor-pointer hover:border-safety-orange transition-colors">
                             <ImageIcon className="w-5 h-5 text-zinc-400 mb-1" />
-                            <span className="text-[8px] text-zinc-400 font-bold">ADD</span>
+                            <span className="text-[8px] text-zinc-400 font-bold">Add</span>
                             <input type="file" accept="image/*" multiple className="hidden" onChange={handleImageSelect} />
                           </label>
                         </div>
                       </div>
 
                       <div className="flex justify-between items-center">
-                        <span className="text-[10px] text-zinc-400 font-bold uppercase tracking-widest">Posting as @{session?.user?.name?.split(' ')[0] || 'Anonymous'}</span>
+                        <span className="text-xs text-zinc-400 font-bold">Posting as @{session?.user?.name?.split(' ')[0] || 'Anonymous'}</span>
                         <div className="flex gap-4">
                           <Button variant="ghost" className="text-zinc-500" onClick={() => { setShowCreate(false); setPostTitle(''); setPostContent(''); setImageFiles([]); setImagePreviews([]); }}>Cancel</Button>
                           <Button onClick={handlePublish} disabled={!postTitle.trim() || !postContent.trim() || publishing}
@@ -353,20 +353,20 @@ export default function CommunityPage() {
                       <Card className="relative group">
                         {post.isPinned && (
                           <div className="absolute top-4 right-4 text-safety-orange flex items-center gap-1">
-                            <Pin className="w-3 h-3 fill-current" /><span className="text-[10px] font-black uppercase">Pinned</span>
+                            <Pin className="w-3 h-3 fill-current" /><span className="text-xs font-bold">Pinned</span>
                           </div>
                         )}
                         <div className="flex gap-6">
                           <div className="hidden sm:flex flex-col items-center shrink-0">
-                            <div className="w-12 h-12 bg-zinc-800 rounded-sm flex items-center justify-center text-white font-black mb-2 shadow-lg border border-white/10">{post.avatar}</div>
+                            <div className="w-12 h-12 bg-zinc-800 rounded-sm flex items-center justify-center text-white font-bold mb-2 shadow-lg border border-white/10">{post.avatar}</div>
                             <div className="h-full w-px bg-zinc-200" />
                           </div>
                           <div className="flex-grow">
                             <div className="flex items-center gap-3 mb-3 min-w-0">
                               <Badge variant={post.tag === 'Announcement' ? 'new' : post.tag === 'Question' ? 'warning' : 'pending'}>{post.tag}</Badge>
-                              <span className="text-xs font-bold text-zinc-500 uppercase tracking-tighter truncate">@{post.author} • {timeAgo(post.createdAt)}</span>
+                              <span className="text-xs font-bold text-zinc-500 truncate">@{post.author} • {timeAgo(post.createdAt)}</span>
                             </div>
-                            <h3 className="text-2xl font-black text-esd-dark uppercase mb-4 group-hover:text-safety-orange transition-colors cursor-pointer break-words">{post.title}</h3>
+                            <h3 className="text-2xl font-bold text-esd-dark mb-4 group-hover:text-safety-orange transition-colors cursor-pointer break-words">{post.title}</h3>
                             <p className="text-zinc-600 mb-4 leading-relaxed whitespace-pre-wrap break-words">{post.content}</p>
 
                             {/* Post Images */}
@@ -392,7 +392,7 @@ export default function CommunityPage() {
                               >
                                 <ThumbsUp className={`w-4 h-4 ${likedPosts.has(post.id) ? 'fill-current' : ''}`} />
                                 <span className="text-sm font-bold">{post.likes}</span>
-                                {likedPosts.has(post.id) && <span className="text-[10px] font-black uppercase tracking-widest ml-1">Liked</span>}
+                                {likedPosts.has(post.id) && <span className="text-xs font-bold ml-1">Liked</span>}
                               </button>
                               {/* Comments toggle */}
                               <button
@@ -429,13 +429,13 @@ export default function CommunityPage() {
                                       ) : (
                                         (commentsByPost[post.id] || []).map((c) => (
                                           <div key={c.id} className="flex gap-3">
-                                            <div className="w-8 h-8 bg-zinc-800 rounded-full flex items-center justify-center text-[10px] text-white font-black shrink-0 border border-white/10">
+                                            <div className="w-8 h-8 bg-zinc-800 rounded-full flex items-center justify-center text-xs text-white font-bold shrink-0 border border-white/10">
                                               {c.avatar}
                                             </div>
                                             <div className="flex-grow bg-[var(--bg-surface)] rounded-sm p-3 border border-[var(--border-secondary)]">
                                               <div className="flex items-center gap-2 mb-1">
-                                                <span className="text-xs font-black text-esd-dark uppercase">@{c.author}</span>
-                                                <span className="text-[10px] text-zinc-400">{timeAgo(c.createdAt)}</span>
+                                                <span className="text-xs font-bold text-esd-dark">@{c.author}</span>
+                                                <span className="text-xs text-zinc-400">{timeAgo(c.createdAt)}</span>
                                               </div>
                                               <p className="text-sm text-[var(--text-secondary)]">{c.content}</p>
                                             </div>
@@ -448,7 +448,7 @@ export default function CommunityPage() {
                                   {/* Comment input */}
                                   {session ? (
                                     <div className="flex gap-3">
-                                      <div className="w-8 h-8 bg-safety-orange rounded-full flex items-center justify-center text-[10px] text-white font-black shrink-0">
+                                      <div className="w-8 h-8 bg-safety-orange rounded-full flex items-center justify-center text-xs text-white font-bold shrink-0">
                                         {session.user?.name?.[0]?.toUpperCase() || '?'}
                                       </div>
                                       <div className="flex-grow flex gap-2">
@@ -486,9 +486,9 @@ export default function CommunityPage() {
                       <div className="w-16 h-16 bg-zinc-900 border border-white/10 rounded-sm flex items-center justify-center mb-6">
                         <MessageSquare className="w-8 h-8 text-zinc-700" />
                       </div>
-                      <h4 className="text-2xl font-black text-white uppercase tracking-tighter mb-2">The Feed is Quiet</h4>
+                      <h4 className="text-2xl font-bold text-white mb-2">No posts yet</h4>
                       <p className="text-sm text-zinc-500 max-w-sm mb-8 font-medium">Be the first to share a build log, ask a question, or start a discussion.</p>
-                      <Button onClick={() => setShowCreate(true)}>Create First Post</Button>
+                      <Button onClick={() => setShowCreate(true)}>Create the first post</Button>
                     </div>
                   </motion.div>
                 )}
@@ -499,13 +499,13 @@ export default function CommunityPage() {
           {/* Sidebar */}
           <div className="space-y-8">
             <div className="p-8 bg-zinc-900 border border-white/5 rounded-sm shadow-2xl">
-              <h4 className="text-lg font-black text-white uppercase mb-6 tracking-tighter">Top Contributors</h4>
+              <h4 className="text-lg font-bold text-white mb-6">Top contributors</h4>
               <div className="space-y-4">
                 {topContributors.length > 0 ? (
                   topContributors.map(([user, count], i) => (
                     <div key={user} className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 bg-zinc-800 rounded-full flex items-center justify-center text-[10px] font-black text-white">{user[0]?.toUpperCase()}</div>
+                        <div className="w-8 h-8 bg-zinc-800 rounded-full flex items-center justify-center text-xs font-bold text-white">{user[0]?.toUpperCase()}</div>
                         <span className="text-sm font-bold text-zinc-400 truncate">@{user}</span>
                       </div>
                       <Badge variant="new" className="text-[8px] px-1 pointer-events-none">{count} post{count !== 1 ? 's' : ''}</Badge>
@@ -518,26 +518,26 @@ export default function CommunityPage() {
             </div>
 
             <div className="p-8 bg-zinc-900 border border-white/5 rounded-sm shadow-2xl">
-              <h4 className="text-lg font-black text-white uppercase mb-6 tracking-tighter">Feed Stats</h4>
+              <h4 className="text-lg font-bold text-white mb-6">Community stats</h4>
               <div className="space-y-3">
                 <div className="flex justify-between">
-                  <span className="text-xs text-zinc-500 font-bold uppercase">Total Posts</span>
-                  <span className="text-sm font-black text-safety-orange">{posts.length}</span>
+                  <span className="text-xs text-zinc-500 font-bold">Total posts</span>
+                  <span className="text-sm font-bold text-safety-orange">{posts.length}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-xs text-zinc-500 font-bold uppercase">Total Likes</span>
-                  <span className="text-sm font-black text-safety-orange">{posts.reduce((s, p) => s + p.likes, 0)}</span>
+                  <span className="text-xs text-zinc-500 font-bold">Total likes</span>
+                  <span className="text-sm font-bold text-safety-orange">{posts.reduce((s, p) => s + p.likes, 0)}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-xs text-zinc-500 font-bold uppercase">Your Likes</span>
-                  <span className="text-sm font-black text-safety-orange">{likedPosts.size}</span>
+                  <span className="text-xs text-zinc-500 font-bold">Your likes</span>
+                  <span className="text-sm font-bold text-safety-orange">{likedPosts.size}</span>
                 </div>
               </div>
             </div>
 
             <div className="p-8 bg-safety-orange rounded-sm shadow-2xl skew-y-1">
               <div className="-skew-y-1">
-                <h4 className="text-lg font-black text-esd-dark uppercase mb-4 tracking-tighter">Hackathon #4</h4>
+                <h4 className="text-lg font-bold text-esd-dark mb-4">Hackathon #4</h4>
                 <p className="text-sm text-esd-dark font-medium mb-6">Join our next build-off starting March 1st. Theme: &quot;Edge Robotics&quot;.</p>
                 <Button variant="secondary" className="w-full text-xs py-2 bg-esd-dark text-white shadow-none">Register Now</Button>
               </div>

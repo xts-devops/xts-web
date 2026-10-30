@@ -1,10 +1,11 @@
 "use client";
 
 import React from 'react';
-import { motion } from 'framer-motion';
+import { motion, type HTMLMotionProps } from 'framer-motion';
 import { cn } from '@/lib/utils';
 
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+interface ButtonProps extends HTMLMotionProps<'button'> {
+  children?: React.ReactNode;
   variant?: 'primary' | 'secondary' | 'ghost' | 'danger' | 'outline';
   size?: 'sm' | 'md' | 'lg';
   isLoading?: boolean;
@@ -20,7 +21,7 @@ export const Button = ({
   ...props 
 }: ButtonProps) => {
   const variants = {
-    primary: 'bg-safety-orange text-white hover:bg-safety-orange-dark shadow-[0_4px_0_0_#995400]',
+    primary: 'bg-[var(--brand-accent)] text-[#191b1e] hover:bg-[#eaca92] shadow-[0_3px_0_0_#92743e]',
     secondary: 'bg-steel-grey text-esd-dark hover:bg-zinc-200 shadow-[0_4px_0_0_#66757f]',
     ghost: 'bg-transparent text-white hover:bg-white/10',
     danger: 'bg-red-600 text-white hover:bg-red-700 shadow-[0_4px_0_0_#991b1b]',
@@ -30,7 +31,7 @@ export const Button = ({
   const sizes = {
     sm: 'px-3 py-1.5 text-sm',
     md: 'px-6 py-3 text-base font-semibold',
-    lg: 'px-8 py-4 text-lg font-bold uppercase tracking-wider',
+    lg: 'px-8 py-4 text-lg font-semibold',
   };
 
   return (
@@ -44,7 +45,7 @@ export const Button = ({
         className
       )}
       disabled={disabled || isLoading}
-      {...(props as any)}
+      {...props}
     >
       {isLoading ? (
         <div className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />

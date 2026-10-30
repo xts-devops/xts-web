@@ -3,7 +3,9 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
-import { XTSLogo, ShopIcon, FabricationIcon, ConsultationIcon, CommunityIcon } from '@/components/icons';
+import { ShopIcon, FabricationIcon, ConsultationIcon, CommunityIcon } from '@/components/icons';
+import { Brand } from './Brand';
+import { usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/Button';
 import { cn } from '@/lib/utils';
 import { Menu, X, ShoppingCart, LogOut, User as UserIcon, LayoutDashboard, Loader2, MessageCircle, Wrench } from 'lucide-react';
@@ -19,22 +21,24 @@ const navLinks = [
 ];
 
 export const Navbar = () => {
-  const { data: session } = useSession();
-  const [isScrolled, setIsScrolled] = useState(false);
+  const pathname = usePathname();
+  const { data: session, status } = useSession();
+  const role = (session?.user as { role?: string } | undefined)?.role;
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [mounted, setMounted] = useState(false);
   const [loggingOut, setLoggingOut] = useState(false);
   const { cartCount } = useCart();
   const [unreadChats, setUnreadChats] = useState(0);
 
   useEffect(() => {
-    setMounted(true);
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
+    if (!mobileMenuOpen) return;
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setMobileMenuOpen(false);
     };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+    window.addEventListener('keydown', closeOnEscape);
+    return () => window.removeEventListener('keydown', closeOnEscape);
+  }, [mobileMenuOpen]);
+
+
 
   // Poll for unread chats. Also listens for an in-page "chats:refresh-unread"
   // event so the badge clears immediately after a user reads or sends a
@@ -62,31 +66,22 @@ export const Navbar = () => {
     await signOut({ callbackUrl: '/' });
   };
 
-  const navClasses = mounted && isScrolled
-    ? "bg-[var(--nav-bg)] backdrop-blur-md py-3 border-b border-[var(--border-primary)] shadow-xl"
-    : "bg-[var(--nav-bg-transparent)] py-5";
-
   return (
-    <nav className={cn(
-      "fixed top-0 left-0 w-full z-50 transition-all duration-300",
-      navClasses
-    )}>
-      <div className="container mx-auto px-4 sm:px-6 flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-2 sm:gap-3 group">
-          <XTSLogo className="w-10 h-10 sm:w-12 sm:h-12 group-hover:rotate-12 transition-transform" />
-          <span className="text-xl sm:text-2xl md:text-3xl font-black tracking-tighter text-[var(--text-primary)]">XTS WEB</span>
-        </Link>
+    <nav className="fixed top-0 left-0 w-full z-50 bg-[var(--nav-bg)] border-b border-[var(--border-primary)] py-3">
+      <div className="store-container navbar-inner flex items-center justify-between">
+        <Link href="/" aria-label="XTS Mechatronics home" className="navbar-brand"><Brand /></Link>
 
         {/* Desktop Nav */}
-        <div className="hidden lg:flex items-center gap-6">
+        <div className="hidden xl:flex items-center gap-6">
           {navLinks.map((link) => (
             <Link
               key={link.name}
               href={link.href}
+              aria-current={pathname === link.href || pathname.startsWith(`${link.href}/`) ? 'page' : undefined}
               className="group flex items-center gap-2 text-[var(--text-secondary)] hover:text-safety-orange transition-colors"
             >
               <link.icon className="w-4 h-4 group-hover:scale-110 transition-transform" />
-              <span className="text-sm font-bold uppercase tracking-tight">{link.name}</span>
+              <span className="text-sm font-medium">{link.name}</span>
             </Link>
           ))}
         </div>
@@ -95,14 +90,14 @@ export const Navbar = () => {
         <div className="flex items-center gap-2 sm:gap-3">
           <ThemeToggle />
 
-          <Link href="/chat" className="hidden md:inline-flex relative p-2 text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors" title="Messages">
+          <Link href="/chat" className="hidden md:inline-flex relative p-2 text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors" title="Messages" aria-label="Messages">
             <MessageCircle className="w-5 h-5 sm:w-6 sm:h-6" />
             {unreadChats > 0 && (
               <span className="absolute top-1 right-1 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-[var(--nav-bg)] animate-pulse" />
             )}
           </Link>
 
-          <Link href="/cart" className="relative p-2 text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">
+          <Link href="/cart" aria-label={`Cart, ${cartCount} items`} className="relative p-2 text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">
             <ShoppingCart className="w-5 h-5 sm:w-6 sm:h-6" />
             {cartCount > 0 && (
               <motion.span
@@ -117,43 +112,43 @@ export const Navbar = () => {
           </Link>
 
           <div className="hidden md:flex items-center gap-3">
-            {session ? (
+            {status === 'loading' ? (
+              // Holds the space while the session loads, so "Sign in" doesn't flash for signed-in users.
+              <div className="h-9 w-24 rounded-md bg-[var(--bg-surface)] animate-pulse" aria-hidden="true" />
+            ) : session ? (
               <div className="flex items-center gap-3">
-                {((session.user as any)?.role?.includes('admin') || (session.user as any)?.role?.includes('expert')) && (
+                {(role?.includes('admin') || role?.includes('expert')) && (
                   <Link href="/admin" className="mr-1">
                     <Button variant="outline" size="sm" className={cn(
                       "border-[var(--border-primary)] text-[var(--text-secondary)] hover:bg-[var(--bg-surface)]",
-                      (session.user as any)?.role?.includes('admin') && "border-red-500/50 text-red-500 hover:bg-red-500/10"
+                      role?.includes('admin') && "border-red-500/50 text-red-500 hover:bg-red-500/10"
                     )}>
-                      {(session.user as any)?.role?.includes('admin') ? 'Terminal' : 'Portal'}
+                      {role?.includes('admin') ? 'Admin' : 'Expert'}
                     </Button>
                   </Link>
                 )}
-                {((session.user as any)?.role?.includes('admin') || (session.user as any)?.role?.includes('seller')) && (
+                {(role?.includes('admin') || role?.includes('seller')) && (
                   <Link href="/seller">
                     <Button variant="outline" size="sm" className="border-blue-500/50 text-blue-500 hover:bg-blue-500/10">
                       Seller
                     </Button>
                   </Link>
                 )}
-                <Link href="/dashboard" className="flex items-center gap-2 group">
+                <Link href="/dashboard" className="flex items-center gap-2 group" title="Your account">
                   {session.user?.image ? (
-                    <img src={session.user.image} alt="Profile" className="w-8 h-8 rounded-full border border-[var(--border-primary)]" />
+                    <img src={session.user.image} alt="" className="w-8 h-8 rounded-full border border-[var(--border-primary)]" />
                   ) : (
                     <div className="w-8 h-8 rounded-full bg-[var(--bg-surface)] flex items-center justify-center border border-[var(--border-primary)]">
                       <UserIcon className="w-4 h-4 text-[var(--text-primary)]" />
                     </div>
                   )}
-                  <div className="flex flex-col">
-                    <span className="text-[10px] font-black uppercase text-[var(--text-muted)] leading-none mb-1">Authenticated</span>
-                    <span className="text-xs font-bold text-[var(--text-primary)] leading-none">{session.user?.name?.split(' ')[0]}</span>
-                  </div>
+                  <span className="text-sm font-medium text-[var(--text-primary)] group-hover:text-safety-orange transition-colors">{session.user?.name?.split(' ')[0] || 'Account'}</span>
                 </Link>
                 <button
                   onClick={handleSignOut}
                   disabled={loggingOut}
                   className="p-2 text-[var(--text-muted)] hover:text-red-500 transition-colors disabled:opacity-50"
-                  title="Sign Out"
+                  title="Sign out" aria-label="Sign out"
                 >
                   {loggingOut ? (
                     <Loader2 className="w-4 h-4 animate-spin" />
@@ -164,13 +159,16 @@ export const Navbar = () => {
               </div>
             ) : (
               <Link href="/login">
-                <Button size="md" variant="outline">Sign In</Button>
+                <Button size="md" variant="outline">Sign in</Button>
               </Link>
             )}
           </div>
 
           <button
-            className="lg:hidden text-[var(--text-primary)]"
+            className="xl:hidden text-[var(--text-primary)]"
+            aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
+            aria-expanded={mobileMenuOpen}
+            aria-controls="mobile-navigation"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           >
             {mobileMenuOpen ? <X /> : <Menu />}
@@ -182,12 +180,14 @@ export const Navbar = () => {
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
+            id="mobile-navigation"
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="lg:hidden bg-[var(--bg-secondary)] border-b border-[var(--border-primary)] overflow-hidden"
+            className="xl:hidden bg-[var(--bg-secondary)] border-b border-[var(--border-primary)] overflow-hidden"
           >
             <div className="container mx-auto px-4 py-6 flex flex-col gap-5">
+              <p className="text-xs font-medium text-[var(--text-secondary)]">Mechatronics</p>
               {session && (
                 <div className="flex items-center gap-4 mb-2 p-4 bg-[var(--bg-surface)] rounded-sm">
                    {session.user?.image ? (
@@ -208,17 +208,21 @@ export const Navbar = () => {
                   key={link.name}
                   href={link.href}
                   onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center gap-4 text-lg font-black uppercase tracking-tighter text-[var(--text-primary)] hover:text-safety-orange transition-colors"
+                  className="flex items-center gap-4 text-base font-semibold text-[var(--text-primary)] hover:text-safety-orange transition-colors"
                 >
                   <link.icon className="w-5 h-5" />
                   {link.name}
                 </Link>
               ))}
 
+              <Link href="/#categories" onClick={() => setMobileMenuOpen(false)} className="text-sm text-[var(--text-secondary)] hover:text-safety-orange py-2">
+                Shop by category
+              </Link>
+
               <Link
                 href="/cart"
                 onClick={() => setMobileMenuOpen(false)}
-                className="flex items-center gap-4 text-lg font-black uppercase tracking-tighter text-[var(--text-primary)] hover:text-safety-orange transition-colors"
+                className="flex items-center gap-4 text-base font-semibold text-[var(--text-primary)] hover:text-safety-orange transition-colors"
               >
                 <ShoppingCart className="w-5 h-5" />
                 Cart {cartCount > 0 && `(${cartCount})`}
@@ -227,7 +231,7 @@ export const Navbar = () => {
               <Link
                 href="/chat"
                 onClick={() => setMobileMenuOpen(false)}
-                className="flex items-center gap-4 text-lg font-black uppercase tracking-tighter text-[var(--text-primary)] hover:text-safety-orange transition-colors relative"
+                className="flex items-center gap-4 text-base font-semibold text-[var(--text-primary)] hover:text-safety-orange transition-colors relative"
               >
                 <MessageCircle className="w-5 h-5" />
                 Messages
@@ -236,25 +240,25 @@ export const Navbar = () => {
                 )}
               </Link>
 
-              {session && ((session.user as any)?.role?.includes('admin') || (session.user as any)?.role?.includes('expert')) && (
+              {session && (role?.includes('admin') || role?.includes('expert')) && (
                 <Link
                   href="/admin"
                   onClick={() => setMobileMenuOpen(false)}
                   className={cn(
-                    "flex items-center gap-4 text-lg font-black uppercase tracking-tighter transition-colors",
-                    (session.user as any)?.role?.includes('admin') ? "text-red-500 hover:text-red-400" : "text-safety-orange hover:text-safety-orange/80"
+                    "flex items-center gap-4 text-base font-semibold transition-colors",
+                    role?.includes('admin') ? "text-red-500 hover:text-red-400" : "text-safety-orange hover:text-safety-orange/80"
                   )}
                 >
                   <LayoutDashboard className="w-5 h-5" />
-                  {(session.user as any)?.role?.includes('admin') ? 'Terminal' : 'Expert Portal'}
+                  {role?.includes('admin') ? 'Admin' : 'Expert Portal'}
                 </Link>
               )}
 
-              {session && ((session.user as any)?.role?.includes('admin') || (session.user as any)?.role?.includes('seller')) && (
+              {session && (role?.includes('admin') || role?.includes('seller')) && (
                 <Link
                   href="/seller"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center gap-4 text-lg font-black uppercase tracking-tighter text-blue-500 hover:text-blue-400 transition-colors"
+                  className="flex items-center gap-4 text-base font-semibold text-blue-500 hover:text-blue-400 transition-colors"
                 >
                   <Wrench className="w-5 h-5" />
                   Seller Portal
@@ -271,15 +275,15 @@ export const Navbar = () => {
                 >
                   {loggingOut ? (
                     <>
-                      <Loader2 className="w-4 h-4 animate-spin" /> Signing Out...
+                      <Loader2 className="w-4 h-4 animate-spin" /> Signing out…
                     </>
                   ) : (
-                    'Sign Out'
+                    'Sign out'
                   )}
                 </Button>
               ) : (
                 <Link href="/login" onClick={() => setMobileMenuOpen(false)}>
-                  <Button className="w-full">Sign In</Button>
+                  <Button className="w-full">Sign in</Button>
                 </Link>
               )}
             </div>

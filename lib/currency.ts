@@ -5,7 +5,7 @@ export const PAYMONGO_MIN_AMOUNT_PHP = 100;
 
 export function formatMoney(amount: number, currency: string = BASE_CURRENCY): string {
   const value = Number.isFinite(amount) ? amount : 0;
-  return new Intl.NumberFormat(undefined, {
+  return new Intl.NumberFormat('en-PH', {
     style: 'currency',
     currency,
     minimumFractionDigits: 2,

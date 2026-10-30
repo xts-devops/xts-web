@@ -23,7 +23,7 @@ export const ComingSoonStub = ({ title, icon }: ComingSoonProps) => (
             {icon}
           </div>
         </div>
-        <h2 className="text-3xl font-black uppercase mb-4 text-esd-dark">Workbench Under Construction</h2>
+        <h2 className="text-3xl font-semibold mb-4 text-esd-dark">Coming soon</h2>
         <p className="text-zinc-600 mb-10 leading-relaxed font-medium">
           The hardware is arriving and the tools are being calibrated. This module is part of the next development phase.
         </p>

@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/Button';
-import { ShieldCheck, FileText, ChevronDown } from 'lucide-react';
+import { ShieldCheck, FileText } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 
@@ -66,7 +66,7 @@ export const TermsModal = () => {
               <div className="bg-[var(--bg-secondary)] p-6">
                 <div className="flex items-center gap-3 mb-2">
                   <ShieldCheck className="w-6 h-6 text-safety-orange" />
-                  <h3 className="text-xl font-black text-[var(--text-primary)] uppercase tracking-tighter">Welcome to XTS WEB</h3>
+                  <h3 className="text-xl font-black text-[var(--text-primary)] uppercase tracking-tighter">Welcome to XTS Mechatronics</h3>
                 </div>
                 <p className="text-xs text-[var(--text-muted)]">Please review and accept our terms to continue</p>
               </div>
@@ -79,7 +79,7 @@ export const TermsModal = () => {
                   <h4 className="font-bold text-[var(--text-primary)] text-sm uppercase">Terms of Service</h4>
                 </div>
                 <p className="text-xs text-[var(--text-secondary)] leading-relaxed mb-3">
-                  By using XTS WEB, you agree to our terms including: proper use of the platform, respect for community guidelines, 
+                  By using XTS Mechatronics, you agree to our terms including: proper use of the platform, respect for community guidelines,
                   acceptance of our order and fabrication service policies, and understanding that expert consultations are advisory.
                 </p>
                 <Link href="/terms" target="_blank" className="text-xs text-safety-orange font-bold hover:underline">
@@ -93,7 +93,7 @@ export const TermsModal = () => {
                   <h4 className="font-bold text-[var(--text-primary)] text-sm uppercase">Privacy Policy</h4>
                 </div>
                 <p className="text-xs text-[var(--text-secondary)] leading-relaxed mb-3">
-                  We collect your name and email via Google OAuth for account management. Your data is stored securely using Firebase 
+                  We collect your name and email via Google OAuth for account management. Your data is stored securely using Firebase
                   infrastructure. We do not sell personal information to third parties.
                 </p>
                 <Link href="/privacy" target="_blank" className="text-xs text-safety-orange font-bold hover:underline">

@@ -7,13 +7,9 @@ export const XTSLogo = ({ className = "w-10 h-10" }: { className?: string }) => 
     xmlns="http://www.w3.org/2000/svg" 
     className={className}
   >
-    <path d="M20 20L80 80" stroke="currentColor" strokeWidth="8" strokeLinecap="round" />
-    <path d="M80 20L20 80" stroke="currentColor" strokeWidth="8" strokeLinecap="round" />
-    <circle cx="50" cy="50" r="15" fill="var(--color-safety-orange)" />
-    <path d="M10 50H25" stroke="currentColor" strokeWidth="4" strokeLinecap="round" />
-    <path d="M75 50H90" stroke="currentColor" strokeWidth="4" strokeLinecap="round" />
-    <path d="M50 10V25" stroke="currentColor" strokeWidth="4" strokeLinecap="round" />
-    <path d="M50 75V90" stroke="currentColor" strokeWidth="4" strokeLinecap="round" />
+    <path d="M4 82 53 8Q55 5 57 9L65 23 29 82Z" fill="currentColor" />
+    <path d="M59 44 69 30 88 65H70Z" fill="currentColor" />
+    <path d="M65 72H91L99 82H57Z" fill="currentColor" />
   </svg>
 );
 
