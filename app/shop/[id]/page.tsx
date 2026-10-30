@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { PageShell } from '@/components/layout/PageShell';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
-import { ArrowLeft, ShieldCheck, Truck, RotateCcw, Activity, Check, ShoppingCart, MessageCircle, Star, Zap } from 'lucide-react';
+import { ArrowLeft, ShieldCheck, Truck, RotateCcw, Activity, Check, ShoppingCart, MessageCircle, Star, Zap, ChevronDown } from 'lucide-react';
 import Link from 'next/link';
 import { useCart } from '@/lib/cart-context';
 import { useSession } from 'next-auth/react';
@@ -28,6 +28,8 @@ function ProductDetailContent({ id }: { id: string }) {
   const [product, setProduct] = useState<ProductDTO | null>(null);
   const [loading, setLoading] = useState(true);
   const [added, setAdded] = useState(false);
+  const [descriptionExpanded, setDescriptionExpanded] = useState(false);
+  const [specsExpanded, setSpecsExpanded] = useState(false);
   const addedTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [fetchError, setFetchError] = useState(false);
   const [attempt, setAttempt] = useState(0);
@@ -163,7 +165,7 @@ function ProductDetailContent({ id }: { id: string }) {
 
           {/* Details Section */}
           <div className="product-summary flex flex-col">
-            <div className="mb-4 sm:mb-6">
+            <div className="product-heading mb-4 sm:mb-6">
               <span className="text-xs font-semibold text-safety-orange block mb-2">{product.category} <span aria-hidden="true">/</span> {product.sku}</span>
               <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-[var(--text-primary)] leading-tight mb-3 sm:mb-4">
                 {product.name}
@@ -189,9 +191,10 @@ function ProductDetailContent({ id }: { id: string }) {
               </div>
             </div>
 
-            <p className="text-sm text-[var(--text-secondary)] leading-relaxed mb-5">
-              {product.description}
-            </p>
+            <div className="product-description" data-expanded={descriptionExpanded} data-collapsible={product.description.length > 120}>
+              <p id="product-description" className="text-sm text-[var(--text-secondary)] leading-relaxed">{product.description}</p>
+              {product.description.length > 120 && <button type="button" className="mobile-detail-toggle" aria-expanded={descriptionExpanded} aria-controls="product-description" onClick={() => setDescriptionExpanded(value => !value)}>{descriptionExpanded ? 'Show less' : 'Read more'}</button>}
+            </div>
 
             {/* Action Buttons (hidden on mobile — sticky bottom bar replaces these) */}
             <div className="product-purchase space-y-3 hidden sm:block">
@@ -241,9 +244,10 @@ function ProductDetailContent({ id }: { id: string }) {
 
             {/* Specs */}
             {specs.length > 0 && (
-              <div className="mb-5">
-                <h2 className="text-sm font-semibold text-[var(--text-primary)] mb-3">Specifications</h2>
-                <div className="border border-[var(--border-primary)] rounded-sm overflow-hidden">
+              <section className="product-specifications mb-5" aria-labelledby="specifications-heading">
+                <h2 id="specifications-heading" className="text-sm font-semibold text-[var(--text-primary)] mb-3">Specifications</h2>
+                <button type="button" className="mobile-spec-toggle" aria-expanded={specsExpanded} aria-controls="product-specifications" onClick={() => setSpecsExpanded(value => !value)}><span>Specifications <small>({specs.length})</small></span><ChevronDown size={17} /></button>
+                <div id="product-specifications" data-expanded={specsExpanded} className="specifications-content border border-[var(--border-primary)] rounded-sm overflow-hidden">
                   {specs.map((spec: { key: string; value: string }, i: number) => (
                     <div key={i} className={`flex text-sm ${i % 2 === 0 ? 'bg-[var(--bg-surface)]' : 'bg-[var(--bg-secondary)]'}`}>
                       <span className="w-1/3 sm:w-2/5 shrink-0 break-words px-3 py-2 font-medium text-[var(--text-secondary)] text-xs border-r border-[var(--border-secondary)]">{spec.key}</span>
@@ -251,11 +255,11 @@ function ProductDetailContent({ id }: { id: string }) {
                     </div>
                   ))}
                 </div>
-              </div>
+              </section>
             )}
 
             {/* Trust Badges */}
-            <div className="grid grid-cols-3 gap-2 sm:gap-3 mb-5">
+            <div className="product-policy-row grid grid-cols-3 gap-2 sm:gap-3 mb-5">
               <div className="p-3 bg-[var(--bg-surface)] border border-[var(--border-primary)] rounded-sm text-center">
                 <ShieldCheck className="w-4 h-4 text-safety-orange mx-auto mb-1.5" />
                 <h4 className="text-xs font-medium text-[var(--text-primary)]">1-year warranty</h4>
@@ -289,23 +293,23 @@ function ProductDetailContent({ id }: { id: string }) {
             onClick={handleAddToCart}
             disabled={product.stock <= 0}
           >
-            {added ? <><Check className="w-3.5 h-3.5 mr-1" /> Added</> : <><ShoppingCart className="w-3.5 h-3.5 mr-1" /> Add</>}
+            {added ? <><Check className="w-3.5 h-3.5 mr-1" /> Added</> : <><ShoppingCart className="w-3.5 h-3.5 mr-1" /> Add to cart</>}
           </Button>
           <Button
             className="flex-1 h-11 text-xs font-semibold bg-[var(--text-primary)] text-[var(--bg-primary)] hover:opacity-90"
             onClick={handleBuyNow}
             disabled={product.stock <= 0}
           >
-            <Zap className="w-3.5 h-3.5 mr-1" /> Buy
+            <Zap className="w-3.5 h-3.5 mr-1" /> Buy now
           </Button>
           <Button
             variant="outline"
-            className="h-11 px-3"
-            aria-label="Message the seller"
+            className="h-11 w-11 shrink-0 px-0"
+            aria-label={chatLoading ? "Opening seller chat" : "Message the seller"}
             onClick={handleChatSeller}
             disabled={chatLoading}
           >
-            <MessageCircle className="w-4 h-4" />
+            {chatLoading ? <Activity className="w-4 h-4 animate-spin" /> : <MessageCircle className="w-4 h-4" />}
           </Button>
         </div>
       )}

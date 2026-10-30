@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ChevronLeft, ChevronRight, Expand, X } from 'lucide-react';
 import { ProductImage } from './ProductImage';
 
@@ -9,7 +9,14 @@ export function ProductGallery({ images, name, sample = false }: { images: strin
   const [expanded, setExpanded] = useState(false);
   const dialog = useRef<HTMLDialogElement>(null);
   const thumbnails = useRef<HTMLDivElement>(null);
+  const swipe = useRef<{ x: number; y: number } | null>(null);
   const count = images.length;
+  useEffect(() => {
+    if (!expanded) return;
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => { document.body.style.overflow = previous; };
+  }, [expanded]);
   function select(index: number) {
     const next = (index + count) % count;
     setSelected(next);
@@ -27,16 +34,25 @@ export function ProductGallery({ images, name, sample = false }: { images: strin
       select(event.key === 'Home' ? 0 : event.key === 'End' ? count - 1 : selected + (event.key === 'ArrowRight' ? 1 : -1));
     }
   }}>
-    <div className="gallery-stage">
+    <div className="gallery-stage" onPointerDown={event => {
+      if ((event.target as HTMLElement).closest('button')) { swipe.current = null; return; }
+      if (event.pointerType === 'touch') swipe.current = { x: event.clientX, y: event.clientY };
+    }} onPointerCancel={() => { swipe.current = null; }} onPointerUp={event => {
+      const start = swipe.current;
+      swipe.current = null;
+      if (!start || count < 2) return;
+      const dx = event.clientX - start.x;
+      const dy = event.clientY - start.y;
+      if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) select(selected + (dx < 0 ? 1 : -1));
+    }}>
       <div className="gallery-image"><ProductImage src={images[selected]} name={name + (count > 1 ? ` — view ${selected + 1}` : '')} priority sizes="(max-width: 600px) 90vw, (max-width: 959px) 520px, 45vw" /></div>
       {count > 0 && <button type="button" className="gallery-expand" aria-label="View larger product image" onClick={() => { dialog.current?.showModal(); setExpanded(true); }}><Expand size={17} /><span>View larger</span></button>}
     </div>
-    {count > 1 && <div className="gallery-controls">{navigation}<span className="gallery-hint">Select a view</span></div>}
-    {count > 1 && <div className="gallery-thumbnails" ref={thumbnails} aria-label="Product image views">
+    {count > 1 && <div className="gallery-strip"><div className="gallery-thumbnails" ref={thumbnails} aria-label="Product image views">
       {images.map((src, index) => <button type="button" key={src} aria-label={`Show ${name}, view ${index + 1}`} aria-pressed={selected === index} onClick={() => select(index)}>
         <ProductImage src={src} name={`${name}, thumbnail ${index + 1}`} sizes="76px" />
       </button>)}
-    </div>}
+    </div><div className="gallery-controls">{navigation}</div></div>}
     {sample && <p className="gallery-caption">Illustrative sample views. Refer to specifications for product details.</p>}
     <dialog ref={dialog} className="gallery-dialog" aria-label={name + ' image viewer'} onClose={() => setExpanded(false)} onClick={event => { if (event.target === event.currentTarget) dialog.current?.close(); }}>
       <div className="gallery-dialog-content">
