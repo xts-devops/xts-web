@@ -322,6 +322,8 @@ footer .text-zinc-500, footer .text-zinc-600 { color: #a1a1aa; }
 .catalog-skeleton .skeleton-category { height: 16px; }
 .catalog-skeleton .skeleton-name { height: 44px; margin: 8px 0 12px; }
 .catalog-skeleton .skeleton-meta { height: 20px; }
+.catalog-info .product-card-description { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; overflow-wrap: anywhere; min-height: 38.4px; margin-bottom: 12px; font-size: 12px; line-height: 1.6; color: var(--text-secondary); }
+.catalog-skeleton .skeleton-description { height: 38.4px; margin-bottom: 12px; }
 .commerce-category-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
 .category-section { padding-top: 14px; }
 .commerce-category { display: flex; align-items: start; gap: 17px; padding: 23px; border: 1px solid var(--border-primary); border-radius: 6px; background: var(--bg-secondary); min-width: 0; transition: border-color 160ms ease, background-color 160ms ease; }
@@ -386,10 +388,6 @@ footer .text-zinc-500, footer .text-zinc-600 { color: #a1a1aa; }
 .gallery-large-image { position: relative; height: min(65dvh, 650px); margin-block: 12px; }
 .product-loading { min-height: 55vh; display: flex; align-items: center; justify-content: center; gap: 12px; color: var(--text-secondary); }
 .related-products { margin-top: 56px; padding-top: 32px; border-top: 1px solid var(--border-primary); }
-.related-skeleton { min-width: 0; padding: 14px; border: 1px solid var(--border-primary); background: var(--bg-surface); border-radius: 4px; }
-.related-skeleton div { aspect-ratio: 1.12; background: var(--border-primary); }
-.related-skeleton span { display: block; height: 14px; margin-top: 18px; width: 75%; background: var(--border-primary); }
-.related-skeleton span:last-child { width: 40%; }
 @media (max-width: 959px) { .product-detail-grid { grid-template-columns: minmax(0, 1fr); gap: 28px; } .product-gallery { margin-inline: auto; } }
 @media (max-width: 639px) { .product-detail { padding-block: 22px 100px; } .product-detail-grid { gap: 24px; } .gallery-image { inset: 14px 14px 46px; } .related-products { margin-top: 32px; padding-top: 24px; } .product-mobile-actions { padding-bottom: max(12px, env(safe-area-inset-bottom)); } }
 

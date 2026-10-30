@@ -24,6 +24,7 @@ export const ProductCardSkeleton = () => (
     <div className="catalog-info">
       <Skeleton className="skeleton-category w-1/3" />
       <Skeleton className="skeleton-name w-3/4" />
+      <Skeleton className="skeleton-description w-full" />
       <Skeleton className="skeleton-meta w-1/3" />
     </div>
     <div className="catalog-bottom">

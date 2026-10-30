@@ -13,11 +13,12 @@ export function ProductCard({ product, added, onAdd }: {
 }) {
   const image = productImage(product);
   const tooltipId = useId();
+  const description = product.description?.replace(/\s+/g, ' ').trim() || '';
   const inStock = product.stock > 0;
   const actionLabel = !inStock ? 'Out of stock' : added ? 'Added to cart' : 'Add to cart';
   return (
     <article className="catalog-card group">
-      <Link href={`/shop/${product.id}`} className="catalog-link" aria-label={'View ' + product.name}>
+      <Link href={`/shop/${product.id}`} className="catalog-link" aria-label={'View ' + product.name} aria-describedby={description ? tooltipId + '-description' : undefined}>
         <div className="catalog-photo">
           <div className="catalog-image-frame"><ProductImage src={image} name={product.name} /></div>
           {product.tag && <span className="product-tag">{product.tag}</span>}
@@ -26,6 +27,7 @@ export function ProductCard({ product, added, onAdd }: {
         <div className="catalog-info">
           <p className="eyebrow">{product.category}</p>
           <h3 title={product.name}>{product.name}</h3>
+          <p id={tooltipId + '-description'} className="product-card-description" aria-hidden={!description || undefined}>{description}</p>
           <div className="product-meta">
             {product.rating != null && product.rating > 0 && <span className="product-rating" aria-label={`Rated ${product.rating} out of 5`}><Star size={12} fill="currentColor" aria-hidden="true" /> {product.rating}</span>}
             <span className={inStock ? product.stock <= 5 ? 'stock-low' : 'stock-available' : 'stock-unavailable'}>{inStock ? product.stock <= 5 ? 'Low stock' : 'In stock' : 'Out of stock'}</span>

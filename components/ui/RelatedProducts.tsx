@@ -8,6 +8,7 @@ import { recommendProducts } from '@/lib/product-recommendations';
 import { productImage } from '@/lib/sample-assets';
 import { useCart } from '@/lib/cart-context';
 import { ProductCard } from './ProductCard';
+import { ProductCardSkeleton } from './Skeleton';
 
 export function RelatedProducts({ product }: { product: ProductDTO }) {
   const [products, setProducts] = useState<ProductDTO[]>([]);
@@ -44,7 +45,7 @@ export function RelatedProducts({ product }: { product: ProductDTO }) {
   return <section className="related-products" aria-labelledby="related-heading" aria-busy={loading}>
     <div className="store-section-heading"><div><h2 id="related-heading">You may also like</h2><p className="section-description">Explore more from the shop. Check specifications for compatibility.</p></div><Link href="/shop" className="text-link">Browse all <ArrowRight size={16} /></Link></div>
     {failed ? <p className="text-sm text-[var(--text-secondary)]">Suggestions are unavailable right now. <Link href="/shop" className="underline">Explore the shop</Link></p>
-      : <div className="store-product-grid">{loading ? Array.from({ length: 4 }, (_, index) => <div key={index} className="related-skeleton" aria-hidden="true"><div /><span /><span /></div>) : products.map(item => <ProductCard key={item.id} product={item} added={added.includes(item.id)} onAdd={add} />)}</div>}
+      : <div className="store-product-grid">{loading ? Array.from({ length: 4 }, (_, index) => <ProductCardSkeleton key={index} />) : products.map(item => <ProductCard key={item.id} product={item} added={added.includes(item.id)} onAdd={add} />)}</div>}
     <p className="sr-only" role="status">{loading ? 'Loading product suggestions' : announcement}</p>
   </section>;
 }
