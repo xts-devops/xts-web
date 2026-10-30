@@ -24,7 +24,7 @@ export function RelatedProducts({ product }: { product: ProductDTO }) {
       if (!response.ok) throw new Error('Catalog unavailable');
       const catalog: ProductDTO[] = await response.json();
       if (!Array.isArray(catalog)) throw new Error('Invalid catalog');
-      if (!controller.signal.aborted) setProducts(recommendProducts(product, catalog));
+      if (!controller.signal.aborted) setProducts(recommendProducts(product, catalog, 16));
     }).catch(() => { if (!controller.signal.aborted) setFailed(true); })
       .finally(() => { if (!controller.signal.aborted) setLoading(false); });
     return () => controller.abort();

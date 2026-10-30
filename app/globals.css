@@ -436,20 +436,8 @@ footer .text-zinc-500, footer .text-zinc-600 { color: #a1a1aa; }
   .gallery-large-image { height: min(58dvh, 520px); }
 }
 
-/* Recommendations: four across on desktop, two columns on tablet and phone. */
+/* Original shared product cards: up to four desktop rows, two mobile columns. */
 .related-products .recommendation-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-.related-products .catalog-photo { aspect-ratio: 1.35; }
 @media (max-width: 1023px) {
   .related-products .recommendation-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-}
-@media (max-width: 639px) {
-  .related-products .recommendation-grid { gap: 12px; }
-  .related-products .catalog-photo { aspect-ratio: 1.25; }
-  .related-products .catalog-info { padding: 10px 10px 0; }
-  .related-products .catalog-info h3 { font-size: 13px; line-height: 1.5; min-height: 39px; margin-block: 6px 8px; }
-  .related-products .catalog-bottom { padding: 10px; gap: 6px; flex-wrap: wrap; }
-  .related-products .catalog-bottom > strong { flex-basis: auto; font-size: 14px; }
-  .related-products .cart-action { width: auto; flex-shrink: 0; }
-  .related-products .cart-action .add-product { width: 44px; height: 44px; }
-  .related-products .catalog-skeleton .skeleton-name { height: 39px; margin-block: 6px 8px; }
 }
