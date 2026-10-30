@@ -12,6 +12,27 @@ Append-only. Newest at top. Never edit past entries. Format:
 
 ---
 
+## 2026-10-30 · codex · codex/xts-mechatronics-ui · minimal welcome hero
+**Did:** Refreshed the hero with a concise welcome, parts search, category shortcuts
+and compact fabrication/expert/community entry points. Moved the service links into
+the intro instead of repeating them below. Added CSS-only 380–460ms intro transitions
+and restrained hover/focus changes; reduced-motion users get no intro animation.
+Catalog search now initializes from `q` and keeps search/category URL parameters
+consistent when edited, cleared or reset. Compact header and product grid retained.
+**Why:** User requested a welcoming marketing intro with useful UI and smooth,
+minimal transitions; recorded the bounded motion direction as D9.
+**Verify:** `npx tsc --noEmit` passed. ESLint for the two changed TSX pages passed with
+zero warnings/errors. Dev preview was started with both LOCAL_PREVIEW flags true;
+home, `/shop?q=ESP32` and the combined search/category URL return HTTP 200. The
+homepage response includes the welcome, labeled search and guidance links.
+Visual/interactive browser QA remains pending: CUA failed to initialize with a missing
+kernel-assets path, including after reset/retry. No screenshot or new viewport/motion
+verification is claimed. Preview open was queued in Codex. No production data, real
+orders/payments, auth changes or new dependencies. Existing untracked `.claude/launch.json`
+left untouched.
+**Next:** Review the welcome/search and reduced-motion behavior in PR #5 after the
+browser preview tool is restored; user merges after review.
+
 ## 2026-10-29 · codex · codex/xts-mechatronics-ui · compact public UI
 **Did:** Replaced the expanded lockup with a compact XTS mark and separate Mechatronics
 department label. Smallest headers show the department in the menu/home context

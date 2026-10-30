@@ -69,14 +69,19 @@ label. Below 400px, the department moves out of the header row; it remains in th
 homepage context, mobile menu and footer. The header is a stable 64px high and shares
 the page content alignment.
 
-The homepage contains a direct introduction, category shortcuts, featured products,
-and services/support links. Removed the signature slogans, serif headline, glows,
-orbits, background dot grid, tilt, decorative diagram, numbered panels, redundant
-hero product display, repeated calls to action, and entrance/hover movement.
-Product photos remain labeled, with working catalog search, categories, cart feedback
-and stock states. Focus outlines, skip link, mobile menu/Escape, reduced-motion
-support and light/dark themes remain. The footer, shop heading and metadata use plain
-language. No new dependency or third-party request was added.
+The homepage now greets visitors with a minimal welcome and a useful catalog search.
+The form uses native GET semantics with client navigation when JavaScript is active;
+empty submission opens the full shop. Search text initializes from the q URL parameter;
+editing, clearing and resetting catalog filters updates q/category consistently.
+Category shortcuts remain available without typing. Fabrication, expert support and
+community links sit together in the hero; duplicate service cards below were removed.
+
+The intro has short 380ms/460ms CSS transitions from 80% opacity and an 8px offset.
+Content is visible and usable immediately; no splash screen or timed navigation gate.
+Reduced-motion preferences disable the intro and new hover transitions. Compact
+branding, image sample labels, keyboard focus and the product grid remain. Removed
+signature slogans, serif styling, ambient graphics and redundant promotional sections
+remain removed. No dependency, image asset or third-party request was added.
 
 The storefront CSS was consolidated instead of layering further overrides onto the
 marketing treatment. The header no longer attaches a scroll listener or changes size
@@ -85,11 +90,15 @@ collisions; long category labels truncate while product names remain readable.
 
 ## Verification
 
-TypeScript passes. Changed-file ESLint reports zero errors and two pre-existing
-profile-image warnings in Navbar. Browser review uses the main 585px view plus
-320px, 375px and 1280px iframe viewports in an ignored local review harness, including
-light/dark phone views and catalog/navigation smoke checks. Existing local sample
-data and seller uploads are preserved. No production data, real orders, payments or
-real login were used. Physical-device testing and formal accessibility/performance
-audits remain outside these checks. A production build requires the real Firebase
-environment and was not attempted.
+2026-10-30: TypeScript and ESLint for the changed homepage/shop TSX files pass with
+zero warnings/errors. The dev-only preview starts successfully and serves the home,
+shop?q=ESP32 and combined search/category URLs with HTTP 200. Home HTML includes the
+welcome, labeled search form and service links. Both LOCAL_PREVIEW flags are enabled.
+
+New visual and interactive QA is pending: CUA initialization failed with a missing
+kernel-assets path, including after reset and retry. No new screenshots or viewport/
+transition verification are claimed. Earlier compact-header viewport checks are in
+PROGRESS.md; those predate this hero update. Physical-device checks and formal
+accessibility/performance audits remain outside these smoke checks. No production
+data, real orders, payments or real login were used. A production build requires the
+real Firebase environment and was not attempted.

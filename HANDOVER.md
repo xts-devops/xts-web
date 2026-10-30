@@ -90,6 +90,10 @@ the user doc on every refresh so role changes apply at once.
 as dependencies. The latest user direction uses a compact XTS mark with a separate
 Mechatronics department label, plain copy, and direct shop/service navigation.
 The earlier enlarged lockup and decorative marketing layout were superseded.
+The 2026-10-30 hero adds a minimal welcome, catalog quick search (`/shop?q=...`),
+compact service entry points and bounded reduced-motion-aware CSS intro transitions.
+The new hero still needs visual/interactive review after CUA initialization is repaired;
+type/lint and local HTTP checks pass. See the latest PROGRESS entry for this limit.
 Shared UI: `components/layout/Brand.tsx`,
 `components/ui/ProductCard.tsx`, `components/ui/ProductImage.tsx`. The asset index is
 `lib/sample-assets.ts`; image provenance, evaluation, and verification scope are in

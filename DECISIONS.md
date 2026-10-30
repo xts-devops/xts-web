@@ -44,3 +44,10 @@ treatment: use a compact XTS mark with Mechatronics as a separate department lab
 plain copy, and direct catalog/service navigation. Omit the department label from the
 smallest header row; retain it in the mobile menu, homepage heading context and footer.
 Remove signature slogans, decorative diagrams, ambient graphics and redundant sections.
+
+### D9 · Useful welcome with bounded motion · 2026-10-30 · codex
+The user requested a refreshed, minimal hero with smooth intro transitions. Keep the
+compact branding from D8; add catalog search and concise service entry points rather
+than restoring decorative panels. Intro motion is CSS-only, under half a second,
+visible and usable immediately, and disabled for reduced-motion preferences. No splash
+screen, autoplay, typewriter effect, new image assets or new dependencies.
