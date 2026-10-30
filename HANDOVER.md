@@ -145,3 +145,10 @@ recommendation limit/ranking and shared card links/cart behavior remain unchange
 The user corrected the earlier "four rows" wording: four products across on desktop.
 This supersedes the stacked-row note above. Current recommendations use four columns
 at 1024px and wider, two columns on tablet/mobile, with normal shared cards/skeletons.
+
+### Original card format / 4×4 capacity · 2026-10-30
+Latest user direction restores the original shared card design, removes all
+recommendation-specific sizing overrides, and requests up to 16 unique items:
+four columns/four rows on desktop when enough listings exist, two mobile columns.
+The eight-product demo catalog supplies only seven other products. Do not repeat
+products or add empty placeholders to fake a full 16; current-item exclusion remains.

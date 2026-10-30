@@ -232,3 +232,18 @@ No horizontal rail, duplicate suggestions or empty placeholder products. Homepag
 layouts and product-detail/gallery behavior are unchanged. TypeScript, changed-file
 ESLint, existing SSR/helper regressions, HTTP preview and git diff --check pass. Visual
 browser QA remains pending because of the previously recorded CUA initialization issue.
+
+## Original cards restored, 4×4 recommendation capacity (2026-10-30)
+The latest user request restores the original shared ProductCard design from before
+the row-layout experiments. Removed all recommendation-only image/type/padding/button
+and skeleton overrides. Shared image proportions, two-line names/descriptions, stock
+metadata, price/cart layout, narrow-screen wrapping and 44px cart targets apply again.
+Recommendations keep four columns at desktop widths (1024px+), two on tablet/mobile,
+and now request up to 16 unique products to support four desktop rows. Existing ranking
+and current-item exclusion remain. Current local catalog has eight products, so a
+product page shows seven recommendations; no repeats or empty placeholder products
+are inserted to simulate 16. A full 4×4 grid appears once 16 other listings exist.
+TypeScript, changed-file ESLint, existing SSR/helper regressions, explicit 16-item
+uniqueness/exclusion assertion, HTTP preview and git diff --check pass. CUA was retried
+and still fails missing-kernel-assets initialization; desktop/mobile visual overflow,
+keyboard and touch signoff remain pending. No catalog/data/API changes.

@@ -12,6 +12,24 @@ Append-only. Newest at top. Never edit past entries. Format:
 
 ---
 
+## 2026-10-30 · codex · codex/xts-mechatronics-ui · original cards and 4×4 capacity
+**Commit:** ce19d2e; base cb1485e, fetched/pulled shared branch before file claim.
+**Files:** RelatedProducts, app/globals.css, UI docs and coordination notes.
+**Did:** Latest user request restores original card format before row experiments.
+Removed recommendation-only image/type/spacing/button/skeleton overrides. Shared
+ProductCard now applies unchanged; four desktop columns, two tablet/mobile columns.
+Requested up to 16 unique recommendations to support four desktop rows. Current local
+catalog only has seven other listings; no repeats, placeholders or data edits used
+to force 16. Ranking/current exclusion/cart links/stock guards remain unchanged.
+**Verify:** TypeScript, changed-file ESLint, SSR/helper regressions, explicit 16-item
+uniqueness/current exclusion, HTTP preview and git diff --check pass. Local catalog
+count confirmed seven other products. CUA retried: missing-kernel-assets failure;
+no actual desktop/mobile visual overflow or interaction validation claimed.
+**Preview:** http://localhost:3001/shop/p-esp32 · same shared branch and PR #5.
+**Next:** Review original cards visually once CUA works; 16 other listings needed
+for a complete four-by-four grid. No production data or API/dependency changes.
+
+
 ## 2026-10-30 · codex · codex/xts-mechatronics-ui · recommendation column correction
 **Commit:** 30b2068; base c903965, fetched/pulled shared branch before file claim.
 **Files:** RelatedProducts, app/globals.css, UI docs and coordination notes.
