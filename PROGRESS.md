@@ -12,6 +12,33 @@ Append-only. Newest at top. Never edit past entries. Format:
 
 ---
 
+## 2026-10-30 · codex · codex/xts-mechatronics-ui · mobile product refinement
+**Commit:** 6cd64a4; base d28356a, fetched/pulled before exact file claim.
+**Files:** app/shop/[id]/page.tsx, app/globals.css, ProductGallery, RelatedProducts,
+lib/sample-assets.ts, lib/firebase/local-seed.ts, eight *-angle.webp assets, UI docs
+and coordination notes. User explicitly authorized UI-lane follow-up.
+**Did:** Phone gallery bounded to 180–240px, one thumbnail/navigation strip, touch
+swiping with vertical scrolling retained, larger-view dialog locks/restores body
+scroll. Long descriptions expand from four lines; specifications expand on demand
+on phones and stay fully visible on desktop. Compact type/policy spacing and full
+Add to cart/Buy now labels with 44px targets and seller-chat loading feedback.
+Recommendations use a single keyboard-focusable horizontal snap row on phones,
+compact images, two-line names/descriptions and one-row price/cart. Desktop grids
+unchanged. Generated eight third illustrative views via built-in imagegen, inspected
+contact sheet and compressed to 800px WebP. Each local demo now has original/top/angle;
+known one/two-view local records upgrade without database reset. Seller URLs preserved.
+**Verify:** TypeScript, changed-file ESLint (zero warnings/errors), SSR/helper regressions
+and git diff --check pass. HTTP product/catalog and all eight new assets return 200.
+Tests cover three-view fallback, legacy two-view demos, real seller preservation,
+production/demo guards, gallery controls and prior card/ranking behavior. No real
+purchase/chat interaction test or production data access. CUA still fails missing-
+kernel-assets initialization: viewport, swipe, expand/collapse and dialog focus QA
+remain pending. Existing policy-copy confirmation task remains unchanged.
+**Preview:** http://localhost:3001/shop/p-esp32 · same branch and PR #5.
+**Next:** Review mobile widths/short heights, rail focus/scroll, gallery swipes and
+purchase controls when browser tooling is available; no main merge or deployment.
+
+
 ## 2026-10-30 · codex · codex/xts-mechatronics-ui · brief product descriptions
 **Commit:** 182e03d; base 7eb8f5f, fetched/pulled before claiming files.
 **Files:** ProductCard, ProductCardSkeleton, RelatedProducts, app/globals.css,

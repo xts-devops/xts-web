@@ -126,3 +126,12 @@ in lib/product-recommendations.ts and reuses the catalog API; no compatibility c
 Preview: http://localhost:3001/shop/p-esp32. Type/lint, helper/SSR and HTTP pass;
 CUA missing-kernel-assets failure prevents new browser interaction/viewport signoff.
 See newest PROGRESS and docs/xts-mechatronics-ui.md; keep existing policy-copy task.
+
+### Mobile product follow-up · 2026-10-30
+On phones, product galleries use a bounded image and a single thumbnail/control strip;
+long descriptions/specifications expand on demand, recommendations scroll in one row.
+Touch swiping is implemented; native image dialog locks/restores background scroll.
+Third illustrative *-angle.webp views extend each local sample to original/top/angle,
+including old one/two-image demo records without resetting the ignored local database.
+Seller galleries remain intact. Preview and PR stay on port 3001 / shared PR #5.
+See current PROGRESS for verification limits; CUA interaction/viewport QA is pending.

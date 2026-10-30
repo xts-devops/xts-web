@@ -176,3 +176,39 @@ already contain brief descriptions. No data/API change or local database reset.
 TypeScript, changed-file ESLint, existing SSR/helper regressions and HTTP home/catalog
 checks pass. Browser visual testing remains pending due the previously recorded CUA
 initialization failure.
+
+## Mobile product refinement and third views (2026-10-30)
+
+At phone widths (up to 639px), the main image stage is bounded to 180–240px using
+viewport height. Thumbnails and 44px navigation controls share one strip. Horizontal
+touch gestures change the main image; vertical page scrolling is retained. The native
+larger-view dialog locks background scrolling while open and restores it on close.
+Long descriptions have a four-line preview with Read more/Show less. Specifications
+use an expandable 48px control; desktop retains full descriptions and specifications.
+Mobile purchase controls keep full Add to cart/Buy now labels with 44px touch targets,
+stock disabling, seller-chat loading feedback and safe-area spacing. Existing policy
+copy is compacted; its outstanding owner-confirmation task is unchanged.
+
+Recommendations become one horizontally scrollable, snap-aligned row on phones,
+showing a partial next card to indicate more content. Images use a compact 1.6 aspect
+ratio, names/descriptions retain two-line slots, and price/cart stay on one row with a
+44px cart control. The rail can receive keyboard focus. Desktop grids are unchanged.
+No entire recommendation list is hidden behind an extra button.
+
+Third demo views are stored as public/images/products/{esp32,nema17,mg996r,pla,lidar,
+bme280,buck,pi5}-angle.webp. Built-in imagegen prompt set: edit each original sample
+into one additional low front three-quarter view from the other front corner; preserve
+the design, proportions, geometry, component count, connectors/pins/cables/colors and
+markings; do not invent backside circuitry or new features; center the entire product
+with 15% margin, warm off-white studio background and soft shadow; no added text or
+graphics. Converted to 800px WebP via Sharp, with originals retained. Each demo now
+has original/top/angle views. The exact-id/SKU helper also upgrades existing one/two-
+image demo records without a database reset; any gallery containing a seller URL is
+preserved. Production never synthesizes these demo URLs. All views remain labeled
+illustrative; they are not manufacturer photos or technical reference.
+
+TypeScript, changed-file ESLint, SSR/helper regressions and local HTTP product/catalog
+checks pass. The generated asset contact sheet is inspected separately from UI QA.
+CUA still fails initialization with the missing kernel-assets path, so viewport,
+actual swipe/scroll, accordion, keyboard/dialog focus and cart/chat interaction QA
+remain pending. No production data, dependencies or API/DTO changes.
