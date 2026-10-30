@@ -19,3 +19,15 @@ export function productImage(product: { id: string; sku: string; imageUrls?: str
   }
   return original || '';
 }
+
+/** Preserve seller galleries; supply alternate views only for known local demos. */
+export function productImages(product: { id: string; sku: string; imageUrls?: string[] }): string[] {
+  const originals = [...new Set((product.imageUrls || []).filter(Boolean))];
+  const primary = productImage(product);
+  const sample = sampleAssets.find(asset => asset.id === product.id && asset.sku === product.sku);
+  if (process.env.NODE_ENV !== 'production' && process.env.NEXT_PUBLIC_LOCAL_PREVIEW === 'true'
+    && sample && originals.length <= 1 && primary === `/images/products/${sample.file}.webp`) {
+    return [primary, `/images/products/${sample.file}-top.webp`];
+  }
+  return originals.length ? originals : primary ? [primary] : [];
+}

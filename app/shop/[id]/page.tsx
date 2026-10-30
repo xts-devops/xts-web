@@ -1,56 +1,59 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { PageShell } from '@/components/layout/PageShell';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
-import { Box, ArrowLeft, ShieldCheck, Truck, RotateCcw, Activity, Check, ShoppingCart, MessageCircle, Star, Zap } from 'lucide-react';
+import { ArrowLeft, ShieldCheck, Truck, RotateCcw, Activity, Check, ShoppingCart, MessageCircle, Star, Zap } from 'lucide-react';
 import Link from 'next/link';
 import { useCart } from '@/lib/cart-context';
 import { useSession } from 'next-auth/react';
 import { formatMoney } from '@/lib/currency';
 import { ADMIN_INBOX_EMAIL } from '@/lib/admin-email';
-import { productImage } from '@/lib/sample-assets';
-import { ProductImage } from '@/components/ui/ProductImage';
+import { productImage, productImages } from '@/lib/sample-assets';
+import { ProductGallery } from '@/components/ui/ProductGallery';
+import { RelatedProducts } from '@/components/ui/RelatedProducts';
 import type { ProductDTO } from '@/lib/types';
 
 export default function ProductDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const [id, setId] = useState<string | null>(null);
+  useEffect(() => { let active = true; params.then(p => { if (active) setId(p.id); }); return () => { active = false; }; }, [params]);
+  return id ? <ProductDetailContent key={id} id={id} /> : <PageShell><div className="product-loading" role="status"><Activity className="animate-spin" />Loading product…</div></PageShell>;
+}
+
+function ProductDetailContent({ id }: { id: string }) {
   const router = useRouter();
   const { data: session } = useSession();
   const [product, setProduct] = useState<ProductDTO | null>(null);
   const [loading, setLoading] = useState(true);
   const [added, setAdded] = useState(false);
-  const [selectedImage, setSelectedImage] = useState(0);
+  const addedTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [fetchError, setFetchError] = useState(false);
+  const [attempt, setAttempt] = useState(0);
   const [chatLoading, setChatLoading] = useState(false);
   const [chatError, setChatError] = useState<string | null>(null);
   const { addToCart } = useCart();
 
   useEffect(() => {
-    params.then(p => setId(p.id));
-  }, [params]);
-
-  useEffect(() => {
-    if (!id) return;
-    const fetchProduct = async () => {
+    const controller = new AbortController();
+    async function load() {
       try {
-        const res = await fetch(`/api/products/${id}`);
-        if (res.ok) {
-          const data = await res.json();
-          setProduct(data);
-        }
-      } catch (e) {
-        console.error("Failed to fetch product", e);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchProduct();
-  }, [id]);
+        const res = await fetch('/api/products/' + encodeURIComponent(id), { signal: controller.signal });
+        if (res.status === 404) return;
+        if (!res.ok) throw new Error('Product unavailable');
+        const data: ProductDTO = await res.json();
+        if (!controller.signal.aborted) setProduct(data);
+      } catch { if (!controller.signal.aborted) setFetchError(true); }
+      finally { if (!controller.signal.aborted) setLoading(false); }
+    }
+    load();
+    return () => controller.abort();
+  }, [id, attempt]);
+  useEffect(() => () => { if (addedTimer.current) clearTimeout(addedTimer.current); }, []);
 
   const handleAddToCart = () => {
-    if (!product) return;
+    if (!product || product.stock <= 0) return;
     addToCart({
       id: product.id,
       name: product.name,
@@ -62,10 +65,12 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
       sellerId: product.sellerId || undefined,
     });
     setAdded(true);
-    setTimeout(() => setAdded(false), 2000);
+    if (addedTimer.current) clearTimeout(addedTimer.current);
+    addedTimer.current = setTimeout(() => setAdded(false), 2000);
   };
 
   const handleBuyNow = () => {
+    if (!product || product.stock <= 0) return;
     handleAddToCart();
     router.push('/cart');
   };
@@ -121,7 +126,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
   if (loading) {
     return (
       <PageShell>
-        <div className="container mx-auto px-4 sm:px-6 py-32 flex justify-center">
+        <div className="product-loading" role="status" aria-label="Loading product">
           <Activity className="w-10 h-10 text-safety-orange animate-spin" />
         </div>
       </PageShell>
@@ -132,8 +137,9 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
     return (
       <PageShell>
         <div className="container mx-auto px-4 sm:px-6 py-32 text-center">
-          <h1 className="text-3xl font-bold tracking-tight text-[var(--text-primary)] mb-2">Product not found</h1>
-          <p className="text-sm text-[var(--text-secondary)] mb-6">It may have been removed or the link is wrong.</p>
+          <h1 className="text-3xl font-bold tracking-tight text-[var(--text-primary)] mb-2">{fetchError ? 'Unable to load product' : 'Product not found'}</h1>
+          <p className="text-sm text-[var(--text-secondary)] mb-6">{fetchError ? 'Please try again or return to the shop.' : 'It may have been removed or the link is wrong.'}</p>
+          {fetchError && <Button className="mr-3" onClick={() => { setFetchError(false); setLoading(true); setAttempt(value => value + 1); }}>Try again</Button>}
           <Button onClick={() => router.push('/shop')}>Back to shop</Button>
         </div>
       </PageShell>
@@ -141,66 +147,30 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
   }
 
   const primaryImage = productImage(product);
-  const images: string[] = primaryImage.startsWith('/images/products/') ? [primaryImage] : product.imageUrls || [];
+  const images = productImages(product);
   const specs = product.specifications || [];
 
   return (
     <PageShell>
-      <div className="container mx-auto px-4 sm:px-6 py-16 sm:py-20 pb-24 sm:pb-20">
-        <Link href="/shop" className="flex items-center gap-2 text-[var(--text-muted)] hover:text-[var(--text-primary)] mb-8 sm:mb-10 transition-colors group">
+      <div className="store-container product-detail">
+        <Link href="/shop" className="flex items-center gap-2 text-[var(--text-muted)] hover:text-[var(--text-primary)] mb-6 transition-colors group">
           <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
           <span className="text-sm font-medium">Back to shop</span>
         </Link>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
-          {/* Image Section */}
-          <div className="space-y-4">
-            <div className="aspect-square bg-[var(--bg-surface)] border border-[var(--border-primary)] rounded-sm flex items-center justify-center relative overflow-hidden">
-              {images.length > 0 ? (
-                <ProductImage src={images[selectedImage]} name={product.name} priority sizes="(max-width: 1024px) 90vw, 45vw" />
-              ) : (
-                <Box className="w-32 h-32 sm:w-40 sm:h-40 text-[var(--text-muted)] opacity-30" />
-              )}
-              {product.tag && <div className="absolute top-4 left-4">
-                <Badge variant="new" className="bg-safety-orange text-white border-none">{product.tag}</Badge>
-              </div>}
-            </div>
-            {primaryImage.startsWith('/images/products/') && <p className="text-xs text-[var(--text-muted)]">Illustrative sample image. Refer to specifications for product details.</p>}
-            {images.length > 1 && (
-              <div className="grid grid-cols-4 gap-2 sm:gap-3">
-                {images.map((img: string, i: number) => (
-                  <button
-                    key={i}
-                    onClick={() => setSelectedImage(i)}
-                    className={`aspect-square rounded-sm overflow-hidden border-2 transition-all ${
-                      selectedImage === i ? 'border-safety-orange' : 'border-[var(--border-primary)] opacity-60 hover:opacity-100'
-                    }`}
-                  >
-                    <img src={img} alt={`${product.name} ${i + 1}`} className="w-full h-full object-cover" />
-                  </button>
-                ))}
-              </div>
-            )}
-            {images.length === 0 && (
-              <div className="grid grid-cols-4 gap-2 sm:gap-3">
-                {[1, 2, 3, 4].map(i => (
-                  <div key={i} className="aspect-square bg-[var(--bg-surface)] border border-[var(--border-primary)] rounded-sm flex items-center justify-center opacity-40">
-                    <Box className="w-6 h-6 text-[var(--text-muted)]" />
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
+        <div className="product-detail-grid">
+          <ProductGallery images={images} name={product.name} sample={primaryImage.startsWith('/images/products/')} />
 
           {/* Details Section */}
-          <div className="flex flex-col">
+          <div className="product-summary flex flex-col">
             <div className="mb-4 sm:mb-6">
               <span className="text-xs font-semibold text-safety-orange block mb-2">{product.category} <span aria-hidden="true">/</span> {product.sku}</span>
-              <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-[var(--text-primary)] leading-tight mb-3 sm:mb-4">
+              <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-[var(--text-primary)] leading-tight mb-3 sm:mb-4">
                 {product.name}
               </h1>
+              {product.tag && <Badge variant="new" className="mb-3">{product.tag}</Badge>}
               <div className="flex flex-wrap items-center gap-3">
-                <span className="text-2xl sm:text-3xl font-bold text-[var(--text-primary)]">{formatMoney(Number(product.price))}</span>
+                <span className="text-2xl font-bold text-[var(--text-primary)]">{formatMoney(Number(product.price))}</span>
                 <Badge variant={product.stock > 0 ? 'completed' : 'warning'} className="text-xs">
                   {product.stock > 0 ? `${product.stock} in stock` : 'Out of stock'}
                 </Badge>
@@ -219,46 +189,15 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
               </div>
             </div>
 
-            <p className="text-sm sm:text-base text-[var(--text-secondary)] font-medium leading-relaxed mb-6 sm:mb-8 border-l-2 border-safety-orange/30 pl-4 py-1">
+            <p className="text-sm text-[var(--text-secondary)] leading-relaxed mb-5">
               {product.description}
             </p>
 
-            {/* Specs */}
-            {specs.length > 0 && (
-              <div className="mb-6 sm:mb-8">
-                <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-3">Specifications</h3>
-                <div className="border border-[var(--border-primary)] rounded-sm overflow-hidden">
-                  {specs.map((spec: { key: string; value: string }, i: number) => (
-                    <div key={i} className={`flex text-sm ${i % 2 === 0 ? 'bg-[var(--bg-surface)]' : 'bg-[var(--bg-secondary)]'}`}>
-                      <span className="w-1/3 sm:w-2/5 px-3 py-2 font-medium text-[var(--text-secondary)] text-xs border-r border-[var(--border-secondary)]">{spec.key}</span>
-                      <span className="flex-grow px-3 py-2 text-[var(--text-primary)] text-xs">{spec.value}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Trust Badges */}
-            <div className="grid grid-cols-3 gap-2 sm:gap-3 mb-6 sm:mb-8">
-              <div className="p-3 bg-[var(--bg-surface)] border border-[var(--border-primary)] rounded-sm text-center">
-                <ShieldCheck className="w-4 h-4 text-safety-orange mx-auto mb-1.5" />
-                <h4 className="text-xs font-medium text-[var(--text-primary)]">1-year warranty</h4>
-              </div>
-              <div className="p-3 bg-[var(--bg-surface)] border border-[var(--border-primary)] rounded-sm text-center">
-                <Truck className="w-4 h-4 text-safety-orange mx-auto mb-1.5" />
-                <h4 className="text-xs font-medium text-[var(--text-primary)]">Fast shipping</h4>
-              </div>
-              <div className="p-3 bg-[var(--bg-surface)] border border-[var(--border-primary)] rounded-sm text-center">
-                <RotateCcw className="w-4 h-4 text-safety-orange mx-auto mb-1.5" />
-                <h4 className="text-xs font-medium text-[var(--text-primary)]">30-day returns</h4>
-              </div>
-            </div>
-
             {/* Action Buttons (hidden on mobile — sticky bottom bar replaces these) */}
-            <div className="mt-auto space-y-3 hidden sm:block">
+            <div className="product-purchase space-y-3 hidden sm:block">
               <div className="grid grid-cols-2 gap-3">
                 <Button
-                  className={`h-12 sm:h-14 text-sm font-semibold transition-all w-full ${
+                  className={`h-12 text-sm font-semibold transition-all w-full ${
                     added
                       ? 'bg-green-600 hover:bg-green-600'
                       : 'bg-safety-orange hover:bg-safety-orange/80'
@@ -273,7 +212,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
                   )}
                 </Button>
                 <Button
-                  className="h-12 sm:h-14 text-sm font-semibold bg-[var(--text-primary)] text-[var(--bg-primary)] hover:opacity-90 w-full"
+                  className="h-12 text-sm font-semibold bg-[var(--text-primary)] text-[var(--bg-primary)] hover:opacity-90 w-full"
                   onClick={handleBuyNow}
                   disabled={product.stock <= 0}
                 >
@@ -293,18 +232,54 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
                 )}
               </Button>
             </div>
+
             {chatError && (
-              <div className="mt-3 p-3 bg-red-500/10 border border-red-500/30 rounded-sm">
+              <div role="alert" className="mt-3 p-3 bg-red-500/10 border border-red-500/30 rounded-sm">
                 <p className="text-xs text-red-500 font-bold">{chatError}</p>
               </div>
             )}
+
+            {/* Specs */}
+            {specs.length > 0 && (
+              <div className="mb-5">
+                <h2 className="text-sm font-semibold text-[var(--text-primary)] mb-3">Specifications</h2>
+                <div className="border border-[var(--border-primary)] rounded-sm overflow-hidden">
+                  {specs.map((spec: { key: string; value: string }, i: number) => (
+                    <div key={i} className={`flex text-sm ${i % 2 === 0 ? 'bg-[var(--bg-surface)]' : 'bg-[var(--bg-secondary)]'}`}>
+                      <span className="w-1/3 sm:w-2/5 shrink-0 break-words px-3 py-2 font-medium text-[var(--text-secondary)] text-xs border-r border-[var(--border-secondary)]">{spec.key}</span>
+                      <span className="flex-grow min-w-0 break-words px-3 py-2 text-[var(--text-primary)] text-xs">{spec.value}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Trust Badges */}
+            <div className="grid grid-cols-3 gap-2 sm:gap-3 mb-5">
+              <div className="p-3 bg-[var(--bg-surface)] border border-[var(--border-primary)] rounded-sm text-center">
+                <ShieldCheck className="w-4 h-4 text-safety-orange mx-auto mb-1.5" />
+                <h4 className="text-xs font-medium text-[var(--text-primary)]">1-year warranty</h4>
+              </div>
+              <div className="p-3 bg-[var(--bg-surface)] border border-[var(--border-primary)] rounded-sm text-center">
+                <Truck className="w-4 h-4 text-safety-orange mx-auto mb-1.5" />
+                <h4 className="text-xs font-medium text-[var(--text-primary)]">Fast shipping</h4>
+              </div>
+              <div className="p-3 bg-[var(--bg-surface)] border border-[var(--border-primary)] rounded-sm text-center">
+                <RotateCcw className="w-4 h-4 text-safety-orange mx-auto mb-1.5" />
+                <h4 className="text-xs font-medium text-[var(--text-primary)]">30-day returns</h4>
+              </div>
+            </div>
+
+
           </div>
         </div>
+        <RelatedProducts key={product.id} product={product} />
+        <p className="sr-only" role="status">{added ? product.name + ' added to cart' : ''}</p>
       </div>
 
       {/* Mobile Sticky Action Bar */}
       {product && (
-        <div className="fixed bottom-0 left-0 right-0 z-40 bg-[var(--bg-primary)] border-t border-[var(--border-primary)] p-3 flex gap-2 sm:hidden">
+        <div className="product-mobile-actions fixed bottom-0 left-0 right-0 z-40 bg-[var(--bg-primary)] border-t border-[var(--border-primary)] p-3 flex gap-2 sm:hidden">
           <Button
             className={`flex-1 h-11 text-xs font-semibold ${
               added

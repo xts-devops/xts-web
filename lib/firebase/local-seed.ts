@@ -84,7 +84,7 @@ export function buildSeed(): Record<string, Record<string, any>> {
     const asset = sampleAssets.find(asset => asset.id === id);
     col('products')[id] = {
       ...rest,
-      imageUrls: asset ? [`/images/products/${asset.file}.webp`] : [],
+      imageUrls: asset ? [`/images/products/${asset.file}.webp`, `/images/products/${asset.file}-top.webp`] : [],
       ...(seller ? { sellerId: users['preview-seller'].email } : {}),
       createdAt: daysAgo(40 - i * 3),
     };
