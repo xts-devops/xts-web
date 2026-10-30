@@ -12,6 +12,35 @@ Append-only. Newest at top. Never edit past entries. Format:
 
 ---
 
+## 2026-10-30 · codex · codex/xts-mechatronics-ui · commerce refinement
+**Base:** `48a6ad5`, fetched/pulled fast-forward before the file claim.
+**Files:** app/page.tsx, app/globals.css, CatalogSearch, ProductCard, ProductImage,
+Skeleton, Navbar, Footer, UI evaluation and coordination notes.
+**Did:** Refined existing hero spacing/shopping links and the transition to featured
+products. Added local predictive product/category suggestions with combobox semantics,
+arrow/Enter/Escape handling, focus dismissal and active-option scrolling. Reused the
+one catalog response; no per-keystroke requests. Retained four desktop columns, added
+three-column tablet and two-column phone rules, standardized image insets/name/meta/price
+slots and skeletons, whole-card detail links, separate 44px cart controls, tooltips,
+added feedback and bounded pointer hover. Added six category routes, four specific
+engineering-service routes and three factual support links. Matched footer alignment
+and added category access to mobile navigation. Preserved dark/dotted/yellow styling.
+**Why:** User requested premium refinement and a complete conversion-oriented page,
+explicitly preserving the existing foundation and all backend/integration behavior.
+**Verify:** TypeScript passed. Changed-file ESLint: zero errors, two pre-existing navbar
+profile-img warnings. `git diff --check` passed. HTTP 200: home, shop search, all three
+fabrication types and consultation. SSR assertions passed for links, cart icon/tooltip,
+out-of-stock disabling, added feedback, lazy image sizes and native/collapsed search
+semantics. Five selected text contrast pairs range from 5.14:1 to 9.39:1; this is not
+a full accessibility audit. The verification script is ignored under `.local-preview/`.
+**Limit:** CUA still fails to initialize with a missing kernel-assets path, including
+after reset/retry. No new visual viewport, interactive keyboard, motion or touch pass
+is claimed. Those checks remain required before calling the result production-ready.
+No production data/orders/payments/auth changes, API shape changes or dependencies.
+**Preview:** http://localhost:3001, shared canonical checkout.
+**Next:** Review PR #5 and run the pending visual/interactive matrix in the UI doc
+when browser tooling is restored. Commit SHA is recorded in the Git handoff.
+
 ## 2026-10-30 · codex · codex/xts-mechatronics-ui · single-checkout verification
 **Commit:** Integration `78a2003`; shared preview/sync instructions `e65a086`.
 **Did:** Rechecked the worktree inventory before the planned old-worktree snapshot

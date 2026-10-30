@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { Package } from 'lucide-react';
 
 /** Optimizes bundled samples; leaves arbitrary seller storage URLs compatible. */
-export function ProductImage({ src, name, priority = false, sizes = '(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw' }: {
+export function ProductImage({ src, name, priority = false, sizes = '(max-width: 767px) 50vw, (max-width: 1099px) 33vw, (max-width: 1304px) 25vw, 295px' }: {
   src: string; name: string; priority?: boolean; sizes?: string;
 }) {
   const [failedSrc, setFailedSrc] = useState<string | null>(null);

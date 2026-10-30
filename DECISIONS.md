@@ -69,3 +69,12 @@ preserve peer changes. Serialize Git mutations, push the shared branch after che
 and log SHA/files/checks/preview/next in PROGRESS. Never force-push or push to main.
 The two inherited D9 entries are distinct (author/date/title disambiguate them);
 preserve both the bounded hero motion and the user-requested dotted background.
+
+### D11 · Refine commerce completeness without redesign · 2026-10-30 · codex
+The user requested the existing foundation be retained: compact brand, dark industrial
+surfaces, dotted background, yellow accents and typography. Homepage order is hero/search,
+featured products, categories, engineering services, factual support/trust links, footer.
+Keep four desktop product columns, bounded microinteractions and reduced-motion handling.
+Predictive suggestions reuse the existing catalog response; no search endpoint, added
+dependency, external assets or backend contract change. Trust content describes actual
+product information, dashboard updates and messaging, without invented guarantees.

@@ -70,42 +70,59 @@ Subjects:
 
 ## Current public UI
 
-The latest user direction replaces the earlier marketing and enlarged-header
-iterations. The header uses a compact XTS mark and a separate Mechatronics department
-label. Below 400px, the department moves out of the header row; it remains in the
-homepage context, mobile menu and footer. The header is a stable 64px high and shares
-the page content alignment.
+The existing dark industrial foundation, dotted background, restrained yellow accents,
+compact XTS/Mechatronics branding and typography are retained. The refinements follow
+this order: hero/search, featured products, categories, engineering services, a compact
+factual support section, and the existing footer aligned with page content.
 
-The homepage now greets visitors with a minimal welcome and a useful catalog search.
-The form uses native GET semantics with client navigation when JavaScript is active;
-empty submission opens the full shop. Search text initializes from the q URL parameter;
-editing, clearing and resetting catalog filters updates q/category consistently.
-Category shortcuts remain available without typing. Fabrication, expert support and
-community links sit together in the hero; duplicate service cards below were removed.
+The hero uses natural height rather than forcing every featured card into the first
+viewport. Vertical padding and the featured-section transition are tightened. Search
+remains primary, with visible shopping/category links. Service, expert and community
+shortcuts retain their separate routes and collapse to compact labels on phones.
 
-The intro has short 380ms/460ms CSS transitions from 80% opacity and an 8px offset.
-Content is visible and usable immediately; no splash screen or timed navigation gate.
-Reduced-motion preferences disable the intro and new hover transitions. Compact
-branding, image sample labels, keyboard focus and the product grid remain. Removed
-signature slogans, serif styling, ambient graphics and redundant promotional sections
-remain removed. No dependency, image asset or third-party request was added.
+CatalogSearch reuses the one products response already fetched by the homepage. A
+memoized lookup supports up to four product suggestions and two unique category
+suggestions after two characters. Arrow keys navigate, Enter selects or searches,
+Escape closes, and blur/Tab dismiss the popup. IME composition is respected. Native
+GET form semantics remain; no per-keystroke network requests, new endpoint or dependency.
+Unavailable suggestions say out of stock. No empty/fake suggestion content is invented.
 
-The storefront CSS was consolidated instead of layering further overrides onto the
-marketing treatment. The header no longer attaches a scroll listener or changes size
-while scrolling. Narrow 320px product cards wrap the price and add button to avoid
-collisions; long category labels truncate while product names remain readable.
+Product cards use four columns from 1100px, three on tablets/laptops below that, and
+two below 768px. Images share aspect ratio and insets with explicit responsive sizes.
+Names use two reserved lines; prices, ratings and availability have distinct hierarchy.
+The whole card links to details while the separate 44px cart button retains its action.
+Cart icons, hover/focus tooltips, added-state feedback and out-of-stock disabling remain.
+Pointer hover is limited to 2px/180ms and is disabled with reduced motion. Loading
+skeleton dimensions track the real card slots. Small cards wrap price/cart controls.
 
-## Verification
+Six category cards use exact loaded category names where available, with search fallback
+otherwise. Counts appear only for actual returned listings. Four engineering cards link
+to existing 3D-printing, laser-cutting, PCB and consultation routes. The support section
+links to product details, dashboard updates and messaging. No testimonial, certification,
+shipping, warranty, payment-security or customer-count claims were added. Footer and
+mobile category navigation match the existing routes.
 
-2026-10-30: TypeScript and ESLint for the changed homepage/shop TSX files pass with
-zero warnings/errors. The dev-only preview starts successfully and serves the home,
-shop?q=ESP32 and combined search/category URLs with HTTP 200. Home HTML includes the
-welcome, labeled search form and service links. Both LOCAL_PREVIEW flags are enabled.
+## Verification (2026-10-30)
 
-New visual and interactive QA is pending: CUA initialization failed with a missing
-kernel-assets path, including after reset and retry. No new screenshots or viewport/
-transition verification are claimed. Earlier compact-header viewport checks are in
-PROGRESS.md; those predate this hero update. Physical-device checks and formal
-accessibility/performance audits remain outside these smoke checks. No production
-data, real orders, payments or real login were used. A production build requires the
-real Firebase environment and was not attempted.
+- TypeScript passes; changed-file ESLint has zero errors and two pre-existing navbar
+  profile-image warnings. git diff --check passes.
+- HTTP 200 from dev-only port 3001: home, shop search, all three fabrication types and
+  consultation. Home HTML contains the expected category, engineering, support and
+  combobox sections.
+- Real React server-render assertions cover product links, cart icon/tooltip,
+  out-of-stock disabling, added feedback, lazy images/sizes, native GET search fallback
+  and collapsed combobox semantics. Script: ignored .local-preview/verify-commerce.cjs.
+- Selected foreground/background contrast calculations: yellow primary action 9.39:1,
+  dark secondary text 6.46:1, dark availability 8.33:1, light availability 6.31:1,
+  light accent 5.14:1. These checks do not constitute a full accessibility audit.
+
+The CUA browser tool still cannot initialize (missing kernel-assets path), including
+reset/retry. No new screenshot or interactive browser validation is claimed. Before
+production signoff, review 320/375/768/1024/1440px widths and short viewport heights;
+check search arrow/Enter/Escape/Tab and outside dismissal, card-vs-cart click isolation,
+category/service navigation, focus/tooltips, touch behavior, reduced motion, light/dark
+contrast, image fallback and horizontal overflow. Earlier checks in PROGRESS predate
+this refinement. Physical-device testing and formal performance/a11y audits are pending.
+
+No production data, real orders/payments, auth changes or backend contract changes were
+made. The production build requires the real Firebase environment and was not attempted.

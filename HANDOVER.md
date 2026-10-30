@@ -92,6 +92,9 @@ Mechatronics department label, plain copy, and direct shop/service navigation.
 The earlier enlarged lockup and decorative marketing layout were superseded.
 The 2026-10-30 hero adds a minimal welcome, catalog quick search (`/shop?q=...`),
 compact service entry points and bounded reduced-motion-aware CSS intro transitions.
+The later commerce refinement retains that foundation and adds CatalogSearch suggestions
+from the existing response, card/tooltips/image/skeleton refinements, categories,
+four engineering-service links and factual support links. No backend behavior changed.
 The new hero still needs visual/interactive review after CUA initialization is repaired;
 type/lint and local HTTP checks pass. See the latest PROGRESS entry for this limit.
 Shared UI: `components/layout/Brand.tsx`,

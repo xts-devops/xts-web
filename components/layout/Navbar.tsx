@@ -215,6 +215,10 @@ export const Navbar = () => {
                 </Link>
               ))}
 
+              <Link href="/#categories" onClick={() => setMobileMenuOpen(false)} className="text-sm text-[var(--text-secondary)] hover:text-safety-orange py-2">
+                Shop by category
+              </Link>
+
               <Link
                 href="/cart"
                 onClick={() => setMobileMenuOpen(false)}

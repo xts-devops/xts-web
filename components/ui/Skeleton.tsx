@@ -17,18 +17,18 @@ export const Skeleton = ({ className }: { className?: string }) => (
 
 /** A shop product card placeholder, same shape and surface as ProductCard. */
 export const ProductCardSkeleton = () => (
-  <div className="catalog-card" aria-hidden="true">
+  <div className="catalog-card catalog-skeleton" aria-hidden="true">
     <div className="catalog-photo">
       <Skeleton className="w-full h-full rounded-none" />
     </div>
-    <div className="flex flex-col gap-2 p-4">
-      <Skeleton className="h-3 w-1/3" />
-      <Skeleton className="h-4 w-3/4" />
-      <Skeleton className="h-3 w-1/4" />
-      <div className="flex items-center justify-between mt-4">
-        <Skeleton className="h-6 w-1/3" />
-        <Skeleton className="h-10 w-10" />
-      </div>
+    <div className="catalog-info">
+      <Skeleton className="skeleton-category w-1/3" />
+      <Skeleton className="skeleton-name w-3/4" />
+      <Skeleton className="skeleton-meta w-1/3" />
+    </div>
+    <div className="catalog-bottom">
+      <Skeleton className="h-6 w-1/3" />
+      <Skeleton className="h-11 w-11" />
     </div>
   </div>
 );

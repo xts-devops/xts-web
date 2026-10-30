@@ -35,7 +35,7 @@ const footerLinks = [
 export const Footer = () => {
   return (
     <footer className="bg-[var(--footer-bg)] pt-16 sm:pt-20 pb-8 sm:pb-10 border-t border-[var(--border-primary)]">
-      <div className="container mx-auto px-4 sm:px-6">
+      <div className="store-container">
         <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-5 gap-8 sm:gap-12 mb-12 sm:mb-16">
           <div className="col-span-2 lg:col-span-2">
             <Link href="/" className="flex items-center gap-2 mb-4 sm:mb-6">
@@ -49,7 +49,7 @@ export const Footer = () => {
 
           {footerLinks.map((section) => (
             <div key={section.title}>
-              <h4 className="text-white font-bold uppercase tracking-tight mb-4 sm:mb-6 text-sm">{section.title}</h4>
+              <h3 className="text-white font-semibold mb-4 sm:mb-6 text-sm">{section.title}</h3>
               <ul className="flex flex-col gap-3">
                 {section.links.map((link) => (
                   <li key={link.name}>
