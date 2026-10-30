@@ -221,3 +221,14 @@ control. Loading uses the same row geometry; real card links and stock guards re
 The existing limit of four is unchanged; smaller catalogs show only actual available
 suggestions. Homepage and shop grids remain unchanged. TypeScript, changed-file lint,
 SSR/helper regressions and HTTP preview checks pass; visual browser QA remains pending.
+
+## Recommendation column correction (2026-10-30)
+The user clarified that "four" means four products across on desktop, not four stacked
+rows. The earlier stacked-row interpretation is superseded. Recommendations now use
+four columns from 1024px and two columns below that. Removed the stacked-row overrides
+and retained standard shared cards/skeletons. Phone cards use compact image ratios,
+two-line names/descriptions, 44px cart buttons and wrapping price/actions when needed.
+No horizontal rail, duplicate suggestions or empty placeholder products. Homepage/shop
+layouts and product-detail/gallery behavior are unchanged. TypeScript, changed-file
+ESLint, existing SSR/helper regressions, HTTP preview and git diff --check pass. Visual
+browser QA remains pending because of the previously recorded CUA initialization issue.

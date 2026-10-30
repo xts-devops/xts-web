@@ -140,3 +140,8 @@ See current PROGRESS for verification limits; CUA interaction/viewport QA is pen
 The user's latest request supersedes the mobile horizontal recommendation rail above:
 You may also like now uses four compact stacked rows on desktop and mobile. The
 recommendation limit/ranking and shared card links/cart behavior remain unchanged.
+
+### Recommendation clarification · 2026-10-30
+The user corrected the earlier "four rows" wording: four products across on desktop.
+This supersedes the stacked-row note above. Current recommendations use four columns
+at 1024px and wider, two columns on tablet/mobile, with normal shared cards/skeletons.

@@ -12,6 +12,21 @@ Append-only. Newest at top. Never edit past entries. Format:
 
 ---
 
+## 2026-10-30 · codex · codex/xts-mechatronics-ui · recommendation column correction
+**Commit:** 30b2068; base c903965, fetched/pulled shared branch before file claim.
+**Files:** RelatedProducts, app/globals.css, UI docs and coordination notes.
+**Did:** Corrected my interpretation of the user's four-row request after clarification:
+four products across at desktop widths (1024px+), two columns on tablet/mobile.
+Removed stacked-row overrides and restored standard shared card/skeleton structure.
+Phone cards retain compact images, two-line names/descriptions, 44px cart controls
+and wrapping price/actions on narrow cards. No other grids/gallery/backend changes.
+**Verify:** TypeScript, changed-file ESLint, existing SSR/helper regressions, HTTP
+product preview and git diff --check pass. Browser visual QA remains pending due
+previously recorded CUA initialization failure; no new viewport/touch pass claimed.
+**Preview:** http://localhost:3001/shop/p-esp32 · same shared branch and PR #5.
+**Next:** Review responsive card sizing; this supersedes the stacked-row entry below.
+
+
 ## 2026-10-30 · codex · codex/xts-mechatronics-ui · four recommendation rows
 **Commit:** 447520c; base 4c48d3d, shared branch fetched/pulled before file claim.
 **Files:** RelatedProducts, app/globals.css, UI docs and coordination notes.
